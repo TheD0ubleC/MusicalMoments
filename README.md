@@ -4,6 +4,15 @@
     
 <img src="https://github.com/TheD0ubleC/MusicalMoments/assets/143760576/7f630f9e-de47-45d8-a861-112ddf8b015d" width="120" style="vertical-align:middle;">
 
+### 介绍
+#### MM(MusicalMoments)是一款完全使用.NET6.0开发的实时音频工具 不像传统的实时音频播放工具一样闭源、收费和功能少(说的就是你SoundPad)
+
+因为发现市面上还没有一款免费开源好用的实时音频工具 所以我决定开发一款如同我描述的工具(sh*t [SLAM](https://slam.flankers.net/) 你们知道我有多难吗 这家伙[七年](https://github.com/SilentSys/SLAM)没更新了?!? 还是我硬给他[汉化](https://www.bilibili.com/video/BV1tK411i7S3)一下和搭建[音频整合站](slam.scmd.cc)才勉强在国内续命 关于他的视频都发了3个了 然后群里巴拉巴拉吵着说CS2怎么还不能用 再加上我早就加了CS2支持 但懒狗valve控制台坏了都不知道修 然后就真没办法咯 硬肝出来这个 还因为哔哩哔哩被封了30天视频都发不了没热度呜呜呜呜)
+
+### 快速跳转
+
+#### 如果你已经有了.NET环境请跳至[第二步](https://github.com/TheD0ubleC/MusicalMoments/main/README.md#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E9%85%8D%E7%BD%AEmmmusical-moments)
+#### 如果你已经有了.NET环境和VB声卡请跳至[绑定音频设备与按键](https://github.com/TheD0ubleC/MusicalMoments/main/README.md#%E7%BB%91%E5%AE%9A%E9%9F%B3%E9%A2%91%E8%AE%BE%E5%A4%87%E4%B8%8E%E6%8C%89%E9%94%AE)或[游戏/语音工具内设置](https://github.com/TheD0ubleC/MusicalMoments/main/README.md#%E6%B8%B8%E6%88%8F%E8%AF%AD%E9%9F%B3%E5%B7%A5%E5%85%B7%E5%86%85%E9%85%8D%E7%BD%AE)
 ## 第一步:安装.NET运行时</h2>
 ## [点我下载](https://download.visualstudio.microsoft.com/download/pr/e030e884-446c-4530-b37b-9cda7ee93e4a/403c115daa64ad3fcf6d8a8b170f86b8/dotnet-sdk-6.0.127-win-x64.exe) 
 下载完成后打开 点击安装
