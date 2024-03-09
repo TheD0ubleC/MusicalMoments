@@ -1,0 +1,104 @@
+{
+  "format": 1,
+  "restore": {
+    "K:\\Project\\C#\\MusicalMoments\\MusicalMoments\\MusicalMoments.csproj": {}
+  },
+  "projects": {
+    "K:\\Project\\C#\\MusicalMoments\\MusicalMoments\\MusicalMoments.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "K:\\Project\\C#\\MusicalMoments\\MusicalMoments\\MusicalMoments.csproj",
+        "projectName": "MusicalMoments",
+        "projectPath": "K:\\Project\\C#\\MusicalMoments\\MusicalMoments\\MusicalMoments.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "K:\\Project\\C#\\MusicalMoments\\MusicalMoments\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "K:\\Microsoft Visual Studio SDK\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0-windows7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "H:\\文档\\nuget": {},
+          "https://aka.ms/maui-preview/index.json": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://packagesource": {}
+        },
+        "frameworks": {
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows7.0",
+          "dependencies": {
+            "MouseKeyHook": {
+              "target": "Package",
+              "version": "[5.7.1, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
+            "NAudio.Lame": {
+              "target": "Package",
+              "version": "[1.1.6, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "System.Management": {
+              "target": "Package",
+              "version": "[9.0.0-preview.1.24080.9, )"
+            },
+            "System.Resources.ResourceManager": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "taglib-sharp-netstandard2.0": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

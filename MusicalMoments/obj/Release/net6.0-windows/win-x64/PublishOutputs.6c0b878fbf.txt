@@ -1,0 +1,2 @@
+K:\Project\C#\MusicalMoments\MusicalMoments\bin\Release\net6.0-windows\publish\win-x64\MusicalMoments.pdb
+K:\Project\C#\MusicalMoments\MusicalMoments\bin\Release\net6.0-windows\publish\win-x64\MusicalMoments.exe

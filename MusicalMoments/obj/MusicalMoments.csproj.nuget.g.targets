@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)system.codedom\9.0.0-preview.1.24080.9\buildTransitive\netcoreapp2.0\System.CodeDom.targets" Condition="Exists('$(NuGetPackageRoot)system.codedom\9.0.0-preview.1.24080.9\buildTransitive\netcoreapp2.0\System.CodeDom.targets')" />
+    <Import Project="$(NuGetPackageRoot)system.management\9.0.0-preview.1.24080.9\buildTransitive\netcoreapp2.0\System.Management.targets" Condition="Exists('$(NuGetPackageRoot)system.management\9.0.0-preview.1.24080.9\buildTransitive\netcoreapp2.0\System.Management.targets')" />
+    <Import Project="$(NuGetPackageRoot)naudio.lame\1.1.6\build\NAudio.Lame.targets" Condition="Exists('$(NuGetPackageRoot)naudio.lame\1.1.6\build\NAudio.Lame.targets')" />
+  </ImportGroup>
+</Project>
