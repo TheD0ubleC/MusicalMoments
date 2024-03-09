@@ -1,6 +1,8 @@
 # Musical Moments - 音乐时刻
 ## 第一步:安装.NET运行时</h2>
-## [点我下载](https://download.visualstudio.microsoft.com/download/pr/e030e884-446c-4530-b37b-9cda7ee93e4a/403c115daa64ad3fcf6d8a8b170f86b8/dotnet-sdk-6.0.127-win-x64.exe) 下载完成后打开 点击安装
+## [点我下载](https://download.visualstudio.microsoft.com/download/pr/e030e884-446c-4530-b37b-9cda7ee93e4a/403c115daa64ad3fcf6d8a8b170f86b8/dotnet-sdk-6.0.127-win-x64.exe) 
+
+下载完成后打开 点击安装
 
 ![image](https://github.com/TheD0ubleC/MusicalMoments/assets/143760576/667f76a7-776b-4e09-afab-e72aada0c4c0)
 
