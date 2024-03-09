@@ -11,8 +11,8 @@
 
 ### 快速跳转
 
-#### 如果你已经有了.NET环境请跳至[第二步](https://github.com/TheD0ubleC/MusicalMoments/main/README.md#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E9%85%8D%E7%BD%AEmmmusical-moments)
-#### 如果你已经有了.NET环境和VB声卡请跳至[绑定音频设备与按键](https://github.com/TheD0ubleC/MusicalMoments/main/README.md#%E7%BB%91%E5%AE%9A%E9%9F%B3%E9%A2%91%E8%AE%BE%E5%A4%87%E4%B8%8E%E6%8C%89%E9%94%AE)或[游戏/语音工具内设置](https://github.com/TheD0ubleC/MusicalMoments/main/README.md#%E6%B8%B8%E6%88%8F%E8%AF%AD%E9%9F%B3%E5%B7%A5%E5%85%B7%E5%86%85%E9%85%8D%E7%BD%AE)
+#### 如果你已经有了.NET环境请跳至[第二步](https://github.com/TheD0ubleC/MusicalMoments/tree/main?tab=readme-ov-file#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E9%85%8D%E7%BD%AEmmmusical-moments)
+#### 如果你已经有了.NET环境和VB声卡请跳至[绑定音频设备与按键](https://github.com/TheD0ubleC/MusicalMoments/tree/main?tab=readme-ov-file#%E7%BB%91%E5%AE%9A%E9%9F%B3%E9%A2%91%E8%AE%BE%E5%A4%87%E4%B8%8E%E6%8C%89%E9%94%AE)或[游戏/语音工具内设置](https://github.com/TheD0ubleC/MusicalMoments/tree/main?tab=readme-ov-file#%E6%B8%B8%E6%88%8F%E8%AF%AD%E9%9F%B3%E5%B7%A5%E5%85%B7%E5%86%85%E9%85%8D%E7%BD%AE)
 ## 第一步:安装.NET运行时</h2>
 ## [点我下载](https://download.visualstudio.microsoft.com/download/pr/e030e884-446c-4530-b37b-9cda7ee93e4a/403c115daa64ad3fcf6d8a8b170f86b8/dotnet-sdk-6.0.127-win-x64.exe) 
 下载完成后打开 点击安装
