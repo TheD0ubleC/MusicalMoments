@@ -1,12 +1,16 @@
-﻿using Microsoft.Win32;
+﻿using HtmlAgilityPack;
+using Microsoft.Win32;
 using NAudio.Wave;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Net;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 namespace MusicalMoments
@@ -300,5 +304,55 @@ namespace MusicalMoments
             }
             return result;
         }
+
+        public static void GetDownloadCards(string url, ListBox nameListBox, ListBox linkListBox)
+        {
+            string htmlContent;
+            WebClient client = new WebClient();
+            try
+            {
+                htmlContent = client.DownloadString(url);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"加载错误，请检查您的网络是否可以正常链接至<slam.scmd.cc>。在重试之前请确保您已关闭VPN或网络代理工具\r\n具体错误信息:{e.ToString()}","错误");
+                return;
+            }
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(htmlContent);
+            HtmlNodeCollection cardNodes = doc.DocumentNode.SelectNodes("//div[contains(@class, 'download-card')]");
+            if (cardNodes != null)
+            {
+                foreach (HtmlNode cardNode in cardNodes)
+                {
+                    string title = GetInnerText(cardNode.InnerHtml, "<h2>", "</h2>").Trim();
+                    string downloadUrl = GetAttribute(cardNode.InnerHtml, "href=\"(.*?)\"", "href");
+                    nameListBox.Items.Add(title);
+                    linkListBox.Items.Add(url + downloadUrl);
+                }
+            }
+        }
+
+
+        private static string GetInnerText(string input, string startTag, string endTag)
+        {
+            int startIndex = input.IndexOf(startTag) + startTag.Length;
+            int endIndex = input.IndexOf(endTag, startIndex);
+            return input.Substring(startIndex, endIndex - startIndex);
+        }
+
+        private static string GetAttribute(string input, string pattern, string attributeName)
+        {
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(input);
+            return match.Groups[1].Value;
+        }
+        public static bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
     }
 }

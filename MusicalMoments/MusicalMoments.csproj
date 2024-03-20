@@ -7,25 +7,36 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>image\MMLOGO.ico</ApplicationIcon>
     <Product>MusicalMoments</Product>
-    <AssemblyVersion>1.1.0</AssemblyVersion>
-    <FileVersion>1.1.0</FileVersion>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
     <StartupObject>MusicalMoments.Program</StartupObject>
     <UseWPF>False</UseWPF>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="image\MMLOGO.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FlacLibSharp" Version="3.2.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Lame" Version="1.1.6" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NVorbis" Version="0.10.5" />
     <PackageReference Include="System.Management" Version="9.0.0-preview.1.24080.9" />
     <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />

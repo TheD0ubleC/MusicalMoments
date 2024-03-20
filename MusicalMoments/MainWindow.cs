@@ -8,6 +8,9 @@ using Gma.System.MouseKeyHook;
 using System.Reflection;
 using System.Text;
 using System.Resources;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Security.Policy;
 namespace MusicalMoments
 {
     public partial class MainWindow : Form
@@ -104,6 +107,9 @@ namespace MusicalMoments
         }
         private void MainWindow_Load(object sender, EventArgs e)
         {
+
+
+
             /*
             用于构建本地化基文件  
             BuildLocalizationBaseFiles(this.Controls, $"{runningDirectory}Resources.zh-CN.resx");
@@ -111,6 +117,9 @@ namespace MusicalMoments
             mainTabControl.ItemSize = new System.Drawing.Size(0, 1);
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioData"));//创建存放音频的文件夹
             Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
+
+            if(!Misc.IsAdministrator()) { Text += " [当前非管理员运行,可能会出现按下按键无反应]"; }
+
 
             label_VBStatus.Text = Misc.checkVB() ? "VB声卡已安装" : "VB声卡未安装";
             comboBoxOutputFormat.SelectedIndex = 0;
@@ -433,6 +442,15 @@ namespace MusicalMoments
                         "版权所有 (c) [Aydin] \r\n" +
                         "特此向Aydin表示感谢。";
                     break;
+                case "HtmlAgilityPack":
+                    info_Label5.Text =
+                        "HtmlAgilityPack。\r\n" +
+                        "HtmlAgilityPack遵循 MIT License\r\n" +
+                        "版权所有 (c) [zzzprojects] \r\n" +
+                        "完整的许可证文本可在以下链接找到:\r\n" +
+                        "https://opensource.org/licenses/MS-PL\r\n" +
+                        "特此向zzzprojects及其贡献者表示感谢。";
+                    break;
             }
         }
         private static WaveOutEvent currentOutputDevice = null;
@@ -630,17 +648,34 @@ namespace MusicalMoments
             }
             else
             {
-                string extension = Path.GetExtension(dataPath_TextBox.Text);
+                string extension = Path.GetExtension(dataPath_TextBox.Text).ToLower();
                 if (extension == ".ncm")
                 {
-                    if (Misc.NCMConvert(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + "." + "mp3") == 0)
+                    if (Misc.NCMConvert(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + ".mp3") == 0)
                     {
                         MessageBox.Show("转换成功 已存储至运行目录下的AudioData文件夹", "提示");
                     }
+                    else
+                    {
+                        MessageBox.Show("转换失败", "错误");
+                    }
+                }
+                else if (extension == ".flac" || extension == ".ogg" || extension == ".mp3" || extension == ".wav")
+                {
+                    string targetFormat = comboBoxOutputFormat.SelectedItem.ToString().ToLower();
+                    if (AudioConverter.ConvertTo(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + "." + targetFormat, targetFormat))
+                    {
+                        MessageBox.Show("转换成功 已存储至运行目录下的AudioData文件夹", "提示");
+                    }
+                    else
+                    {
+                        MessageBox.Show("转换失败", "错误");
+                    }
                 }
                 else
-                { MessageBox.Show("目前版本不支持转换该格式", "提示"); }
-
+                {
+                    MessageBox.Show("不支持的文件格式", "错误");
+                }
             }
         }
         private void audioListView_DragDrop(object sender, DragEventArgs e)
@@ -777,6 +812,129 @@ namespace MusicalMoments
         private void 停止播放ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StopPlayback();
+        }
+
+        public class AudioItem
+        {
+            public string Name { get; set; }
+            public string DownloadLink { get; set; }
+
+            public AudioItem(string name, string downloadLink)
+            {
+                Name = name;
+                DownloadLink = downloadLink;
+            }
+        }
+
+        // 定义一个全局变量来存储原始音频列表和对应链接
+        List<AudioItem> OriginalAudioList = new List<AudioItem>();
+        private void LoadList_Click(object sender, EventArgs e)
+        {
+            AudioListBox.Items.Clear();
+            // 清空原始音频列表
+            OriginalAudioList.Clear();
+
+            // 获取下载卡片并加载到列表框中
+            Misc.GetDownloadCards("https://slam.scmd.cc/", AudioListBox, DownloadLinkListBox);
+
+            // 将下载卡片信息添加到原始音频列表
+            for (int i = 0; i < AudioListBox.Items.Count; i++)
+            {
+                OriginalAudioList.Add(new AudioItem(AudioListBox.Items[i].ToString(), DownloadLinkListBox.Items[i].ToString()));
+            }
+            numberLabel.Text = $"{AudioListBox.Items.Count} 个项目";
+        }
+
+        private void SearchBarTextBox_Enter(object sender, EventArgs e)
+        {
+            if (SearchBarTextBox.Text == "搜索")
+            {
+                SearchBarTextBox.Text = "";
+            }
+        }
+
+        private void SearchBarTextBox_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(SearchBarTextBox.Text))
+            {
+                SearchBarTextBox.Text = "搜索";
+            }
+        }
+
+        private void SearchBarTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // 清空列表框
+            AudioListBox.Items.Clear();
+
+            // 获取搜索关键词
+            string keyword = SearchBarTextBox.Text.ToLower();
+
+            // 如果关键词为空，则显示所有项
+            if (string.IsNullOrWhiteSpace(keyword) || keyword == "搜索")
+            {
+                foreach (var item in OriginalAudioList)
+                {
+                    AudioListBox.Items.Add(item.Name);
+                }
+            }
+            else
+            {
+                // 遍历原始列表中的所有项，仅显示包含搜索关键词的项
+                foreach (var item in OriginalAudioList)
+                {
+                    if (item.Name.ToLower().Contains(keyword))
+                    {
+                        AudioListBox.Items.Add(item.Name);
+                    }
+                }
+            }
+            numberLabel.Text = $"{AudioListBox.Items.Count} 个项目";
+        }
+
+        private void DownloadSelected_Click(object sender, EventArgs e)
+        {
+            // 检查是否选择了项
+            if (AudioListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("请选择要下载的音频。", "提示");
+                return;
+            }
+
+            // 获取选定项的名称
+            string selectedName = AudioListBox.SelectedItem.ToString();
+
+            // 查找选定项的下载链接
+            string downloadLink = OriginalAudioList.Find(x => x.Name == selectedName).DownloadLink;
+
+            // 如果找到下载链接，则进行下载操作
+            if (!string.IsNullOrEmpty(downloadLink))
+            {
+                // 使用 WebClient 进行下载
+                using (WebClient webClient = new WebClient())
+                {
+                    try
+                    {
+                        // 获取文件名（从下载链接中提取）
+                        string fileName = Path.GetFileName(downloadLink);
+
+                        // 指定下载的保存路径
+                        string savePath = Path.Combine(Application.StartupPath, "AudioData", fileName);
+
+                        // 下载文件
+                        webClient.DownloadFile(downloadLink, savePath);
+
+                        MessageBox.Show($"已成功下载：{fileName}", "提示");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"下载失败：{ex.Message}", "错误");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("未找到选定项的下载链接。", "错误");
+            }
         }
     }
 }

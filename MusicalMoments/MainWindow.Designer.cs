@@ -26,12 +26,13 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem7 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem8 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem9 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem10 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem11 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem12 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -107,16 +108,23 @@
             conversion_Group1 = new GroupBox();
             dataPath_TextBox = new TextBox();
             upData_button = new Button();
+            tabPage7 = new TabPage();
+            numberLabel = new Label();
+            DownloadSelected = new Button();
+            SearchBarTextBox = new TextBox();
+            AudioListBox = new ListBox();
+            DownloadLinkListBox = new ListBox();
+            LoadList = new Button();
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
             播放ToolStripMenuItem = new ToolStripMenuItem();
+            停止播放ToolStripMenuItem = new ToolStripMenuItem();
             删除ToolStripMenuItem = new ToolStripMenuItem();
             重命名ToolStripMenuItem = new ToolStripMenuItem();
             设为播放项ToolStripMenuItem = new ToolStripMenuItem();
             打开文件所在位置ToolStripMenuItem = new ToolStripMenuItem();
             upData = new OpenFileDialog();
-            停止播放ToolStripMenuItem = new ToolStripMenuItem();
             tabPage2.SuspendLayout();
             tabPage1.SuspendLayout();
             tips_Group1.SuspendLayout();
@@ -139,6 +147,7 @@
             conversion_Group3.SuspendLayout();
             conversion_Group2.SuspendLayout();
             conversion_Group1.SuspendLayout();
+            tabPage7.SuspendLayout();
             mainGroupBox.SuspendLayout();
             groupBox1.SuspendLayout();
             mainContextMenuStrip.SuspendLayout();
@@ -151,7 +160,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("NLXJT", 24F, FontStyle.Bold, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem7, listViewItem8, listViewItem9, listViewItem10, listViewItem11, listViewItem12 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -176,6 +185,7 @@
             sideListsImage.Images.SetKeyName(3, "赞.png");
             sideListsImage.Images.SetKeyName(4, "一般提示.png");
             sideListsImage.Images.SetKeyName(5, "转换.png");
+            sideListsImage.Images.SetKeyName(6, "发现.png");
             // 
             // tabPage2
             // 
@@ -387,6 +397,7 @@
             mainTabControl.Controls.Add(tabPage4);
             mainTabControl.Controls.Add(tabPage5);
             mainTabControl.Controls.Add(tabPage6);
+            mainTabControl.Controls.Add(tabPage7);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
@@ -808,7 +819,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(364, 105);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：1\r\n- 修订号（Patch Version）：1\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240309";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：2\r\n- 修订号（Patch Version）：0\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240320";
             // 
             // info_Group
             // 
@@ -831,7 +842,7 @@
             info_ListBox.ForeColor = Color.FromArgb(90, 90, 90);
             info_ListBox.FormattingEnabled = true;
             info_ListBox.ItemHeight = 17;
-            info_ListBox.Items.AddRange(new object[] { "NAudio", "Newtonsoft.Json", "System.Management", "taglib-sharp-netstandard2.0", "MouseKeyHook", "MediaToolkit" });
+            info_ListBox.Items.AddRange(new object[] { "NAudio", "Newtonsoft.Json", "System.Management", "taglib-sharp-netstandard2.0", "MouseKeyHook", "MediaToolkit", "HtmlAgilityPack" });
             info_ListBox.Location = new Point(389, 16);
             info_ListBox.Name = "info_ListBox";
             info_ListBox.RightToLeft = RightToLeft.No;
@@ -858,9 +869,9 @@
             info_Label2.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
-            info_Label2.Size = new Size(338, 35);
+            info_Label2.Size = new Size(337, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.1.1-Release+20240309";
+            info_Label2.Text = "版本号:1.2.0-Release+20240320";
             // 
             // info_Label1
             // 
@@ -909,18 +920,18 @@
             conversion_Group3.Location = new Point(6, 150);
             conversion_Group3.Name = "conversion_Group3";
             conversion_Group3.RightToLeft = RightToLeft.No;
-            conversion_Group3.Size = new Size(553, 94);
+            conversion_Group3.Size = new Size(553, 61);
             conversion_Group3.TabIndex = 4;
             conversion_Group3.TabStop = false;
             conversion_Group3.Text = "提示";
             // 
             // label2
             // 
-            label2.Location = new Point(6, 26);
+            label2.Location = new Point(6, 27);
             label2.Name = "label2";
-            label2.Size = new Size(541, 60);
+            label2.Size = new Size(541, 31);
             label2.TabIndex = 3;
-            label2.Text = "目前版本仅支持<.ncm>网易云音乐加密文件转换 且仅支持转换为<.mp3> 后续版本会陆续开放更多格式转换\r\n";
+            label2.Text = "支持被转化的格式:<ncm><mp3><wav><ogg><flac>";
             // 
             // conversion_Group2
             // 
@@ -1022,6 +1033,97 @@
             upData_button.UseVisualStyleBackColor = true;
             upData_button.Click += upData_button_Click;
             // 
+            // tabPage7
+            // 
+            tabPage7.BackColor = SystemColors.Control;
+            tabPage7.Controls.Add(numberLabel);
+            tabPage7.Controls.Add(DownloadSelected);
+            tabPage7.Controls.Add(SearchBarTextBox);
+            tabPage7.Controls.Add(AudioListBox);
+            tabPage7.Controls.Add(DownloadLinkListBox);
+            tabPage7.Controls.Add(LoadList);
+            tabPage7.Location = new Point(0, 22);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Padding = new Padding(3);
+            tabPage7.Size = new Size(565, 341);
+            tabPage7.TabIndex = 6;
+            tabPage7.Text = "发现";
+            // 
+            // numberLabel
+            // 
+            numberLabel.AutoSize = true;
+            numberLabel.Font = new Font("NLXJT", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            numberLabel.Location = new Point(436, 70);
+            numberLabel.Name = "numberLabel";
+            numberLabel.RightToLeft = RightToLeft.No;
+            numberLabel.Size = new Size(0, 19);
+            numberLabel.TabIndex = 5;
+            // 
+            // DownloadSelected
+            // 
+            DownloadSelected.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            DownloadSelected.Location = new Point(436, 39);
+            DownloadSelected.Name = "DownloadSelected";
+            DownloadSelected.Size = new Size(123, 28);
+            DownloadSelected.TabIndex = 3;
+            DownloadSelected.Text = "下载选中";
+            DownloadSelected.UseVisualStyleBackColor = true;
+            DownloadSelected.Click += DownloadSelected_Click;
+            // 
+            // SearchBarTextBox
+            // 
+            SearchBarTextBox.BorderStyle = BorderStyle.FixedSingle;
+            SearchBarTextBox.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            SearchBarTextBox.ForeColor = Color.FromArgb(90, 90, 90);
+            SearchBarTextBox.Location = new Point(6, 6);
+            SearchBarTextBox.Name = "SearchBarTextBox";
+            SearchBarTextBox.RightToLeft = RightToLeft.No;
+            SearchBarTextBox.Size = new Size(424, 28);
+            SearchBarTextBox.TabIndex = 4;
+            SearchBarTextBox.Text = "搜索";
+            SearchBarTextBox.TextAlign = HorizontalAlignment.Center;
+            SearchBarTextBox.TextChanged += SearchBarTextBox_TextChanged;
+            SearchBarTextBox.Enter += SearchBarTextBox_Enter;
+            SearchBarTextBox.Leave += SearchBarTextBox_Leave;
+            // 
+            // AudioListBox
+            // 
+            AudioListBox.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            AudioListBox.ForeColor = Color.FromArgb(90, 90, 90);
+            AudioListBox.FormattingEnabled = true;
+            AudioListBox.ItemHeight = 21;
+            AudioListBox.Location = new Point(6, 39);
+            AudioListBox.Name = "AudioListBox";
+            AudioListBox.RightToLeft = RightToLeft.No;
+            AudioListBox.ScrollAlwaysVisible = true;
+            AudioListBox.Size = new Size(424, 319);
+            AudioListBox.TabIndex = 0;
+            // 
+            // DownloadLinkListBox
+            // 
+            DownloadLinkListBox.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            DownloadLinkListBox.ForeColor = Color.FromArgb(90, 90, 90);
+            DownloadLinkListBox.FormattingEnabled = true;
+            DownloadLinkListBox.ItemHeight = 21;
+            DownloadLinkListBox.Location = new Point(436, 247);
+            DownloadLinkListBox.Name = "DownloadLinkListBox";
+            DownloadLinkListBox.RightToLeft = RightToLeft.No;
+            DownloadLinkListBox.ScrollAlwaysVisible = true;
+            DownloadLinkListBox.Size = new Size(123, 88);
+            DownloadLinkListBox.TabIndex = 2;
+            DownloadLinkListBox.Visible = false;
+            // 
+            // LoadList
+            // 
+            LoadList.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            LoadList.Location = new Point(436, 6);
+            LoadList.Name = "LoadList";
+            LoadList.Size = new Size(123, 28);
+            LoadList.TabIndex = 1;
+            LoadList.Text = "加载/刷新";
+            LoadList.UseVisualStyleBackColor = true;
+            LoadList.Click += LoadList_Click;
+            // 
             // mainGroupBox
             // 
             mainGroupBox.Controls.Add(mainTabControl);
@@ -1048,49 +1150,49 @@
             // 
             mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { 播放ToolStripMenuItem, 停止播放ToolStripMenuItem, 删除ToolStripMenuItem, 重命名ToolStripMenuItem, 设为播放项ToolStripMenuItem, 打开文件所在位置ToolStripMenuItem });
             mainContextMenuStrip.Name = "mainContextMenuStrip";
-            mainContextMenuStrip.Size = new Size(181, 158);
+            mainContextMenuStrip.Size = new Size(173, 136);
             // 
             // 播放ToolStripMenuItem
             // 
             播放ToolStripMenuItem.Name = "播放ToolStripMenuItem";
-            播放ToolStripMenuItem.Size = new Size(180, 22);
+            播放ToolStripMenuItem.Size = new Size(172, 22);
             播放ToolStripMenuItem.Text = "播放选择项";
             播放ToolStripMenuItem.Click += 播放ToolStripMenuItem_Click;
+            // 
+            // 停止播放ToolStripMenuItem
+            // 
+            停止播放ToolStripMenuItem.Name = "停止播放ToolStripMenuItem";
+            停止播放ToolStripMenuItem.Size = new Size(172, 22);
+            停止播放ToolStripMenuItem.Text = "停止播放";
+            停止播放ToolStripMenuItem.Click += 停止播放ToolStripMenuItem_Click;
             // 
             // 删除ToolStripMenuItem
             // 
             删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            删除ToolStripMenuItem.Size = new Size(180, 22);
+            删除ToolStripMenuItem.Size = new Size(172, 22);
             删除ToolStripMenuItem.Text = "删除选择项";
             删除ToolStripMenuItem.Click += 删除ToolStripMenuItem_Click;
             // 
             // 重命名ToolStripMenuItem
             // 
             重命名ToolStripMenuItem.Name = "重命名ToolStripMenuItem";
-            重命名ToolStripMenuItem.Size = new Size(180, 22);
+            重命名ToolStripMenuItem.Size = new Size(172, 22);
             重命名ToolStripMenuItem.Text = "重命名选择项";
             重命名ToolStripMenuItem.Click += 重命名ToolStripMenuItem_Click;
             // 
             // 设为播放项ToolStripMenuItem
             // 
             设为播放项ToolStripMenuItem.Name = "设为播放项ToolStripMenuItem";
-            设为播放项ToolStripMenuItem.Size = new Size(180, 22);
+            设为播放项ToolStripMenuItem.Size = new Size(172, 22);
             设为播放项ToolStripMenuItem.Text = "设为播放项";
             设为播放项ToolStripMenuItem.Click += 设为播放项ToolStripMenuItem_Click;
             // 
             // 打开文件所在位置ToolStripMenuItem
             // 
             打开文件所在位置ToolStripMenuItem.Name = "打开文件所在位置ToolStripMenuItem";
-            打开文件所在位置ToolStripMenuItem.Size = new Size(180, 22);
+            打开文件所在位置ToolStripMenuItem.Size = new Size(172, 22);
             打开文件所在位置ToolStripMenuItem.Text = "打开文件所在位置";
             打开文件所在位置ToolStripMenuItem.Click += 打开文件所在位置ToolStripMenuItem_Click;
-            // 
-            // 停止播放ToolStripMenuItem
-            // 
-            停止播放ToolStripMenuItem.Name = "停止播放ToolStripMenuItem";
-            停止播放ToolStripMenuItem.Size = new Size(180, 22);
-            停止播放ToolStripMenuItem.Text = "停止播放";
-            停止播放ToolStripMenuItem.Click += 停止播放ToolStripMenuItem_Click;
             // 
             // MainWindow
             // 
@@ -1137,6 +1239,8 @@
             conversion_Group2.PerformLayout();
             conversion_Group1.ResumeLayout(false);
             conversion_Group1.PerformLayout();
+            tabPage7.ResumeLayout(false);
+            tabPage7.PerformLayout();
             mainGroupBox.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             mainContextMenuStrip.ResumeLayout(false);
@@ -1227,5 +1331,12 @@
         private Label label2;
         private Button mToAudioData1;
         private ToolStripMenuItem 停止播放ToolStripMenuItem;
+        private TabPage tabPage7;
+        private ListBox AudioListBox;
+        private Button LoadList;
+        private ListBox DownloadLinkListBox;
+        private Button DownloadSelected;
+        private TextBox SearchBarTextBox;
+        private Label numberLabel;
     }
 }
