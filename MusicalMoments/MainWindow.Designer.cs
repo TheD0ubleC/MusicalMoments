@@ -26,13 +26,14 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem9 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem10 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem11 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem12 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem13 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem14 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem15 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem16 = new ListViewItem("编辑", 7);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -115,6 +116,8 @@
             AudioListBox = new ListBox();
             DownloadLinkListBox = new ListBox();
             LoadList = new Button();
+            tabPage8 = new TabPage();
+            RTipLabel = new Label();
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
@@ -148,6 +151,7 @@
             conversion_Group2.SuspendLayout();
             conversion_Group1.SuspendLayout();
             tabPage7.SuspendLayout();
+            tabPage8.SuspendLayout();
             mainGroupBox.SuspendLayout();
             groupBox1.SuspendLayout();
             mainContextMenuStrip.SuspendLayout();
@@ -158,15 +162,15 @@
             sideLists.BackColor = SystemColors.Control;
             sideLists.BorderStyle = BorderStyle.None;
             sideLists.Cursor = Cursors.Hand;
-            sideLists.Font = new Font("NLXJT", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            sideLists.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem9, listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
             sideLists.OwnerDraw = true;
             sideLists.Scrollable = false;
-            sideLists.Size = new Size(111, 363);
+            sideLists.Size = new Size(98, 363);
             sideLists.SmallImageList = sideListsImage;
             sideLists.TabIndex = 0;
             sideLists.UseCompatibleStateImageBehavior = false;
@@ -186,6 +190,7 @@
             sideListsImage.Images.SetKeyName(4, "一般提示.png");
             sideListsImage.Images.SetKeyName(5, "转换.png");
             sideListsImage.Images.SetKeyName(6, "发现.png");
+            sideListsImage.Images.SetKeyName(7, "编辑.png");
             // 
             // tabPage2
             // 
@@ -398,6 +403,7 @@
             mainTabControl.Controls.Add(tabPage5);
             mainTabControl.Controls.Add(tabPage6);
             mainTabControl.Controls.Add(tabPage7);
+            mainTabControl.Controls.Add(tabPage8);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
@@ -1124,12 +1130,33 @@
             LoadList.UseVisualStyleBackColor = true;
             LoadList.Click += LoadList_Click;
             // 
+            // tabPage8
+            // 
+            tabPage8.BackColor = SystemColors.Control;
+            tabPage8.Controls.Add(RTipLabel);
+            tabPage8.Location = new Point(0, 22);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Padding = new Padding(3);
+            tabPage8.Size = new Size(565, 341);
+            tabPage8.TabIndex = 7;
+            tabPage8.Text = "编辑";
+            // 
+            // RTipLabel
+            // 
+            RTipLabel.AutoSize = true;
+            RTipLabel.Font = new Font("NLXJT", 50F, FontStyle.Bold, GraphicsUnit.Point);
+            RTipLabel.Location = new Point(134, 127);
+            RTipLabel.Name = "RTipLabel";
+            RTipLabel.Size = new Size(305, 88);
+            RTipLabel.TabIndex = 0;
+            RTipLabel.Text = "敬请期待";
+            // 
             // mainGroupBox
             // 
             mainGroupBox.Controls.Add(mainTabControl);
             mainGroupBox.Font = new Font("NLXJT", 16F, FontStyle.Bold, GraphicsUnit.Point);
             mainGroupBox.ForeColor = Color.FromArgb(90, 90, 90);
-            mainGroupBox.Location = new Point(135, 4);
+            mainGroupBox.Location = new Point(127, 4);
             mainGroupBox.Name = "mainGroupBox";
             mainGroupBox.RightToLeft = RightToLeft.Yes;
             mainGroupBox.Size = new Size(577, 391);
@@ -1142,7 +1169,7 @@
             groupBox1.Controls.Add(sideLists);
             groupBox1.Location = new Point(12, 10);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(117, 385);
+            groupBox1.Size = new Size(109, 385);
             groupBox1.TabIndex = 3;
             groupBox1.TabStop = false;
             // 
@@ -1198,7 +1225,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(724, 407);
+            ClientSize = new Size(713, 407);
             Controls.Add(groupBox1);
             Controls.Add(mainGroupBox);
             DoubleBuffered = true;
@@ -1241,6 +1268,8 @@
             conversion_Group1.PerformLayout();
             tabPage7.ResumeLayout(false);
             tabPage7.PerformLayout();
+            tabPage8.ResumeLayout(false);
+            tabPage8.PerformLayout();
             mainGroupBox.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             mainContextMenuStrip.ResumeLayout(false);
@@ -1338,5 +1367,7 @@
         private Button DownloadSelected;
         private TextBox SearchBarTextBox;
         private Label numberLabel;
+        private TabPage tabPage8;
+        private Label RTipLabel;
     }
 }

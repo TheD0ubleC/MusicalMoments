@@ -11,10 +11,15 @@ using System.Resources;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Security.Policy;
+using NAudio.Gui;
+using TagLib.Mpeg;
+
+using File = System.IO.File;
 namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
+        public static string nowVer = "v1.2.1-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         private Keys toggleStreamKey;
         private Keys playAudioKey;
@@ -105,20 +110,25 @@ namespace MusicalMoments
             // 绘制文本
             e.Graphics.DrawString(e.Item.Text, e.Item.Font, textBrush, e.Bounds.Left + 40, e.Bounds.Top);
         }
-        private void MainWindow_Load(object sender, EventArgs e)
+        private async void MainWindow_Load(object sender, EventArgs e)
         {
-
-
-
+            Visible = false;
+            foreach (TabPage tabPage in mainTabControl.TabPages)
+            {
+                mainTabControl.SelectTab(tabPage);
+                //我有强迫症 所以防止切换选项卡的时候有卡顿的加载就在启动前先都切一遍:D
+            }
             /*
-            用于构建本地化基文件  
+            用于构建本地化基文件(感觉用不上这东西 别说海外用户了 能有几个国内用户用我就心满意足了TT)
             BuildLocalizationBaseFiles(this.Controls, $"{runningDirectory}Resources.zh-CN.resx");
             */
+            Misc.FadeIn(200, this);
+
             mainTabControl.ItemSize = new System.Drawing.Size(0, 1);
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioData"));//创建存放音频的文件夹
             Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
 
-            if(!Misc.IsAdministrator()) { Text += " [当前非管理员运行,可能会出现按下按键无反应]"; }
+            if (!Misc.IsAdministrator()) { Text += " [当前非管理员运行,可能会出现按下按键无反应]"; }
 
 
             label_VBStatus.Text = Misc.checkVB() ? "VB声卡已安装" : "VB声卡未安装";
@@ -140,6 +150,22 @@ namespace MusicalMoments
             VBVolumeTrackBar_Scroll(null, null);
             VolumeTrackBar_Scroll(null, null);
             TipsVolumeTrackBar_Scroll(null, null);
+
+            
+
+            LoadUserData();
+
+            //最后再版本验证 以防UI错误
+            var latestVer = await Misc.GetLatestVersionAsync();
+            if (latestVer != nowVer)
+            {
+                DialogResult dialogResult = MessageBox.Show($"Musical Moments存在新版本，请及时更新。当前版本为{nowVer} 最新版本为{latestVer}，按下确定将自动前往新版本下载页。", "新版本推送", MessageBoxButtons.OKCancel);
+                if (dialogResult == DialogResult.OK) { Process.Start(new ProcessStartInfo("https://github.com/TheD0ubleC/MusicalMoments/releases/tag/" + latestVer) { UseShellExecute = true }); }
+            }
+        }
+
+        private void LoadUserData()
+        {
             string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "userSettings.json");
             if (File.Exists(configPath))
             {
@@ -203,6 +229,7 @@ namespace MusicalMoments
             }
             else
             {
+                mainTabControl.SelectedIndex = 0;
                 comboBox_AudioEquipmentInput.SelectedIndex = 0;
                 comboBox_AudioEquipmentOutput.SelectedIndex = 0;
                 comboBox_VBAudioEquipmentInput.SelectedIndex = 0;
@@ -210,10 +237,10 @@ namespace MusicalMoments
                 VBVolumeTrackBar_Scroll(null, null);
                 VolumeTrackBar_Scroll(null, null);
                 TipsVolumeTrackBar_Scroll(null, null);
-                firstStart = System.DateTime.Now.ToString("yyyy年MM月dd HH时mm分ss秒");
+                firstStart = System.DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
             }
         }
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        private async void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             var settings = new UserSettings
             {
@@ -235,7 +262,11 @@ namespace MusicalMoments
             };
             string json = JsonConvert.SerializeObject(settings);
             File.WriteAllText(Path.Combine(runningDirectory, "userSettings.json"), json);
+
+            e.Cancel = true;
+            Misc.FadeOut(200, this);
         }
+
         private void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
             reLoadList();
@@ -743,71 +774,7 @@ namespace MusicalMoments
                     break;
             }
         }
-        public void ApplyResourcesToControls(Control.ControlCollection controls, string baseName, Assembly assembly)
-        {
-            ResourceManager rm = new ResourceManager(baseName, assembly);
-            foreach (Control control in controls)
-            {
-                if (control.HasChildren)
-                {
-                    ApplyResourcesToControls(control.Controls, baseName, assembly);
-                }
-                string key = $"{control.Name}ResxText";
-                string resourceValue = rm.GetString(key);
-                if (!string.IsNullOrEmpty(resourceValue))
-                {
-                    control.Text = resourceValue;
-                }
-            }
-        }
-        public static void BuildLocalizationBaseFiles(Control.ControlCollection controls, string filePath)
-        {
-            //该函数用于生成标准本地化文件 基文件为简体中文
-            StringBuilder resxContent = new StringBuilder();
-            // 添加.resx文件必要的头部
-            resxContent.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-            resxContent.AppendLine("<root>");
-            resxContent.AppendLine("  <!-- 简化的头部信息 -->");
-            resxContent.AppendLine("  <resheader name=\"resmimetype\">");
-            resxContent.AppendLine("    <value>text/microsoft-resx</value>");
-            resxContent.AppendLine("  </resheader>");
-            resxContent.AppendLine("  <resheader name=\"version\">");
-            resxContent.AppendLine("    <value>2.0</value>");
-            resxContent.AppendLine("  </resheader>");
-            resxContent.AppendLine("  <resheader name=\"reader\">");
-            resxContent.AppendLine("    <value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value>");
-            resxContent.AppendLine("  </resheader>");
-            resxContent.AppendLine("  <resheader name=\"writer\">");
-            resxContent.AppendLine("    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>");
-            resxContent.AppendLine("  </resheader>");
-            // 为控件生成<data>元素
-            resxContent.Append(BuildControlToXMLDataValue(controls));
-            // 添加文件尾部
-            resxContent.AppendLine("</root>");
-            // 保存到文件
-            File.WriteAllText(filePath, resxContent.ToString());
-        }
-        private static string BuildControlToXMLDataValue(Control.ControlCollection controls)
-        {
-            StringBuilder resxEntries = new StringBuilder();
-            foreach (Control control in controls)
-            {
-                if (control.HasChildren)
-                {
-                    resxEntries.Append(BuildControlToXMLDataValue(control.Controls));
-                }
-                if (!string.IsNullOrEmpty(control.Name) && !string.IsNullOrEmpty(control.Text))
-                {
-                    string escapedControlText = control.Text
-                        .Replace("<", "&lt;")
-                        .Replace(">", "&gt;");
-                    resxEntries.AppendLine($"  <data name=\"{control.Name}ResxText\" xml:space=\"preserve\">");
-                    resxEntries.AppendLine($"    <value>{escapedControlText}</value>");
-                    resxEntries.AppendLine($"  </data>");
-                }
-            }
-            return resxEntries.ToString();
-        }
+
 
         private void 停止播放ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -843,6 +810,8 @@ namespace MusicalMoments
                 OriginalAudioList.Add(new AudioItem(AudioListBox.Items[i].ToString(), DownloadLinkListBox.Items[i].ToString()));
             }
             numberLabel.Text = $"{AudioListBox.Items.Count} 个项目";
+            if (!Debugger.IsAttached) { Misc.ButtonStabilization(5, LoadList); }
+
         }
 
         private void SearchBarTextBox_Enter(object sender, EventArgs e)
@@ -936,5 +905,9 @@ namespace MusicalMoments
                 MessageBox.Show("未找到选定项的下载链接。", "错误");
             }
         }
+        AudioFileReader audioFileT;
+        Bitmap waveformBitmap;
+
+
     }
 }

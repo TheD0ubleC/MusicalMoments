@@ -7,12 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Net;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
+using System.Resources;
+using System.Text.Json;
 namespace MusicalMoments
 {
     internal class Misc
@@ -353,6 +355,148 @@ namespace MusicalMoments
             WindowsPrincipal principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
+        public static void ButtonStabilization(int time,Button button)
+        {
+            var ori = button.Text;
+            button.Enabled = false;
+            for (int i = time; i != 0; i--) { button.Text = i.ToString(); Misc.Delay(1000); }
+            button.Enabled = true;
+            button.Text = ori;
+        }
+        public static async Task FadeIn(int durationMilliseconds, Form form)
+        {
+            form.Visible = false;
+            form.Opacity = 0;
+            form.Show();
+
+            for (double opacity = 0; opacity <= 1; opacity += 0.05)
+            {
+                form.Opacity = opacity;
+                await Task.Delay(durationMilliseconds / 20);
+            }
+
+            form.Opacity = 1;
+        }
+
+        public static async Task FadeOut(int durationMilliseconds, Form form)
+        {
+            for (double opacity = 1; opacity >= 0; opacity -= 0.05)
+            {
+                form.Opacity = opacity;
+                await Task.Delay(durationMilliseconds / 20);
+            }
+            form.Visible = false;
+            form.Dispose();
+        }
+        public void ApplyResourcesToControls(Control.ControlCollection controls, string baseName, Assembly assembly)
+        {
+            ResourceManager rm = new ResourceManager(baseName, assembly);
+            foreach (Control control in controls)
+            {
+                if (control.HasChildren)
+                {
+                    ApplyResourcesToControls(control.Controls, baseName, assembly);
+                }
+                string key = $"{control.Name}ResxText";
+                string resourceValue = rm.GetString(key);
+                if (!string.IsNullOrEmpty(resourceValue))
+                {
+                    control.Text = resourceValue;
+                }
+            }
+        }
+        public static void BuildLocalizationBaseFiles(Control.ControlCollection controls, string filePath)
+        {
+            //该函数用于生成标准本地化文件 基文件为简体中文
+            StringBuilder resxContent = new StringBuilder();
+            // 添加.resx文件必要的头部
+            resxContent.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            resxContent.AppendLine("<root>");
+            resxContent.AppendLine("  <!-- 简化的头部信息 -->");
+            resxContent.AppendLine("  <resheader name=\"resmimetype\">");
+            resxContent.AppendLine("    <value>text/microsoft-resx</value>");
+            resxContent.AppendLine("  </resheader>");
+            resxContent.AppendLine("  <resheader name=\"version\">");
+            resxContent.AppendLine("    <value>2.0</value>");
+            resxContent.AppendLine("  </resheader>");
+            resxContent.AppendLine("  <resheader name=\"reader\">");
+            resxContent.AppendLine("    <value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value>");
+            resxContent.AppendLine("  </resheader>");
+            resxContent.AppendLine("  <resheader name=\"writer\">");
+            resxContent.AppendLine("    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>");
+            resxContent.AppendLine("  </resheader>");
+            // 为控件生成<data>元素
+            resxContent.Append(BuildControlToXMLDataValue(controls));
+            // 添加文件尾部
+            resxContent.AppendLine("</root>");
+            // 保存到文件
+            File.WriteAllText(filePath, resxContent.ToString());
+        }
+        private static string BuildControlToXMLDataValue(Control.ControlCollection controls)
+        {
+            StringBuilder resxEntries = new StringBuilder();
+            foreach (Control control in controls)
+            {
+                if (control.HasChildren)
+                {
+                    resxEntries.Append(BuildControlToXMLDataValue(control.Controls));
+                }
+                if (!string.IsNullOrEmpty(control.Name) && !string.IsNullOrEmpty(control.Text))
+                {
+                    string escapedControlText = control.Text
+                        .Replace("<", "&lt;")
+                        .Replace(">", "&gt;");
+                    resxEntries.AppendLine($"  <data name=\"{control.Name}ResxText\" xml:space=\"preserve\">");
+                    resxEntries.AppendLine($"    <value>{escapedControlText}</value>");
+                    resxEntries.AppendLine($"  </data>");
+                }
+            }
+            return resxEntries.ToString();
+        }
+
+
+        private const string RepoOwner = "TheD0ubleC"; // GitHub用户名
+        private const string RepoName = "MusicalMoments"; // GitHub仓库名
+
+        public static async Task<string> GetLatestVersionAsync()
+        {
+            HttpResponseMessage response = null;
+            string latestVersion = string.Empty;
+
+            string releasesUrl = $"https://api.github.com/repos/{RepoOwner}/{RepoName}/releases/latest";
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "C# App");
+                try { response = await client.GetAsync(releasesUrl);}catch (Exception ex) { return MainWindow.nowVer; }
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    latestVersion = ParseLatestVersion(json);
+                }
+            }
+
+            return latestVersion;
+        }
+
+        private static string ParseLatestVersion(string json)
+        {
+            using (JsonDocument doc = JsonDocument.Parse(json))
+            {
+                JsonElement root = doc.RootElement;
+
+                if (root.TryGetProperty("tag_name", out JsonElement tagElement))
+                {
+                    return tagElement.GetString();
+                }
+            }
+
+            return string.Empty;
+        }
+
+
+
 
     }
 }
