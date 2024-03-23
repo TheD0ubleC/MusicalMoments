@@ -7,8 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>image\MMLOGO.ico</ApplicationIcon>
     <Product>MusicalMoments</Product>
-    <AssemblyVersion>1.2.1</AssemblyVersion>
-    <FileVersion>1.2.1</FileVersion>
+    <AssemblyVersion>1.2.3</AssemblyVersion>
+    <FileVersion>1.2.3</FileVersion>
     <StartupObject>MusicalMoments.Program</StartupObject>
     <UseWPF>False</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
@@ -37,8 +37,6 @@
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NVorbis" Version="0.10.5" />
-    <PackageReference Include="System.Management" Version="9.0.0-preview.1.24080.9" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>

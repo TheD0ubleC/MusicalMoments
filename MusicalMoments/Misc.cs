@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -463,7 +462,7 @@ namespace MusicalMoments
             HttpResponseMessage response = null;
             string latestVersion = string.Empty;
 
-            string releasesUrl = $"https://api.github.com/repos/{RepoOwner}/{RepoName}/releases/latest";
+            string releasesUrl = $"https://api.kkgithub.com/repos/{RepoOwner}/{RepoName}/releases/latest";
 
             using (HttpClient client = new HttpClient())
             {
@@ -474,6 +473,27 @@ namespace MusicalMoments
                 {
                     string json = await response.Content.ReadAsStringAsync();
                     latestVersion = ParseLatestVersion(json);
+                }
+            }
+
+            return latestVersion;
+        }
+        public static async Task<string> GetLatestVersionTipsAsync()
+        {
+            HttpResponseMessage response = null;
+            string latestVersion = string.Empty;
+
+            string releasesUrl = $"https://api.kkgithub.com/repos/{RepoOwner}/{RepoName}/releases/latest";
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "C# App");
+                try { response = await client.GetAsync(releasesUrl); } catch (Exception ex) { return MainWindow.nowVer; }
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    latestVersion = ParseLatestVersionTips(json);
                 }
             }
 
@@ -495,7 +515,20 @@ namespace MusicalMoments
             return string.Empty;
         }
 
+        private static string ParseLatestVersionTips(string json)
+        {
+            using (JsonDocument doc = JsonDocument.Parse(json))
+            {
+                JsonElement root = doc.RootElement;
 
+                if (root.TryGetProperty("body", out JsonElement tagElement))
+                {
+                    return tagElement.GetString();
+                }
+            }
+
+            return string.Empty;
+        }
 
 
     }

@@ -15,11 +15,12 @@ using NAudio.Gui;
 using TagLib.Mpeg;
 
 using File = System.IO.File;
+
 namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.2.1-release-x64";
+        public static string nowVer = "v1.2.3-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         private Keys toggleStreamKey;
         private Keys playAudioKey;
@@ -82,7 +83,7 @@ namespace MusicalMoments
                     {
                         if (File.Exists(selectedAudioPath))
                         {
-                            if (!isPlaying)
+                            if (isPlaying)
                             {
                                 Misc.PlayAudioToSpecificDevice(selectedAudioPath, Misc.GetOutputDeviceID(comboBox_VBAudioEquipmentOutput.SelectedItem.ToString()), true, VBvolume, audioEquipmentPlay.Checked, selectedAudioPath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), volume);
                             }
@@ -151,17 +152,13 @@ namespace MusicalMoments
             VolumeTrackBar_Scroll(null, null);
             TipsVolumeTrackBar_Scroll(null, null);
 
-            
+
 
             LoadUserData();
 
             //最后再版本验证 以防UI错误
-            var latestVer = await Misc.GetLatestVersionAsync();
-            if (latestVer != nowVer)
-            {
-                DialogResult dialogResult = MessageBox.Show($"Musical Moments存在新版本，请及时更新。当前版本为{nowVer} 最新版本为{latestVer}，按下确定将自动前往新版本下载页。", "新版本推送", MessageBoxButtons.OKCancel);
-                if (dialogResult == DialogResult.OK) { Process.Start(new ProcessStartInfo("https://github.com/TheD0ubleC/MusicalMoments/releases/tag/" + latestVer) { UseShellExecute = true }); }
-            }
+            CheckNewVer();
+
         }
 
         private void LoadUserData()
@@ -267,6 +264,38 @@ namespace MusicalMoments
             Misc.FadeOut(200, this);
         }
 
+
+        private async void CheckNewVer()
+        {
+            var newVerTips = await Misc.GetLatestVersionTipsAsync();
+            var latestVer = await Misc.GetLatestVersionAsync();
+            if (latestVer != nowVer)
+            {
+                DialogResult dialogResult = MessageBox.Show($"Musical Moments存在新版本，请尽快更新。当前版本为{nowVer} 最新版本为{latestVer}。\r\n按下是则自动下载最新版本压缩包 按下否则跳转至最新版本页面 按下取消则关闭\r\n\r\n以下是新版本简介:\r\n{newVerTips}", "新版本推送", MessageBoxButtons.YesNoCancel);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    string[] parts = latestVer.Split('-');
+                    string version = parts[0].TrimStart('v'); // 获取版本号部分
+                    string downloadUrl = $"https://kkgithub.com/TheD0ubleC/MusicalMoments/releases/download/{latestVer}/MM.Release-{version}.zip";
+                    try
+                    {
+                        using (WebClient wc = new WebClient())
+                        {
+                            wc.DownloadFile(downloadUrl, $"{runningDirectory}MM.Release-{version}.zip");
+                            MessageBox.Show($"下载成功 已存放至运行目录 详情路径:{runningDirectory}MM.Release-{version}.zip", "提示");
+                        }
+                    }
+                    catch (Exception ex)
+                    { MessageBox.Show($"下载失败，请至github页面自行下载或在群文件下载 错误详情:{ex.ToString()}", "错误"); }
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    Process.Start(new ProcessStartInfo("https://github.com/TheD0ubleC/MusicalMoments/releases/tag/" + latestVer) { UseShellExecute = true });
+                }
+            }
+
+        }
         private void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
             reLoadList();
@@ -908,6 +937,33 @@ namespace MusicalMoments
         AudioFileReader audioFileT;
         Bitmap waveformBitmap;
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string pluginPath = @"K:\Project\C#\MMPlugin\MMPlugin\bin\Release\MMPlugin.dll";
+
+            if (File.Exists(pluginPath))
+            {
+                Assembly pluginAssembly = Assembly.LoadFile(pluginPath);
+                Type[] pluginTypes = pluginAssembly.GetTypes();
+
+                foreach (Type pluginType in pluginTypes)
+                {
+                    if (pluginType.Namespace == "MusicalMoments" && pluginType.Name == "Plugin")
+                    {
+                        MethodInfo runMethod = pluginType.GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
+
+                        if (runMethod != null)
+                        {
+                            runMethod.Invoke(null, null);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Plugin file not found.");
+            }
+        }
 
     }
 }

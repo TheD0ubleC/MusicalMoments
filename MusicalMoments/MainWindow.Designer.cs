@@ -26,14 +26,15 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem9 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem10 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem11 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem12 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem13 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem14 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem15 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem16 = new ListViewItem("编辑", 7);
+            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem8 = new ListViewItem("编辑", 7);
+            ListViewItem listViewItem9 = new ListViewItem("插件", 8);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -118,6 +119,9 @@
             LoadList = new Button();
             tabPage8 = new TabPage();
             RTipLabel = new Label();
+            tabPage9 = new TabPage();
+            label1 = new Label();
+            button1 = new Button();
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
@@ -152,6 +156,7 @@
             conversion_Group1.SuspendLayout();
             tabPage7.SuspendLayout();
             tabPage8.SuspendLayout();
+            tabPage9.SuspendLayout();
             mainGroupBox.SuspendLayout();
             groupBox1.SuspendLayout();
             mainContextMenuStrip.SuspendLayout();
@@ -164,7 +169,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem9, listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -191,6 +196,7 @@
             sideListsImage.Images.SetKeyName(5, "转换.png");
             sideListsImage.Images.SetKeyName(6, "发现.png");
             sideListsImage.Images.SetKeyName(7, "编辑.png");
+            sideListsImage.Images.SetKeyName(8, "插件.png");
             // 
             // tabPage2
             // 
@@ -404,6 +410,7 @@
             mainTabControl.Controls.Add(tabPage6);
             mainTabControl.Controls.Add(tabPage7);
             mainTabControl.Controls.Add(tabPage8);
+            mainTabControl.Controls.Add(tabPage9);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
@@ -825,7 +832,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(364, 105);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：2\r\n- 修订号（Patch Version）：0\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240320";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：2\r\n- 修订号（Patch Version）：3\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240324";
             // 
             // info_Group
             // 
@@ -875,9 +882,9 @@
             info_Label2.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
-            info_Label2.Size = new Size(337, 35);
+            info_Label2.Size = new Size(339, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.2.0-Release+20240320";
+            info_Label2.Text = "版本号:1.2.3-Release+20240324";
             // 
             // info_Label1
             // 
@@ -1151,6 +1158,39 @@
             RTipLabel.TabIndex = 0;
             RTipLabel.Text = "敬请期待";
             // 
+            // tabPage9
+            // 
+            tabPage9.BackColor = SystemColors.Control;
+            tabPage9.Controls.Add(label1);
+            tabPage9.Controls.Add(button1);
+            tabPage9.Location = new Point(0, 22);
+            tabPage9.Name = "tabPage9";
+            tabPage9.Padding = new Padding(3);
+            tabPage9.Size = new Size(565, 341);
+            tabPage9.TabIndex = 8;
+            tabPage9.Text = "插件";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("NLXJT", 50F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(130, 126);
+            label1.Name = "label1";
+            label1.Size = new Size(238, 88);
+            label1.TabIndex = 1;
+            label1.Text = "开发中";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(6, 6);
+            button1.Name = "button1";
+            button1.Size = new Size(149, 53);
+            button1.TabIndex = 0;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
+            button1.Click += button1_Click;
+            // 
             // mainGroupBox
             // 
             mainGroupBox.Controls.Add(mainTabControl);
@@ -1270,6 +1310,8 @@
             tabPage7.PerformLayout();
             tabPage8.ResumeLayout(false);
             tabPage8.PerformLayout();
+            tabPage9.ResumeLayout(false);
+            tabPage9.PerformLayout();
             mainGroupBox.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             mainContextMenuStrip.ResumeLayout(false);
@@ -1369,5 +1411,8 @@
         private Label numberLabel;
         private TabPage tabPage8;
         private Label RTipLabel;
+        private TabPage tabPage9;
+        private Button button1;
+        private Label label1;
     }
 }
