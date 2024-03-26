@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Resources;
 using System.Text.Json;
+using Newtonsoft.Json;
 namespace MusicalMoments
 {
     internal class Misc
@@ -185,14 +186,64 @@ namespace MusicalMoments
             {
                 var fileTag = TagLib.File.Create(file.FullName);
                 // 尝试读取音频文件的标题作为曲目信息
-                string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
                 string fileName = Path.GetFileNameWithoutExtension(file.Name); // 获取不带扩展名的文件名
+                string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
                 string fileType = file.Extension.TrimStart('.').ToUpper(); // 获取文件类型
                 ListViewItem item = new ListViewItem(new[] { fileName, track, fileType });
                 item.Tag = file.FullName; // 将文件的完整路径存储在Tag属性中
                 listView.Items.Add(item);
             }
         }
+        public static void AddPluginFilesToListView(string rootDirectoryPath, ListView listView)
+        {
+            // 清空列表视图中的项
+            listView.Items.Clear();
+
+            // 获取根目录下的所有文件夹
+            string[] subDirectories = Directory.GetDirectories(rootDirectoryPath);
+            foreach (string subDirectory in subDirectories)
+            {
+                string directoryName = new DirectoryInfo(subDirectory).Name;
+                string exeFilePath = Path.Combine(subDirectory, directoryName + ".exe");
+                string jsonFilePath = Path.Combine(subDirectory, directoryName + ".json");
+                if (File.Exists(exeFilePath) && File.Exists(jsonFilePath))
+                {
+                    try
+                    {
+                        string jsonContent = File.ReadAllText(jsonFilePath);
+                        PluginSDK.PluginInfo pluginInfo = JsonConvert.DeserializeObject<PluginSDK.PluginInfo>(jsonContent);
+                        if (pluginInfo != null)
+                        {
+                            ListViewItem item = new ListViewItem(new[] { directoryName, pluginInfo.PluginDescription, pluginInfo.PluginVersion });
+                            item.Tag = exeFilePath;
+                            listView.Items.Add(item);
+                        }
+                        else
+                        {
+                            ListViewItem item = new ListViewItem(new[] { directoryName, "无数据", "无数据" });
+                            item.Tag = exeFilePath;
+                            listView.Items.Add(item);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ListViewItem item = new ListViewItem(new[] { directoryName, "无数据", "无数据" });
+                        item.Tag = exeFilePath;
+                        listView.Items.Add(item);
+                    }
+                }
+                else
+                {
+                    ListViewItem item = new ListViewItem(new[] { directoryName, "无数据", "无数据" });
+                    item.Tag = exeFilePath;
+                    listView.Items.Add(item);
+                }
+            }
+        }
+
+
+
+
         public static string GetKeyDisplay(KeyEventArgs keyEventArgs = null, KeyPressEventArgs keyPressEventArgs = null)
         {
             // 从 KeyEventArgs 提取 keyCode

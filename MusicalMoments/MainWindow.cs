@@ -20,21 +20,22 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.2.3-release-x64";
+        public static string nowVer = "v1.3.0-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        private Keys toggleStreamKey;
-        private Keys playAudioKey;
-        private string selectedAudioPath;
-        private int closeCount = 0;
-        private int playedCount = 0;
-        private int changedCount = 0;
-        private string firstStart = System.DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
-        bool playAudio = true;
-        private IKeyboardMouseEvents m_GlobalHook;
-        private static bool isPlaying = false;
-        float VBvolume = 1f;
-        float volume = 1f;
-        float tipsvolume = 1f;
+        public static Keys toggleStreamKey;
+        public static Keys playAudioKey;
+        public static string selectedAudioPath;
+        public static string selectedPluginPath;
+        public static int closeCount = 0;
+        public static int playedCount = 0;
+        public static int changedCount = 0;
+        public static string firstStart = System.DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
+        public static bool playAudio = true;
+        public static IKeyboardMouseEvents m_GlobalHook;
+        public static bool isPlaying = false;
+        public static float VBvolume = 1f;
+        public static float volume = 1f;
+        public static float tipsvolume = 1f;
         public MainWindow()
         {
             InitializeComponent();
@@ -127,8 +128,9 @@ namespace MusicalMoments
 
             mainTabControl.ItemSize = new System.Drawing.Size(0, 1);
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioData"));//创建存放音频的文件夹
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugin"));//创建存放插件的文件夹
             Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
-
+            Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
             if (!Misc.IsAdministrator()) { Text += " [当前非管理员运行,可能会出现按下按键无反应]"; }
 
 
@@ -299,6 +301,7 @@ namespace MusicalMoments
         private void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
             reLoadList();
+            Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
             foreach (int index in sideLists.SelectedIndices)
             {
                 mainTabControl.SelectTab(index);
@@ -934,36 +937,85 @@ namespace MusicalMoments
                 MessageBox.Show("未找到选定项的下载链接。", "错误");
             }
         }
-        AudioFileReader audioFileT;
-        Bitmap waveformBitmap;
 
-        private void button1_Click(object sender, EventArgs e)
+        bool pluginServer = false;
+        private void TogglePluginServer_Click(object sender, EventArgs e)
         {
-            string pluginPath = @"K:\Project\C#\MMPlugin\MMPlugin\bin\Release\MMPlugin.dll";
-
-            if (File.Exists(pluginPath))
+            if (!pluginServer)
             {
-                Assembly pluginAssembly = Assembly.LoadFile(pluginPath);
-                Type[] pluginTypes = pluginAssembly.GetTypes();
+                PluginSDK.PluginServer.StartServer();
+                pluginServer = true;
+                TogglePluginServer.Text = "关闭插件服务";
+                PluginStatus.Text = "插件状态:已开启";
+                LoadPlugin.Enabled = true;
+                pluginListView.Enabled = true;
+                PluginServerAddress.Text = PluginSDK.PluginServer.GetServerAddress();
+            }
+            else
+            {
+                PluginSDK.PluginServer.StopServer();
+                pluginServer = false;
+                TogglePluginServer.Text = "开启插件服务";
+                PluginStatus.Text = "插件状态:未开启";
+                LoadPlugin.Enabled = false;
+                pluginListView.Enabled = false;
+                PluginServerAddress.Text = "";
+            }
+        }
 
-                foreach (Type pluginType in pluginTypes)
+        private void PluginServerAddress_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(PluginServerAddress.Text);
+        }
+
+        private void mToPluginData_Click(object sender, EventArgs e)
+        {
+            string folderPath = Path.Combine(runningDirectory, "Plugin");
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = folderPath,
+                UseShellExecute = true
+            });
+        }
+        private void LoadPlugin_Click(object sender, EventArgs e)
+        {
+            // 检查是否有选中的项
+            if (pluginListView.SelectedItems.Count > 0)
+            {
+                // 获取选中项
+                ListViewItem selectedItem = pluginListView.SelectedItems[0];
+
+                // 从选中项的 Tag 属性中获取插件文件的完整路径
+                string pluginFilePath = selectedItem.Tag as string;
+
+                // 如果插件文件路径不为空
+                if (!string.IsNullOrEmpty(pluginFilePath))
                 {
-                    if (pluginType.Namespace == "MusicalMoments" && pluginType.Name == "Plugin")
-                    {
-                        MethodInfo runMethod = pluginType.GetMethod("Run", BindingFlags.Static | BindingFlags.Public);
+                    // 设置启动信息
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = pluginFilePath;
+                    startInfo.Arguments = PluginServerAddress.Text;
 
-                        if (runMethod != null)
-                        {
-                            runMethod.Invoke(null, null);
-                        }
-                    }
+                    // 启动选中的插件应用程序
+                    try
+                    { Process.Start(startInfo); }
+                    catch(Exception ex) { MessageBox.Show($"请确认该插件是否为可执行文件 错误详情:\r\n{ex}","错误"); }
                 }
             }
             else
             {
-                MessageBox.Show("Plugin file not found.");
+                // 如果没有选中的项，给出提示或者清空显示的内容
+                MessageBox.Show("请选择要加载的插件。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
+        private void reLoadPluginListsView_Click(object sender, EventArgs e)
+        {
+            Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
+        }
     }
 }

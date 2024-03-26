@@ -120,8 +120,16 @@
             tabPage8 = new TabPage();
             RTipLabel = new Label();
             tabPage9 = new TabPage();
-            label1 = new Label();
-            button1 = new Button();
+            LoadPlugin = new Button();
+            reLoadPluginListsView = new Button();
+            PluginServerAddress = new Label();
+            mToPluginData = new Button();
+            PluginStatus = new Label();
+            TogglePluginServer = new Button();
+            pluginListView = new ListView();
+            PluginName = new ColumnHeader();
+            PluginAuthor = new ColumnHeader();
+            PluginVer = new ColumnHeader();
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
@@ -832,7 +840,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(364, 105);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：2\r\n- 修订号（Patch Version）：3\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240324";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：0\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240326\r\n";
             // 
             // info_Group
             // 
@@ -882,9 +890,9 @@
             info_Label2.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
-            info_Label2.Size = new Size(339, 35);
+            info_Label2.Size = new Size(338, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.2.3-Release+20240324";
+            info_Label2.Text = "版本号:1.3.0-Release+20240326";
             // 
             // info_Label1
             // 
@@ -1161,8 +1169,13 @@
             // tabPage9
             // 
             tabPage9.BackColor = SystemColors.Control;
-            tabPage9.Controls.Add(label1);
-            tabPage9.Controls.Add(button1);
+            tabPage9.Controls.Add(LoadPlugin);
+            tabPage9.Controls.Add(reLoadPluginListsView);
+            tabPage9.Controls.Add(PluginServerAddress);
+            tabPage9.Controls.Add(mToPluginData);
+            tabPage9.Controls.Add(PluginStatus);
+            tabPage9.Controls.Add(TogglePluginServer);
+            tabPage9.Controls.Add(pluginListView);
             tabPage9.Location = new Point(0, 22);
             tabPage9.Name = "tabPage9";
             tabPage9.Padding = new Padding(3);
@@ -1170,26 +1183,96 @@
             tabPage9.TabIndex = 8;
             tabPage9.Text = "插件";
             // 
-            // label1
+            // LoadPlugin
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("NLXJT", 50F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(130, 126);
-            label1.Name = "label1";
-            label1.Size = new Size(238, 88);
-            label1.TabIndex = 1;
-            label1.Text = "开发中";
+            LoadPlugin.Enabled = false;
+            LoadPlugin.Location = new Point(285, 304);
+            LoadPlugin.Name = "LoadPlugin";
+            LoadPlugin.Size = new Size(75, 31);
+            LoadPlugin.TabIndex = 8;
+            LoadPlugin.Text = "加载";
+            LoadPlugin.UseVisualStyleBackColor = true;
+            LoadPlugin.Click += LoadPlugin_Click;
             // 
-            // button1
+            // reLoadPluginListsView
             // 
-            button1.Location = new Point(6, 6);
-            button1.Name = "button1";
-            button1.Size = new Size(149, 53);
-            button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Visible = false;
-            button1.Click += button1_Click;
+            reLoadPluginListsView.Location = new Point(285, 267);
+            reLoadPluginListsView.Name = "reLoadPluginListsView";
+            reLoadPluginListsView.Size = new Size(75, 31);
+            reLoadPluginListsView.TabIndex = 6;
+            reLoadPluginListsView.Text = "刷新";
+            reLoadPluginListsView.UseVisualStyleBackColor = true;
+            reLoadPluginListsView.Click += reLoadPluginListsView_Click;
+            // 
+            // PluginServerAddress
+            // 
+            PluginServerAddress.AutoSize = true;
+            PluginServerAddress.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            PluginServerAddress.Location = new Point(6, 298);
+            PluginServerAddress.Name = "PluginServerAddress";
+            PluginServerAddress.Size = new Size(0, 21);
+            PluginServerAddress.TabIndex = 5;
+            PluginServerAddress.Click += PluginServerAddress_Click;
+            // 
+            // mToPluginData
+            // 
+            mToPluginData.Location = new Point(366, 304);
+            mToPluginData.Name = "mToPluginData";
+            mToPluginData.Size = new Size(193, 31);
+            mToPluginData.TabIndex = 4;
+            mToPluginData.Text = "打开插件文件夹";
+            mToPluginData.UseVisualStyleBackColor = true;
+            mToPluginData.Click += mToPluginData_Click;
+            // 
+            // PluginStatus
+            // 
+            PluginStatus.AutoSize = true;
+            PluginStatus.Location = new Point(6, 269);
+            PluginStatus.Name = "PluginStatus";
+            PluginStatus.Size = new Size(179, 29);
+            PluginStatus.TabIndex = 3;
+            PluginStatus.Text = "插件状态:未启动";
+            // 
+            // TogglePluginServer
+            // 
+            TogglePluginServer.Location = new Point(366, 267);
+            TogglePluginServer.Name = "TogglePluginServer";
+            TogglePluginServer.Size = new Size(193, 31);
+            TogglePluginServer.TabIndex = 2;
+            TogglePluginServer.Text = "开启插件服务";
+            TogglePluginServer.UseVisualStyleBackColor = true;
+            TogglePluginServer.Click += TogglePluginServer_Click;
+            // 
+            // pluginListView
+            // 
+            pluginListView.AllowDrop = true;
+            pluginListView.Columns.AddRange(new ColumnHeader[] { PluginName, PluginAuthor, PluginVer });
+            pluginListView.Enabled = false;
+            pluginListView.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            pluginListView.ForeColor = SystemColors.WindowFrame;
+            pluginListView.Location = new Point(6, 6);
+            pluginListView.MultiSelect = false;
+            pluginListView.Name = "pluginListView";
+            pluginListView.RightToLeft = RightToLeft.No;
+            pluginListView.Size = new Size(553, 255);
+            pluginListView.TabIndex = 1;
+            pluginListView.UseCompatibleStateImageBehavior = false;
+            pluginListView.View = View.Details;
+            // 
+            // PluginName
+            // 
+            PluginName.Text = "插件名称";
+            PluginName.Width = 180;
+            // 
+            // PluginAuthor
+            // 
+            PluginAuthor.Text = "描述";
+            PluginAuthor.Width = 260;
+            // 
+            // PluginVer
+            // 
+            PluginVer.Text = "版本";
+            PluginVer.Width = 100;
             // 
             // mainGroupBox
             // 
@@ -1412,7 +1495,15 @@
         private TabPage tabPage8;
         private Label RTipLabel;
         private TabPage tabPage9;
-        private Button button1;
-        private Label label1;
+        private ListView pluginListView;
+        private ColumnHeader PluginName;
+        private ColumnHeader PluginAuthor;
+        private ColumnHeader PluginVer;
+        private Button TogglePluginServer;
+        private Button mToPluginData;
+        private Label PluginStatus;
+        private Label PluginServerAddress;
+        private Button reLoadPluginListsView;
+        private Button LoadPlugin;
     }
 }
