@@ -21,7 +21,7 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.3.0-release-x64";
+        public static string nowVer = "v1.3.1-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -30,7 +30,7 @@ namespace MusicalMoments
         public static int closeCount = 0;
         public static int playedCount = 0;
         public static int changedCount = 0;
-        public static string firstStart = System.DateTime.Now.ToString("yyyyÄêMMÔÂddÈÕ HHÊ±mm·ÖssÃë");
+        public static string firstStart = System.DateTime.Now.ToString("yyyyå¹´MMæœˆddæ—¥ HHæ—¶mmåˆ†ssç§’");
         public static bool playAudio = true;
         public static IKeyboardMouseEvents m_GlobalHook;
         public static bool isPlaying = false;
@@ -47,13 +47,13 @@ namespace MusicalMoments
         }
         public void Subscribe()
         {
-            // ¶©ÔÄÈ«¾Ö¼üÅÌÊÂ¼ş
+            // è®¢é˜…å…¨å±€é”®ç›˜äº‹ä»¶
             m_GlobalHook = Hook.GlobalEvents();
             m_GlobalHook.KeyDown += GlobalHookKeyDown;
         }
         private void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
-            // ¼ì²éÊÇ·ñ°´ÏÂÁË²¥·ÅÒôÆµµÄ°´¼ü
+            // æ£€æŸ¥æ˜¯å¦æŒ‰ä¸‹äº†æ’­æ”¾éŸ³é¢‘çš„æŒ‰é”®
             if (e.KeyCode == playAudioKey)
             {
                 if (playAudio)
@@ -74,15 +74,15 @@ namespace MusicalMoments
                 }
                 playedCount = playedCount + 1;
             }
-            // ¼ì²éÊÇ·ñ°´ÏÂÁËÇĞ»»Á÷µÄ°´¼ü
+            // æ£€æŸ¥æ˜¯å¦æŒ‰ä¸‹äº†åˆ‡æ¢æµçš„æŒ‰é”®
             if (e.KeyCode == toggleStreamKey)
             {
                 if (switchStreamTips.Checked)
                 {
                     playAudio = !playAudio;
                     string audioFilePath = playAudio
-                        ? Path.Combine(runningDirectory, @"ResourceFiles\ÇĞ»»ÎªÒôÆµ.wav")
-                        : Path.Combine(runningDirectory, @"ResourceFiles\ÇĞ»»ÎªÂó¿Ë·ç.wav");
+                        ? Path.Combine(runningDirectory, @"ResourceFiles\åˆ‡æ¢ä¸ºéŸ³é¢‘.wav")
+                        : Path.Combine(runningDirectory, @"ResourceFiles\åˆ‡æ¢ä¸ºéº¦å…‹é£.wav");
                     PlayAudioex(audioFilePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), tipsvolume);
                     if (!playAudio)
                     {
@@ -106,14 +106,14 @@ namespace MusicalMoments
         private void sideLists_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
             e.DrawBackground();
-            // »æÖÆÍ¼Æ¬
+            // ç»˜åˆ¶å›¾ç‰‡
             if (e.Item.ImageIndex >= 0)
             {
                 e.Graphics.DrawImage(sideLists.SmallImageList.Images[e.Item.ImageIndex], e.Bounds.Left, e.Bounds.Top);
             }
-            // ÉèÖÃÎÄ±¾ÑÕÉ«Îª»ÒÉ«
+            // è®¾ç½®æ–‡æœ¬é¢œè‰²ä¸ºç°è‰²
             Brush textBrush = new SolidBrush(Color.FromArgb(85, 85, 85));
-            // »æÖÆÎÄ±¾
+            // ç»˜åˆ¶æ–‡æœ¬
             e.Graphics.DrawString(e.Item.Text, e.Item.Font, textBrush, e.Bounds.Left + 40, e.Bounds.Top);
         }
         private async void MainWindow_Load(object sender, EventArgs e)
@@ -122,23 +122,23 @@ namespace MusicalMoments
             foreach (TabPage tabPage in mainTabControl.TabPages)
             {
                 mainTabControl.SelectTab(tabPage);
-                //ÎÒÓĞÇ¿ÆÈÖ¢ ËùÒÔ·ÀÖ¹ÇĞ»»Ñ¡Ïî¿¨µÄÊ±ºòÓĞ¿¨¶ÙµÄ¼ÓÔØ¾ÍÔÚÆô¶¯Ç°ÏÈ¶¼ÇĞÒ»±é:D
+                //æˆ‘æœ‰å¼ºè¿«ç—‡ æ‰€ä»¥é˜²æ­¢åˆ‡æ¢é€‰é¡¹å¡çš„æ—¶å€™æœ‰å¡é¡¿çš„åŠ è½½å°±åœ¨å¯åŠ¨å‰å…ˆéƒ½åˆ‡ä¸€é:D
             }
             /*
-            ÓÃÓÚ¹¹½¨±¾µØ»¯»ùÎÄ¼ş(¸Ğ¾õÓÃ²»ÉÏÕâ¶«Î÷ ±ğËµº£ÍâÓÃ»§ÁË ÄÜÓĞ¼¸¸ö¹úÄÚÓÃ»§ÓÃÎÒ¾ÍĞÄÂúÒâ×ãÁËTT)
+            ç”¨äºæ„å»ºæœ¬åœ°åŒ–åŸºæ–‡ä»¶(æ„Ÿè§‰ç”¨ä¸ä¸Šè¿™ä¸œè¥¿ åˆ«è¯´æµ·å¤–ç”¨æˆ·äº† èƒ½æœ‰å‡ ä¸ªå›½å†…ç”¨æˆ·ç”¨æˆ‘å°±å¿ƒæ»¡æ„è¶³äº†TT)
             BuildLocalizationBaseFiles(this.Controls, $"{runningDirectory}Resources.zh-CN.resx");
             */
             Misc.FadeIn(200, this);
 
             mainTabControl.ItemSize = new System.Drawing.Size(0, 1);
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioData"));//´´½¨´æ·ÅÒôÆµµÄÎÄ¼ş¼Ğ
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugin"));//´´½¨´æ·Å²å¼şµÄÎÄ¼ş¼Ğ
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioData"));//åˆ›å»ºå­˜æ”¾éŸ³é¢‘çš„æ–‡ä»¶å¤¹
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugin"));//åˆ›å»ºå­˜æ”¾æ’ä»¶çš„æ–‡ä»¶å¤¹
             Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
-            if (!Misc.IsAdministrator()) { Text += " [µ±Ç°·Ç¹ÜÀíÔ±ÔËĞĞ,¿ÉÄÜ»á³öÏÖ°´ÏÂ°´¼üÎŞ·´Ó¦]"; }
+            if (!Misc.IsAdministrator()) { Text += " [å½“å‰éç®¡ç†å‘˜è¿è¡Œ,å¯èƒ½ä¼šå‡ºç°æŒ‰ä¸‹æŒ‰é”®æ— ååº”]"; }
 
 
-            label_VBStatus.Text = Misc.checkVB() ? "VBÉù¿¨ÒÑ°²×°" : "VBÉù¿¨Î´°²×°";
+            label_VBStatus.Text = Misc.checkVB() ? "VBå£°å¡å·²å®‰è£…" : "VBå£°å¡æœªå®‰è£…";
             comboBoxOutputFormat.SelectedIndex = 0;
             foreach (string device in Misc.GetInputAudioDeviceNames())
             {
@@ -162,7 +162,7 @@ namespace MusicalMoments
 
             LoadUserData();
 
-            //×îºóÔÙ°æ±¾ÑéÖ¤ ÒÔ·ÀUI´íÎó
+            //æœ€åå†ç‰ˆæœ¬éªŒè¯ ä»¥é˜²UIé”™è¯¯
             CheckNewVer();
 
         }
@@ -173,7 +173,7 @@ namespace MusicalMoments
             if (File.Exists(configPath))
             {
                 mainTabControl.SelectedIndex = 1;
-                mainGroupBox.Text = "ÒôÆµ";
+                mainGroupBox.Text = "éŸ³é¢‘";
                 try
                 {
                     string json = File.ReadAllText(configPath);
@@ -202,15 +202,15 @@ namespace MusicalMoments
                     }
                     if (settings.CloseCount == 35)
                     {
-                        MessageBox.Show("¿´À´ÄãÒÑ¾­Æô¶¯¹ıÁË35´ÎÈí¼şÄØ£¡¾¿¾¹ÊÇÒòÎªÌ«Ï²»¶·ÅÒôÆµ»¹ÊÇÒòÎªÎÒµÄ´úÂëBUGÌ«¶àÒ»Ö±ÉÁÍËÄó£¿£¡£¿(ps:ËãÊÇĞ¡²Êµ°°É£¿¿´µ½ÁË¿ÉÒÔ·¢ÎÒÓ´ ±Ï¾¹ÎÒÒ²ÏëÖªµÀÊÇË­ÕâÃ´Ï²»¶·ÅÒôÆµ »òÕßÊÇ°ïÎÒÕÒBUG?ºóÃæ»¹ÓĞ²Êµ°Å¶ ¶à´ò¿ª¼¸´Î°É~)", "ÄãºÃÑ½");
+                        MessageBox.Show("çœ‹æ¥ä½ å·²ç»å¯åŠ¨è¿‡äº†35æ¬¡è½¯ä»¶å‘¢ï¼ç©¶ç«Ÿæ˜¯å› ä¸ºå¤ªå–œæ¬¢æ”¾éŸ³é¢‘è¿˜æ˜¯å› ä¸ºæˆ‘çš„ä»£ç BUGå¤ªå¤šä¸€ç›´é—ªé€€æï¼Ÿï¼ï¼Ÿ(ps:ç®—æ˜¯å°å½©è›‹å§ï¼Ÿçœ‹åˆ°äº†å¯ä»¥å‘æˆ‘å“Ÿ æ¯•ç«Ÿæˆ‘ä¹Ÿæƒ³çŸ¥é“æ˜¯è°è¿™ä¹ˆå–œæ¬¢æ”¾éŸ³é¢‘ æˆ–è€…æ˜¯å¸®æˆ‘æ‰¾BUG?åé¢è¿˜æœ‰å½©è›‹å“¦ å¤šæ‰“å¼€å‡ æ¬¡å§~)", "ä½ å¥½å‘€");
                     }
                     else if (settings.CloseCount == 50)
                     {
-                        MessageBox.Show("¿´À´ÄãÒÑ¾­Æô¶¯¹ıÁË50´ÎÈí¼şÄØ£¡Õâ´ÎÎÒ¸ÒÈ·¶¨¾ø¶Ô²»ÊÇÎÒ´úÂëBUG¶à£¡£¡ÒòÎªBUG¶àÒ»Ö±ÉÁÍË¾Í´ú±íÎÒµÄÈí¼ş²»ºÃÓÃ£¡Ö®ºóÓÃ»§¾Í»á»»Èí¼şÁË£¡£¡£¡(ps:µ±Æô¶¯´ÎÊıÓĞ80´Îºó»áÓĞÒ»¸ö´ó²Êµ°ÄØ~)", "ÄãºÃÑ½");
+                        MessageBox.Show("çœ‹æ¥ä½ å·²ç»å¯åŠ¨è¿‡äº†50æ¬¡è½¯ä»¶å‘¢ï¼è¿™æ¬¡æˆ‘æ•¢ç¡®å®šç»å¯¹ä¸æ˜¯æˆ‘ä»£ç BUGå¤šï¼ï¼å› ä¸ºBUGå¤šä¸€ç›´é—ªé€€å°±ä»£è¡¨æˆ‘çš„è½¯ä»¶ä¸å¥½ç”¨ï¼ä¹‹åç”¨æˆ·å°±ä¼šæ¢è½¯ä»¶äº†ï¼ï¼ï¼(ps:å½“å¯åŠ¨æ¬¡æ•°æœ‰80æ¬¡åä¼šæœ‰ä¸€ä¸ªå¤§å½©è›‹å‘¢~)", "ä½ å¥½å‘€");
                     }
                     else if (settings.CloseCount == 80)
                     {
-                        MessageBox.Show("ÕâÃ´¿ì¾Í80´ÎÁËÂğ£¿£¡£¿ÄÇ¾Í¸æËßÄã´ó²Êµ°µÄÎ»ÖÃ°É~Ê×ÏÈÄØÒªÈ¥¹ØÓÚÒ³Ãæ È»ºóÁ¬Ğø´Á20´ÎLOGOÍ¼Æ¬¾ÍÓĞÁË ÄÇ¾ÍÕâÑù °İÀ² ºóÃæÒ²²»»áÓĞ²Êµ°ÁË~", "ÄãºÃÑ½");
+                        MessageBox.Show("è¿™ä¹ˆå¿«å°±80æ¬¡äº†å—ï¼Ÿï¼ï¼Ÿé‚£å°±å‘Šè¯‰ä½ å¤§å½©è›‹çš„ä½ç½®å§~é¦–å…ˆå‘¢è¦å»å…³äºé¡µé¢ ç„¶åè¿ç»­æˆ³20æ¬¡LOGOå›¾ç‰‡å°±æœ‰äº† é‚£å°±è¿™æ · æ‹œå•¦ åé¢ä¹Ÿä¸ä¼šæœ‰å½©è›‹äº†~", "ä½ å¥½å‘€");
                     }
                     VBVolumeTrackBar.Value = (int)(settings.VBVolume * 100);
                     VolumeTrackBar.Value = (int)(settings.Volume * 100);
@@ -227,7 +227,7 @@ namespace MusicalMoments
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"¶ÁÈ¡ÅäÖÃÊ±³ö´í: {ex.Message}", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"è¯»å–é…ç½®æ—¶å‡ºé”™: {ex.Message}", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -240,7 +240,7 @@ namespace MusicalMoments
                 VBVolumeTrackBar_Scroll(null, null);
                 VolumeTrackBar_Scroll(null, null);
                 TipsVolumeTrackBar_Scroll(null, null);
-                firstStart = System.DateTime.Now.ToString("yyyyÄêMMÔÂddÈÕ HHÊ±mm·ÖssÃë");
+                firstStart = System.DateTime.Now.ToString("yyyyå¹´MMæœˆddæ—¥ HHæ—¶mmåˆ†ssç§’");
             }
         }
         private async void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -277,23 +277,23 @@ namespace MusicalMoments
             var latestVer = await Misc.GetLatestVersionAsync();
             if (latestVer != nowVer)
             {
-                DialogResult dialogResult = MessageBox.Show($"Musical Moments´æÔÚĞÂ°æ±¾£¬Çë¾¡¿ì¸üĞÂ¡£µ±Ç°°æ±¾Îª{nowVer} ×îĞÂ°æ±¾Îª{latestVer}¡£\r\n°´ÏÂÊÇÔò×Ô¶¯ÏÂÔØ×îĞÂ°æ±¾Ñ¹Ëõ°ü °´ÏÂ·ñÔòÌø×ªÖÁ×îĞÂ°æ±¾Ò³Ãæ °´ÏÂÈ¡ÏûÔò¹Ø±Õ\r\n\r\nÒÔÏÂÊÇĞÂ°æ±¾¼ò½é:\r\n{newVerTips}", "ĞÂ°æ±¾ÍÆËÍ", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show($"Musical Momentså­˜åœ¨æ–°ç‰ˆæœ¬ï¼Œè¯·å°½å¿«æ›´æ–°ã€‚å½“å‰ç‰ˆæœ¬ä¸º{nowVer} æœ€æ–°ç‰ˆæœ¬ä¸º{latestVer}ã€‚\r\næŒ‰ä¸‹æ˜¯åˆ™è‡ªåŠ¨ä¸‹è½½æœ€æ–°ç‰ˆæœ¬å‹ç¼©åŒ… æŒ‰ä¸‹å¦åˆ™è·³è½¬è‡³æœ€æ–°ç‰ˆæœ¬é¡µé¢ æŒ‰ä¸‹å–æ¶ˆåˆ™å…³é—­\r\n\r\nä»¥ä¸‹æ˜¯æ–°ç‰ˆæœ¬ç®€ä»‹:\r\n{newVerTips}", "æ–°ç‰ˆæœ¬æ¨é€", MessageBoxButtons.YesNoCancel);
 
                 if (dialogResult == DialogResult.Yes)
                 {
                     string[] parts = latestVer.Split('-');
-                    string version = parts[0].TrimStart('v'); // »ñÈ¡°æ±¾ºÅ²¿·Ö
+                    string version = parts[0].TrimStart('v'); // è·å–ç‰ˆæœ¬å·éƒ¨åˆ†
                     string downloadUrl = $"https://kkgithub.com/TheD0ubleC/MusicalMoments/releases/download/{latestVer}/MM.Release-{version}.zip";
                     try
                     {
                         using (WebClient wc = new WebClient())
                         {
                             wc.DownloadFile(downloadUrl, $"{runningDirectory}MM.Release-{version}.zip");
-                            MessageBox.Show($"ÏÂÔØ³É¹¦ ÒÑ´æ·ÅÖÁÔËĞĞÄ¿Â¼ ÏêÇéÂ·¾¶:{runningDirectory}MM.Release-{version}.zip", "ÌáÊ¾");
+                            MessageBox.Show($"ä¸‹è½½æˆåŠŸ å·²å­˜æ”¾è‡³è¿è¡Œç›®å½• è¯¦æƒ…è·¯å¾„:{runningDirectory}MM.Release-{version}.zip", "æç¤º");
                         }
                     }
                     catch (Exception ex)
-                    { MessageBox.Show($"ÏÂÔØÊ§°Ü£¬ÇëÖÁgithubÒ³Ãæ×ÔĞĞÏÂÔØ»òÔÚÈºÎÄ¼şÏÂÔØ ´íÎóÏêÇé:{ex.ToString()}", "´íÎó"); }
+                    { MessageBox.Show($"ä¸‹è½½å¤±è´¥ï¼Œè¯·è‡³githubé¡µé¢è‡ªè¡Œä¸‹è½½æˆ–åœ¨ç¾¤æ–‡ä»¶ä¸‹è½½ é”™è¯¯è¯¦æƒ…:{ex.ToString()}", "é”™è¯¯"); }
                 }
                 else if (dialogResult == DialogResult.No)
                 {
@@ -317,8 +317,8 @@ namespace MusicalMoments
         }
         private void retestVB_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show(Misc.checkVB() ? "vbÒÑ°²×°" : "vbÎ´°²×°");
-            label_VBStatus.Text = Misc.checkVB() ? "VBÉù¿¨ÒÑ°²×°" : "VBÉù¿¨Î´°²×°";
+            //MessageBox.Show(Misc.checkVB() ? "vbå·²å®‰è£…" : "vbæœªå®‰è£…");
+            label_VBStatus.Text = Misc.checkVB() ? "VBå£°å¡å·²å®‰è£…" : "VBå£°å¡æœªå®‰è£…";
         }
         private void audioListView_MouseClick(object sender, MouseEventArgs e)
         {
@@ -327,19 +327,19 @@ namespace MusicalMoments
                 var hitTestInfo = audioListView.HitTest(e.Location);
                 if (hitTestInfo.Item != null)
                 {
-                    // ÏÔÊ¾²Ëµ¥ÔÚÊó±êµã»÷µÄÎ»ÖÃ
+                    // æ˜¾ç¤ºèœå•åœ¨é¼ æ ‡ç‚¹å‡»çš„ä½ç½®
                     mainContextMenuStrip.Show(audioListView, e.Location);
                 }
             }
         }
-        private void ²¥·ÅToolStripMenuItem_Click(object sender, EventArgs e)
+        private void æ’­æ”¾ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ListViewItem selectedItem = audioListView.SelectedItems[0];
             string filePath = selectedItem.Tag as string;
             PlayAudioex(filePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), volume);
             playedCount = playedCount + 1;
         }
-        private void É¾³ıToolStripMenuItem_Click(object sender, EventArgs e)
+        private void åˆ é™¤ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (audioListView.SelectedItems.Count > 0)
             {
@@ -347,23 +347,23 @@ namespace MusicalMoments
                 string filePath = selectedItem.Tag as string;
                 if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
                 {
-                    DialogResult dialogResult = MessageBox.Show("È·¶¨ÒªÉ¾³ıÕâ¸öÎÄ¼şÂğ£¿", "É¾³ıÎÄ¼ş", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    DialogResult dialogResult = MessageBox.Show("ç¡®å®šè¦åˆ é™¤è¿™ä¸ªæ–‡ä»¶å—ï¼Ÿ", "åˆ é™¤æ–‡ä»¶", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.Yes)
                     {
                         try
                         {
-                            File.Delete(filePath); // É¾³ıÎÄ¼ş
-                            audioListView.Items.Remove(selectedItem); // Èç¹ûÎÄ¼şÉ¾³ı³É¹¦£¬´ÓListViewÖĞÒÆ³ıÏî
+                            File.Delete(filePath); // åˆ é™¤æ–‡ä»¶
+                            audioListView.Items.Remove(selectedItem); // å¦‚æœæ–‡ä»¶åˆ é™¤æˆåŠŸï¼Œä»ListViewä¸­ç§»é™¤é¡¹
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"É¾³ıÎÄ¼şÊ±³ö´í: {ex.Message}");
+                            MessageBox.Show($"åˆ é™¤æ–‡ä»¶æ—¶å‡ºé”™: {ex.Message}");
                         }
                     }
                 }
             }
         }
-        private void ÖØÃüÃûToolStripMenuItem_Click(object sender, EventArgs e)
+        private void é‡å‘½åToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (audioListView.SelectedItems.Count > 0)
             {
@@ -374,17 +374,17 @@ namespace MusicalMoments
                 string originalFileName = Path.GetFileName(originalFilePath);
                 string currentName = selectedItem.Text;
                 string extension = Path.GetExtension(originalFilePath);
-                string input = Interaction.InputBox("ÇëÊäÈëĞÂµÄÃû³Æ£º", "ÖØÃüÃû", currentName, -1, -1);
+                string input = Interaction.InputBox("è¯·è¾“å…¥æ–°çš„åç§°ï¼š", "é‡å‘½å", currentName, -1, -1);
                 if (string.IsNullOrEmpty(input) || input.Equals(currentName, StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
                 string newFileName = input + extension;
                 string newFilePath = Path.Combine(directoryPath, newFileName);
-                // ¼ì²éĞÂÃüÃûµÄÎÄ¼şÊÇ·ñÒÑ´æÔÚ
+                // æ£€æŸ¥æ–°å‘½åçš„æ–‡ä»¶æ˜¯å¦å·²å­˜åœ¨
                 if (File.Exists(newFilePath))
                 {
-                    MessageBox.Show("ÃüÃûÖØ¸´", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("å‘½åé‡å¤", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
@@ -396,7 +396,7 @@ namespace MusicalMoments
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"ÖØÃüÃûÎÄ¼şÊ±³ö´í: {ex.Message}", "´íÎó", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"é‡å‘½åæ–‡ä»¶æ—¶å‡ºé”™: {ex.Message}", "é”™è¯¯", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -461,64 +461,64 @@ namespace MusicalMoments
             {
                 case "NAudio":
                     info_Label5.Text =
-                        "MMÊ¹ÓÃÁËNAudioÒôÆµ´¦Àí¿â¡£\r\n" +
-                        "NAudio×ñÑ­Microsoft Public License (Ms-PL)¡£\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [NAudio] \r\n" +
-                        "ÍêÕûµÄĞí¿ÉÖ¤ÎÄ±¾¿ÉÔÚÒÔÏÂÁ´½ÓÕÒµ½:\r\n" +
+                        "MMä½¿ç”¨äº†NAudioéŸ³é¢‘å¤„ç†åº“ã€‚\r\n" +
+                        "NAudioéµå¾ªMicrosoft Public License (Ms-PL)ã€‚\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [NAudio] \r\n" +
+                        "å®Œæ•´çš„è®¸å¯è¯æ–‡æœ¬å¯åœ¨ä»¥ä¸‹é“¾æ¥æ‰¾åˆ°:\r\n" +
                         "https://opensource.org/licenses/MS-PL\r\n" +
-                        "ÌØ´ËÏòNAudio¼°Æä¹±Ï×Õß±íÊ¾¸ĞĞ»¡£";
+                        "ç‰¹æ­¤å‘NAudioåŠå…¶è´¡çŒ®è€…è¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
                 case "Newtonsoft.Json":
                     info_Label5.Text =
-                        "MMÊ¹ÓÃÁËNewtonsoft.Json¿â¡£\r\n" +
-                        "Newtonsoft.Json×ñÑ­MIT License¡£\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [Newtonsoft.Json] \r\n" +
-                        "ÍêÕûµÄĞí¿ÉÖ¤ÎÄ±¾¿ÉÔÚÒÔÏÂÁ´½ÓÕÒµ½:\r\n" +
+                        "MMä½¿ç”¨äº†Newtonsoft.Jsonåº“ã€‚\r\n" +
+                        "Newtonsoft.Jsonéµå¾ªMIT Licenseã€‚\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [Newtonsoft.Json] \r\n" +
+                        "å®Œæ•´çš„è®¸å¯è¯æ–‡æœ¬å¯åœ¨ä»¥ä¸‹é“¾æ¥æ‰¾åˆ°:\r\n" +
                         "https://opensource.org/licenses/MIT\r\n" +
-                        "ÌØ´ËÏòNewtonsoft.Json¼°Æä¹±Ï×Õß±íÊ¾¸ĞĞ»¡£";
+                        "ç‰¹æ­¤å‘Newtonsoft.JsonåŠå…¶è´¡çŒ®è€…è¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
                 case "System.Management":
                     info_Label5.Text =
-                        "MMÊ¹ÓÃÁËSystem.Management¿â¡£\r\n" +
-                        "NAudio×ñÑ­MIT License¡£\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [.NET Foundation ºÍ¹±Ï×Õß] \r\n" +
-                        "ÍêÕûµÄĞí¿ÉÖ¤ÎÄ±¾¿ÉÔÚÒÔÏÂÁ´½ÓÕÒµ½:\r\n" +
+                        "MMä½¿ç”¨äº†System.Managementåº“ã€‚\r\n" +
+                        "NAudioéµå¾ªMIT Licenseã€‚\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [.NET Foundation å’Œè´¡çŒ®è€…] \r\n" +
+                        "å®Œæ•´çš„è®¸å¯è¯æ–‡æœ¬å¯åœ¨ä»¥ä¸‹é“¾æ¥æ‰¾åˆ°:\r\n" +
                         "https://opensource.org/licenses/MS-PL\r\n" +
-                        "ÌØ´ËÏò.NETÉçÇø¼°Æä¹±Ï×Õß±íÊ¾¸ĞĞ»¡£";
+                        "ç‰¹æ­¤å‘.NETç¤¾åŒºåŠå…¶è´¡çŒ®è€…è¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
                 case "taglib-sharp-netstandard2.0":
                     info_Label5.Text =
-                        "MMÊ¹ÓÃÁËtaglib-sharp-netstandard2.0¿â¡£\r\n" +
-                        "taglib-sharp-netstandard2.0×ñÑ­LGPL-2.1 License\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [taglib-sharp] \r\n" +
-                        "ÍêÕûµÄĞí¿ÉÖ¤ÎÄ±¾¿ÉÔÚÒÔÏÂÁ´½ÓÕÒµ½:\r\n" +
+                        "MMä½¿ç”¨äº†taglib-sharp-netstandard2.0åº“ã€‚\r\n" +
+                        "taglib-sharp-netstandard2.0éµå¾ªLGPL-2.1 License\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [taglib-sharp] \r\n" +
+                        "å®Œæ•´çš„è®¸å¯è¯æ–‡æœ¬å¯åœ¨ä»¥ä¸‹é“¾æ¥æ‰¾åˆ°:\r\n" +
                         "https://opensource.org/licenses/LGPL-2.1\r\n" +
-                        "ÌØ´ËÏòtaglib-sharp¼°Æä¹±Ï×Õß±íÊ¾¸ĞĞ»¡£";
+                        "ç‰¹æ­¤å‘taglib-sharpåŠå…¶è´¡çŒ®è€…è¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
                 case "MouseKeyHook":
                     info_Label5.Text =
-                        "MMÊ¹ÓÃÁËMouseKeyHook¿â¡£\r\n" +
-                        "MouseKeyHook×ñÑ­MIT License\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [George Mamaladze] \r\n" +
-                        "ÍêÕûµÄĞí¿ÉÖ¤ÎÄ±¾¿ÉÔÚÒÔÏÂÁ´½ÓÕÒµ½:\r\n" +
+                        "MMä½¿ç”¨äº†MouseKeyHookåº“ã€‚\r\n" +
+                        "MouseKeyHookéµå¾ªMIT License\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [George Mamaladze] \r\n" +
+                        "å®Œæ•´çš„è®¸å¯è¯æ–‡æœ¬å¯åœ¨ä»¥ä¸‹é“¾æ¥æ‰¾åˆ°:\r\n" +
                         "https://opensource.org/licenses/MS-PL\r\n" +
-                        "ÌØ´ËÏòGeorge Mamaladze¼°Æä¹±Ï×Õß±íÊ¾¸ĞĞ»¡£";
+                        "ç‰¹æ­¤å‘George MamaladzeåŠå…¶è´¡çŒ®è€…è¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
                 case "MediaToolkit":
                     info_Label5.Text =
-                        "MMÊ¹ÓÃÁËMediaToolkit¿â¡£\r\n" +
-                        "MediaToolkitÔİÎŞÊ¹ÓÃÖĞµÄĞí¿ÉÖ¤\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [Aydin] \r\n" +
-                        "ÌØ´ËÏòAydin±íÊ¾¸ĞĞ»¡£";
+                        "MMä½¿ç”¨äº†MediaToolkitåº“ã€‚\r\n" +
+                        "MediaToolkitæš‚æ— ä½¿ç”¨ä¸­çš„è®¸å¯è¯\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [Aydin] \r\n" +
+                        "ç‰¹æ­¤å‘Aydinè¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
                 case "HtmlAgilityPack":
                     info_Label5.Text =
-                        "HtmlAgilityPack¡£\r\n" +
-                        "HtmlAgilityPack×ñÑ­ MIT License\r\n" +
-                        "°æÈ¨ËùÓĞ (c) [zzzprojects] \r\n" +
-                        "ÍêÕûµÄĞí¿ÉÖ¤ÎÄ±¾¿ÉÔÚÒÔÏÂÁ´½ÓÕÒµ½:\r\n" +
+                        "HtmlAgilityPackã€‚\r\n" +
+                        "HtmlAgilityPackéµå¾ª MIT License\r\n" +
+                        "ç‰ˆæƒæ‰€æœ‰ (c) [zzzprojects] \r\n" +
+                        "å®Œæ•´çš„è®¸å¯è¯æ–‡æœ¬å¯åœ¨ä»¥ä¸‹é“¾æ¥æ‰¾åˆ°:\r\n" +
                         "https://opensource.org/licenses/MS-PL\r\n" +
-                        "ÌØ´ËÏòzzzprojects¼°Æä¹±Ï×Õß±íÊ¾¸ĞĞ»¡£";
+                        "ç‰¹æ­¤å‘zzzprojectsåŠå…¶è´¡çŒ®è€…è¡¨ç¤ºæ„Ÿè°¢ã€‚";
                     break;
             }
         }
@@ -536,8 +536,8 @@ namespace MusicalMoments
                 }
                 var audioFile = new AudioFileReader(audioFilePath);
                 var outputDevice = new WaveOutEvent { DeviceNumber = deviceNumber };
-                // Ó¦ÓÃÒôÁ¿ÉèÖÃ
-                outputDevice.Volume = volume; // È·±£ volume ÖµÔÚ 0 µ½ 1 Ö®¼ä
+                // åº”ç”¨éŸ³é‡è®¾ç½®
+                outputDevice.Volume = volume; // ç¡®ä¿ volume å€¼åœ¨ 0 åˆ° 1 ä¹‹é—´
                 outputDevice.PlaybackStopped += (sender, e) =>
                 {
                     outputDevice.Dispose();
@@ -550,7 +550,7 @@ namespace MusicalMoments
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"²¥·ÅÒôÆµÊ±³ö´í: {ex.Message}", "´íÎó");
+                MessageBox.Show($"æ’­æ”¾éŸ³é¢‘æ—¶å‡ºé”™: {ex.Message}", "é”™è¯¯");
                 reLoadList();
             }
         }
@@ -560,28 +560,28 @@ namespace MusicalMoments
             {
                 if (currentOutputDevice != null)
                 {
-                    currentOutputDevice.Stop(); // Í£Ö¹²¥·Å
-                    currentOutputDevice.Dispose(); // ÊÍ·ÅÒôÆµÊä³öÉè±¸×ÊÔ´
-                    currentOutputDevice = null; // Çå³ıÒıÓÃ
+                    currentOutputDevice.Stop(); // åœæ­¢æ’­æ”¾
+                    currentOutputDevice.Dispose(); // é‡Šæ”¾éŸ³é¢‘è¾“å‡ºè®¾å¤‡èµ„æº
+                    currentOutputDevice = null; // æ¸…é™¤å¼•ç”¨
                 }
                 if (currentAudioFile != null)
                 {
-                    currentAudioFile.Dispose(); // ÊÍ·ÅÒôÆµÎÄ¼ş×ÊÔ´
-                    currentAudioFile = null; // Çå³ıÒıÓÃ
+                    currentAudioFile.Dispose(); // é‡Šæ”¾éŸ³é¢‘æ–‡ä»¶èµ„æº
+                    currentAudioFile = null; // æ¸…é™¤å¼•ç”¨
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Í£Ö¹²¥·ÅÊ±³ö´í: {ex.Message}", "´íÎó");
+                MessageBox.Show($"åœæ­¢æ’­æ”¾æ—¶å‡ºé”™: {ex.Message}", "é”™è¯¯");
             }
         }
 
-        private void ÉèÎª²¥·ÅÏîToolStripMenuItem_Click(object sender, EventArgs e)
+        private void è®¾ä¸ºæ’­æ”¾é¡¹ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ListViewItem selectedItem = audioListView.SelectedItems[0];
             string filePath = selectedItem.Tag as string;
             selectedAudioPath = filePath;
-            SelectedAudioLabel.Text = $"ÒÑÑ¡Ôñ:{selectedItem.Text}";
+            SelectedAudioLabel.Text = $"å·²é€‰æ‹©:{selectedItem.Text}";
         }
         public void reLoadList()
         {
@@ -611,7 +611,7 @@ namespace MusicalMoments
         }
         private void toVB_Click(object sender, EventArgs e)
         {
-            toVB.Text = "ÏÂÔØÖĞ";
+            toVB.Text = "ä¸‹è½½ä¸­";
             using (WebClient webClient = new WebClient())
             {
                 string url = "https://download.vb-audio.com/Download_CABLE/VBCABLE_Driver_Pack43.zip";
@@ -619,7 +619,7 @@ namespace MusicalMoments
                 try
                 {
                     webClient.DownloadFile(url, filePath);
-                    DialogResult result = MessageBox.Show($"ÏÂÔØÍê³É£¬ÒÑ±£´æÔÚ³ÌĞòµÄÔËĞĞÄ¿Â¼£¬ÊÇ·ñ´ò¿ªÎÄ¼ş£¿", "´ò¿ªÎÄ¼ş", MessageBoxButtons.YesNo);
+                    DialogResult result = MessageBox.Show($"ä¸‹è½½å®Œæˆï¼Œå·²ä¿å­˜åœ¨ç¨‹åºçš„è¿è¡Œç›®å½•ï¼Œæ˜¯å¦æ‰“å¼€æ–‡ä»¶ï¼Ÿ", "æ‰“å¼€æ–‡ä»¶", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
                         Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
@@ -627,9 +627,9 @@ namespace MusicalMoments
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("ÏÂÔØÎÄ¼şÊ±·¢Éú´íÎó£º" + ex.Message);
+                    MessageBox.Show("ä¸‹è½½æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ï¼š" + ex.Message);
                 }
-                toVB.Text = "µãÎÒÏÂÔØ";
+                toVB.Text = "ç‚¹æˆ‘ä¸‹è½½";
             }
         }
         private void toSettings_Click(object sender, EventArgs e)
@@ -649,7 +649,7 @@ namespace MusicalMoments
                 UseShellExecute = true
             });
         }
-        private void ´ò¿ªÎÄ¼şËùÔÚÎ»ÖÃToolStripMenuItem_Click(object sender, EventArgs e)
+        private void æ‰“å¼€æ–‡ä»¶æ‰€åœ¨ä½ç½®ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (audioListView.SelectedItems.Count > 0)
             {
@@ -668,17 +668,17 @@ namespace MusicalMoments
         }
         private void VBVolumeTrackBar_Scroll(object sender, EventArgs e)
         {
-            volume_Label1.Text = $"Éù¿¨Âó({VBVolumeTrackBar.Value}%):";
+            volume_Label1.Text = $"å£°å¡éº¦({VBVolumeTrackBar.Value}%):";
             VBvolume = VBVolumeTrackBar.Value / 100f;
         }
         private void VolumeTrackBar_Scroll(object sender, EventArgs e)
         {
-            volume_Label2.Text = $"ÎïÀíÂó({VolumeTrackBar.Value}%):";
+            volume_Label2.Text = $"ç‰©ç†éº¦({VolumeTrackBar.Value}%):";
             volume = VolumeTrackBar.Value / 100f;
         }
         private void TipsVolumeTrackBar_Scroll(object sender, EventArgs e)
         {
-            volume_Label3.Text = $"ÌáÊ¾Òô({TipsVolumeTrackBar.Value}%):";
+            volume_Label3.Text = $"æç¤ºéŸ³({TipsVolumeTrackBar.Value}%):";
             tipsvolume = TipsVolumeTrackBar.Value / 100f;
         }
         private static int logoClickCount = 0;
@@ -687,13 +687,13 @@ namespace MusicalMoments
             logoClickCount++;
             if (logoClickCount >= 10)
             {
-                MessageBox.Show($"àË~ÎÒÊÇCC£¬Õâ¸öÈí¼şµÄ¿ª·¢Õß¡£ÎÒÃÇµÚÒ»´Î¼ûÃæÊÇÔÚ<{firstStart}> ÏÖÔÚÊÇ<{System.DateTime.Now.ToString("yyyyÄêMMÔÂddÈÕHHÊ±mm·ÖssÃë")}> ÕâÆÚ¼äÄãÒÑ¾­²¥·ÅÁË<{playedCount}>´ÎÒôÆµ »¹ÇĞ»»ÁË<{changedCount}>´ÎÒôÆµÁ÷£¡£¡(ps:Èç¹ûÊı¾İ²»Ì«¶Ô¿ÉÄÜÊÇÒòÎªÄã²»Ğ¡ĞÄ°ÑÔËĞĞÄ¿Â¼µÄjsonÉ¾³ıÁË°É£¿)", "¹§Ï²Äã·¢ÏÖÁË²Êµ°£¡");
+                MessageBox.Show($"å—¨~æˆ‘æ˜¯CCï¼Œè¿™ä¸ªè½¯ä»¶çš„å¼€å‘è€…ã€‚æˆ‘ä»¬ç¬¬ä¸€æ¬¡è§é¢æ˜¯åœ¨<{firstStart}> ç°åœ¨æ˜¯<{System.DateTime.Now.ToString("yyyyå¹´MMæœˆddæ—¥HHæ—¶mmåˆ†ssç§’")}> è¿™æœŸé—´ä½ å·²ç»æ’­æ”¾äº†<{playedCount}>æ¬¡éŸ³é¢‘ è¿˜åˆ‡æ¢äº†<{changedCount}>æ¬¡éŸ³é¢‘æµï¼ï¼(ps:å¦‚æœæ•°æ®ä¸å¤ªå¯¹å¯èƒ½æ˜¯å› ä¸ºä½ ä¸å°å¿ƒæŠŠè¿è¡Œç›®å½•çš„jsonåˆ é™¤äº†å§ï¼Ÿ)", "æ­å–œä½ å‘ç°äº†å½©è›‹ï¼");
             }
         }
         private void upData_button_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "ÒôÊÓÆµÎÄ¼ş|*.mp3;*.wav;*.ogg;*.acc;*.ncm;*.qmc3;*.mp4;*.avi|È«²¿ÎÄ¼ş|*.*";
+            openFileDialog.Filter = "éŸ³è§†é¢‘æ–‡ä»¶|*.mp3;*.wav;*.ogg;*.acc;*.ncm;*.qmc3;*.mp4;*.avi|å…¨éƒ¨æ–‡ä»¶|*.*";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string selectedFile = openFileDialog.FileName;
@@ -720,7 +720,7 @@ namespace MusicalMoments
         {
             if (!File.Exists(dataPath_TextBox.Text))
             {
-                MessageBox.Show("Ñ¡ÔñµÄÎÄ¼ş²»´æÔÚ", "´íÎó");
+                MessageBox.Show("é€‰æ‹©çš„æ–‡ä»¶ä¸å­˜åœ¨", "é”™è¯¯");
             }
             else
             {
@@ -729,11 +729,11 @@ namespace MusicalMoments
                 {
                     if (Misc.NCMConvert(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + ".mp3") == 0)
                     {
-                        MessageBox.Show("×ª»»³É¹¦ ÒÑ´æ´¢ÖÁÔËĞĞÄ¿Â¼ÏÂµÄAudioDataÎÄ¼ş¼Ğ", "ÌáÊ¾");
+                        MessageBox.Show("è½¬æ¢æˆåŠŸ å·²å­˜å‚¨è‡³è¿è¡Œç›®å½•ä¸‹çš„AudioDataæ–‡ä»¶å¤¹", "æç¤º");
                     }
                     else
                     {
-                        MessageBox.Show("×ª»»Ê§°Ü", "´íÎó");
+                        MessageBox.Show("è½¬æ¢å¤±è´¥", "é”™è¯¯");
                     }
                 }
                 else if (extension == ".flac" || extension == ".ogg" || extension == ".mp3" || extension == ".wav")
@@ -741,16 +741,16 @@ namespace MusicalMoments
                     string targetFormat = comboBoxOutputFormat.SelectedItem.ToString().ToLower();
                     if (AudioConverter.ConvertTo(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + "." + targetFormat, targetFormat))
                     {
-                        MessageBox.Show("×ª»»³É¹¦ ÒÑ´æ´¢ÖÁÔËĞĞÄ¿Â¼ÏÂµÄAudioDataÎÄ¼ş¼Ğ", "ÌáÊ¾");
+                        MessageBox.Show("è½¬æ¢æˆåŠŸ å·²å­˜å‚¨è‡³è¿è¡Œç›®å½•ä¸‹çš„AudioDataæ–‡ä»¶å¤¹", "æç¤º");
                     }
                     else
                     {
-                        MessageBox.Show("×ª»»Ê§°Ü", "´íÎó");
+                        MessageBox.Show("è½¬æ¢å¤±è´¥", "é”™è¯¯");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("²»Ö§³ÖµÄÎÄ¼ş¸ñÊ½", "´íÎó");
+                    MessageBox.Show("ä¸æ”¯æŒçš„æ–‡ä»¶æ ¼å¼", "é”™è¯¯");
                 }
             }
         }
@@ -768,7 +768,7 @@ namespace MusicalMoments
                     string destFile = Path.Combine(audioDataPath, Path.GetFileName(file));
                     if (File.Exists(destFile))
                     {
-                        var result = MessageBox.Show($"ÎÄ¼ş {Path.GetFileName(file)} ÒÑ´æÔÚ¡£ÊÇ·ñ¸²¸Ç£¿", "ÎÄ¼ş³åÍ»", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        var result = MessageBox.Show($"æ–‡ä»¶ {Path.GetFileName(file)} å·²å­˜åœ¨ã€‚æ˜¯å¦è¦†ç›–ï¼Ÿ", "æ–‡ä»¶å†²çª", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (result != DialogResult.Yes)
                         {
                             continue;
@@ -807,21 +807,21 @@ namespace MusicalMoments
         {
             switch (languageComboBox.SelectedItem.ToString())
             {
-                case "¼òÌåÖĞÎÄ":
+                case "ç®€ä½“ä¸­æ–‡":
                     break;
                 case "English":
                     MessageBox.Show("The current version does not support this language, but support for this language will be added in the future.", "Tips");
                     //ApplyResourcesToControls(this.Controls, $"{runningDirectory}ResourceFiles\\Localization\\en\\en.resx", Assembly.GetExecutingAssembly());
                     break;
-                case "ÈÕ±¾ÕZ":
-                    MessageBox.Show("¬FÔÚ¤Î¥Ğ©`¥¸¥ç¥ó¤Ç¤Ï¤³¤ÎÑÔÕZ¤Ï¥µ¥İ©`¥È¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¤¬¡¢½«À´µÄ¤Ë¤Ï¤³¤ÎÑÔÕZ¤Î¥µ¥İ©`¥È¤¬×·¼Ó¤µ¤ì¤ëÓè¶¨¤Ç¤¹¡£", "¥Á¥Ã¥×");
+                case "æ—¥æœ¬èª":
+                    MessageBox.Show("ç¾åœ¨ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã¯ã“ã®è¨€èªã¯ã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“ãŒã€å°†æ¥çš„ã«ã¯ã“ã®è¨€èªã®ã‚µãƒãƒ¼ãƒˆãŒè¿½åŠ ã•ã‚Œã‚‹äºˆå®šã§ã™ã€‚", "ãƒãƒƒãƒ—");
                     //ApplyResourcesToControls(this.Controls, $"{runningDirectory}ResourceFiles\\Localization\\ja\\ja.resx", Assembly.GetExecutingAssembly());
                     break;
             }
         }
 
 
-        private void Í£Ö¹²¥·ÅToolStripMenuItem_Click(object sender, EventArgs e)
+        private void åœæ­¢æ’­æ”¾ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StopPlayback();
         }
@@ -838,30 +838,30 @@ namespace MusicalMoments
             }
         }
 
-        // ¶¨ÒåÒ»¸öÈ«¾Ö±äÁ¿À´´æ´¢Ô­Ê¼ÒôÆµÁĞ±íºÍ¶ÔÓ¦Á´½Ó
+        // å®šä¹‰ä¸€ä¸ªå…¨å±€å˜é‡æ¥å­˜å‚¨åŸå§‹éŸ³é¢‘åˆ—è¡¨å’Œå¯¹åº”é“¾æ¥
         List<AudioItem> OriginalAudioList = new List<AudioItem>();
         private void LoadList_Click(object sender, EventArgs e)
         {
             AudioListBox.Items.Clear();
-            // Çå¿ÕÔ­Ê¼ÒôÆµÁĞ±í
+            // æ¸…ç©ºåŸå§‹éŸ³é¢‘åˆ—è¡¨
             OriginalAudioList.Clear();
 
-            // »ñÈ¡ÏÂÔØ¿¨Æ¬²¢¼ÓÔØµ½ÁĞ±í¿òÖĞ
+            // è·å–ä¸‹è½½å¡ç‰‡å¹¶åŠ è½½åˆ°åˆ—è¡¨æ¡†ä¸­
             Misc.GetDownloadCards("https://slam.scmd.cc/", AudioListBox, DownloadLinkListBox);
 
-            // ½«ÏÂÔØ¿¨Æ¬ĞÅÏ¢Ìí¼Óµ½Ô­Ê¼ÒôÆµÁĞ±í
+            // å°†ä¸‹è½½å¡ç‰‡ä¿¡æ¯æ·»åŠ åˆ°åŸå§‹éŸ³é¢‘åˆ—è¡¨
             for (int i = 0; i < AudioListBox.Items.Count; i++)
             {
                 OriginalAudioList.Add(new AudioItem(AudioListBox.Items[i].ToString(), DownloadLinkListBox.Items[i].ToString()));
             }
-            numberLabel.Text = $"{AudioListBox.Items.Count} ¸öÏîÄ¿";
+            numberLabel.Text = $"{AudioListBox.Items.Count} ä¸ªé¡¹ç›®";
             if (!Debugger.IsAttached) { Misc.ButtonStabilization(5, LoadList); }
 
         }
 
         private void SearchBarTextBox_Enter(object sender, EventArgs e)
         {
-            if (SearchBarTextBox.Text == "ËÑË÷")
+            if (SearchBarTextBox.Text == "æœç´¢")
             {
                 SearchBarTextBox.Text = "";
             }
@@ -871,20 +871,20 @@ namespace MusicalMoments
         {
             if (string.IsNullOrWhiteSpace(SearchBarTextBox.Text))
             {
-                SearchBarTextBox.Text = "ËÑË÷";
+                SearchBarTextBox.Text = "æœç´¢";
             }
         }
 
         private void SearchBarTextBox_TextChanged(object sender, EventArgs e)
         {
-            // Çå¿ÕÁĞ±í¿ò
+            // æ¸…ç©ºåˆ—è¡¨æ¡†
             AudioListBox.Items.Clear();
 
-            // »ñÈ¡ËÑË÷¹Ø¼ü´Ê
+            // è·å–æœç´¢å…³é”®è¯
             string keyword = SearchBarTextBox.Text.ToLower();
 
-            // Èç¹û¹Ø¼ü´ÊÎª¿Õ£¬ÔòÏÔÊ¾ËùÓĞÏî
-            if (string.IsNullOrWhiteSpace(keyword) || keyword == "ËÑË÷")
+            // å¦‚æœå…³é”®è¯ä¸ºç©ºï¼Œåˆ™æ˜¾ç¤ºæ‰€æœ‰é¡¹
+            if (string.IsNullOrWhiteSpace(keyword) || keyword == "æœç´¢")
             {
                 foreach (var item in OriginalAudioList)
                 {
@@ -893,7 +893,7 @@ namespace MusicalMoments
             }
             else
             {
-                // ±éÀúÔ­Ê¼ÁĞ±íÖĞµÄËùÓĞÏî£¬½öÏÔÊ¾°üº¬ËÑË÷¹Ø¼ü´ÊµÄÏî
+                // éå†åŸå§‹åˆ—è¡¨ä¸­çš„æ‰€æœ‰é¡¹ï¼Œä»…æ˜¾ç¤ºåŒ…å«æœç´¢å…³é”®è¯çš„é¡¹
                 foreach (var item in OriginalAudioList)
                 {
                     if (item.Name.ToLower().Contains(keyword))
@@ -902,52 +902,52 @@ namespace MusicalMoments
                     }
                 }
             }
-            numberLabel.Text = $"{AudioListBox.Items.Count} ¸öÏîÄ¿";
+            numberLabel.Text = $"{AudioListBox.Items.Count} ä¸ªé¡¹ç›®";
         }
 
         private void DownloadSelected_Click(object sender, EventArgs e)
         {
-            // ¼ì²éÊÇ·ñÑ¡ÔñÁËÏî
+            // æ£€æŸ¥æ˜¯å¦é€‰æ‹©äº†é¡¹
             if (AudioListBox.SelectedIndex == -1)
             {
-                MessageBox.Show("ÇëÑ¡ÔñÒªÏÂÔØµÄÒôÆµ¡£", "ÌáÊ¾");
+                MessageBox.Show("è¯·é€‰æ‹©è¦ä¸‹è½½çš„éŸ³é¢‘ã€‚", "æç¤º");
                 return;
             }
 
-            // »ñÈ¡Ñ¡¶¨ÏîµÄÃû³Æ
+            // è·å–é€‰å®šé¡¹çš„åç§°
             string selectedName = AudioListBox.SelectedItem.ToString();
 
-            // ²éÕÒÑ¡¶¨ÏîµÄÏÂÔØÁ´½Ó
+            // æŸ¥æ‰¾é€‰å®šé¡¹çš„ä¸‹è½½é“¾æ¥
             string downloadLink = OriginalAudioList.Find(x => x.Name == selectedName).DownloadLink;
 
-            // Èç¹ûÕÒµ½ÏÂÔØÁ´½Ó£¬Ôò½øĞĞÏÂÔØ²Ù×÷
+            // å¦‚æœæ‰¾åˆ°ä¸‹è½½é“¾æ¥ï¼Œåˆ™è¿›è¡Œä¸‹è½½æ“ä½œ
             if (!string.IsNullOrEmpty(downloadLink))
             {
-                // Ê¹ÓÃ WebClient ½øĞĞÏÂÔØ
+                // ä½¿ç”¨ WebClient è¿›è¡Œä¸‹è½½
                 using (WebClient webClient = new WebClient())
                 {
                     try
                     {
-                        // »ñÈ¡ÎÄ¼şÃû£¨´ÓÏÂÔØÁ´½ÓÖĞÌáÈ¡£©
+                        // è·å–æ–‡ä»¶åï¼ˆä»ä¸‹è½½é“¾æ¥ä¸­æå–ï¼‰
                         string fileName = Path.GetFileName(downloadLink);
 
-                        // Ö¸¶¨ÏÂÔØµÄ±£´æÂ·¾¶
+                        // æŒ‡å®šä¸‹è½½çš„ä¿å­˜è·¯å¾„
                         string savePath = Path.Combine(Application.StartupPath, "AudioData", fileName);
 
-                        // ÏÂÔØÎÄ¼ş
+                        // ä¸‹è½½æ–‡ä»¶
                         webClient.DownloadFile(downloadLink, savePath);
 
-                        MessageBox.Show($"ÒÑ³É¹¦ÏÂÔØ£º{fileName}", "ÌáÊ¾");
+                        MessageBox.Show($"å·²æˆåŠŸä¸‹è½½ï¼š{fileName}", "æç¤º");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"ÏÂÔØÊ§°Ü£º{ex.Message}", "´íÎó");
+                        MessageBox.Show($"ä¸‹è½½å¤±è´¥ï¼š{ex.Message}", "é”™è¯¯");
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Î´ÕÒµ½Ñ¡¶¨ÏîµÄÏÂÔØÁ´½Ó¡£", "´íÎó");
+                MessageBox.Show("æœªæ‰¾åˆ°é€‰å®šé¡¹çš„ä¸‹è½½é“¾æ¥ã€‚", "é”™è¯¯");
             }
         }
 
@@ -958,8 +958,8 @@ namespace MusicalMoments
             {
                 PluginSDK.PluginServer.StartServer();
                 pluginServer = true;
-                TogglePluginServer.Text = "¹Ø±Õ²å¼ş·şÎñ";
-                PluginStatus.Text = "²å¼ş×´Ì¬:ÒÑ¿ªÆô";
+                TogglePluginServer.Text = "å…³é—­æ’ä»¶æœåŠ¡";
+                PluginStatus.Text = "æ’ä»¶çŠ¶æ€:å·²å¼€å¯";
                 LoadPlugin.Enabled = true;
                 pluginListView.Enabled = true;
                 PluginServerAddress.Text = PluginSDK.PluginServer.GetServerAddress();
@@ -968,8 +968,8 @@ namespace MusicalMoments
             {
                 PluginSDK.PluginServer.StopServer();
                 pluginServer = false;
-                TogglePluginServer.Text = "¿ªÆô²å¼ş·şÎñ";
-                PluginStatus.Text = "²å¼ş×´Ì¬:Î´¿ªÆô";
+                TogglePluginServer.Text = "å¼€å¯æ’ä»¶æœåŠ¡";
+                PluginStatus.Text = "æ’ä»¶çŠ¶æ€:æœªå¼€å¯";
                 LoadPlugin.Enabled = false;
                 pluginListView.Enabled = false;
                 PluginServerAddress.Text = "";
@@ -996,33 +996,33 @@ namespace MusicalMoments
         }
         private void LoadPlugin_Click(object sender, EventArgs e)
         {
-            // ¼ì²éÊÇ·ñÓĞÑ¡ÖĞµÄÏî
+            // æ£€æŸ¥æ˜¯å¦æœ‰é€‰ä¸­çš„é¡¹
             if (pluginListView.SelectedItems.Count > 0)
             {
-                // »ñÈ¡Ñ¡ÖĞÏî
+                // è·å–é€‰ä¸­é¡¹
                 ListViewItem selectedItem = pluginListView.SelectedItems[0];
 
-                // ´ÓÑ¡ÖĞÏîµÄ Tag ÊôĞÔÖĞ»ñÈ¡²å¼şÎÄ¼şµÄÍêÕûÂ·¾¶
+                // ä»é€‰ä¸­é¡¹çš„ Tag å±æ€§ä¸­è·å–æ’ä»¶æ–‡ä»¶çš„å®Œæ•´è·¯å¾„
                 string pluginFilePath = selectedItem.Tag as string;
 
-                // Èç¹û²å¼şÎÄ¼şÂ·¾¶²»Îª¿Õ
+                // å¦‚æœæ’ä»¶æ–‡ä»¶è·¯å¾„ä¸ä¸ºç©º
                 if (!string.IsNullOrEmpty(pluginFilePath))
                 {
-                    // ÉèÖÃÆô¶¯ĞÅÏ¢
+                    // è®¾ç½®å¯åŠ¨ä¿¡æ¯
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.FileName = pluginFilePath;
                     startInfo.Arguments = PluginServerAddress.Text;
 
-                    // Æô¶¯Ñ¡ÖĞµÄ²å¼şÓ¦ÓÃ³ÌĞò
+                    // å¯åŠ¨é€‰ä¸­çš„æ’ä»¶åº”ç”¨ç¨‹åº
                     try
                     { Process.Start(startInfo); }
-                    catch(Exception ex) { MessageBox.Show($"ÇëÈ·ÈÏ¸Ã²å¼şÊÇ·ñÎª¿ÉÖ´ĞĞÎÄ¼ş ´íÎóÏêÇé:\r\n{ex}","´íÎó"); }
+                    catch(Exception ex) { MessageBox.Show($"è¯·ç¡®è®¤è¯¥æ’ä»¶æ˜¯å¦ä¸ºå¯æ‰§è¡Œæ–‡ä»¶ é”™è¯¯è¯¦æƒ…:\r\n{ex}","é”™è¯¯"); }
                 }
             }
             else
             {
-                // Èç¹ûÃ»ÓĞÑ¡ÖĞµÄÏî£¬¸ø³öÌáÊ¾»òÕßÇå¿ÕÏÔÊ¾µÄÄÚÈİ
-                MessageBox.Show("ÇëÑ¡ÔñÒª¼ÓÔØµÄ²å¼ş¡£", "ÌáÊ¾", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // å¦‚æœæ²¡æœ‰é€‰ä¸­çš„é¡¹ï¼Œç»™å‡ºæç¤ºæˆ–è€…æ¸…ç©ºæ˜¾ç¤ºçš„å†…å®¹
+                MessageBox.Show("è¯·é€‰æ‹©è¦åŠ è½½çš„æ’ä»¶ã€‚", "æç¤º", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
