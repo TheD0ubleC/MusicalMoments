@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -78,6 +79,15 @@ namespace MusicalMoments
                 string method = requestParts[0];
                 string endpoint = requestParts[1];
 
+                // 参数请求
+                string[] endpointParts = endpoint.Split('?');
+                string endpointWithoutParams = endpointParts[0];
+                string[] queryParams = null;
+                if (endpointParts.Length > 1)
+                {
+                    queryParams = endpointParts[1].Split('&');
+                }
+
                 // 处理GET请求
                 if (method == "GET")
                 {
@@ -85,68 +95,91 @@ namespace MusicalMoments
                     if (endpoint == "/api/SDKVer")
                     {
                         // 返回一些示例数据
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + "V1.0.0";
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + "V1.0.0";
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/isPlaying") // 是否在播放中
                     {
                         // 返回 isPlaying 变量的值
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + (MainWindow.isPlaying ? "true" : "false");
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + (Misc.currentOutputDevice != null ? "true" : "false");
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/playAudio") // 是否正在使用音频源
                     {
                         // 返回 playAudio 变量的值
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + (MainWindow.playAudio ? "true" : "false");
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + (MainWindow.playAudio ? "true" : "false");
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/nowVer") // 当前版本
                     {
                         // 返回 nowVer 变量的值
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + MainWindow.nowVer;
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + MainWindow.nowVer;
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/runningDirectory") // 程序运行目录
                     {
                         // 返回 runningDirectory 变量的值
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + MainWindow.runningDirectory;
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + MainWindow.runningDirectory;
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/playAudioKey") // 播放音频按键
                     {
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + MainWindow.playAudioKey.ToString();
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + MainWindow.playAudioKey.ToString();
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/toggleStreamKey") // 切换源按键
                     {
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + MainWindow.toggleStreamKey.ToString();
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + MainWindow.toggleStreamKey.ToString();
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/VBvolume") // 切换源按键
                     {
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + (MainWindow.VBvolume * 100f).ToString();
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + (MainWindow.VBvolume * 100f).ToString();
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/volume") // 切换源按键
                     {
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + (MainWindow.volume * 100f).ToString();
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + (MainWindow.volume * 100f).ToString();
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
                     else if (endpoint == "/api/tipsvolume") // 切换源按键
                     {
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n" + (MainWindow.tipsvolume * 100f).ToString();
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + (MainWindow.tipsvolume * 100f).ToString();
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
+                    else if (endpointWithoutParams == "/api/listViewInfo")
+                    {
+                        string result = "";
+
+                        if (queryParams != null)
+                        {
+                            foreach (string param in queryParams)
+                            {
+                                string[] Parts = param.Split('=');
+                                if (Parts[0] == "type" && Parts[1] == "json")
+                                {
+                                    result = JsonConvert.SerializeObject(MainWindow.audioInfo, Formatting.None);
+                                    break;
+                                }
+                            }
+                        }
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\n\r\n" + result;
+                        byte[] responseData = Encoding.UTF8.GetBytes(response);
+                        stream.Write(responseData, 0, responseData.Length);
+                    }
+
+
+
                 }
                 client.Close();
             }

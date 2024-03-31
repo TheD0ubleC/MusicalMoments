@@ -15,6 +15,7 @@ using NAudio.Gui;
 using TagLib.Mpeg;
 
 using File = System.IO.File;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MusicalMoments
 {
@@ -36,10 +37,13 @@ namespace MusicalMoments
         public static float VBvolume = 1f;
         public static float volume = 1f;
         public static float tipsvolume = 1f;
+
+        public static List<AudioInfo> audioInfo = new List<AudioInfo>();
         public MainWindow()
         {
             InitializeComponent();
             Subscribe();
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         }
         public void Subscribe()
         {
@@ -434,6 +438,7 @@ namespace MusicalMoments
                 PlayAudio.Enabled = true;
                 e.SuppressKeyPress = true;
             }
+            MessageBox.Show(playAudioKey.ToString());
         }
         private void PlayAudio_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -448,6 +453,7 @@ namespace MusicalMoments
                 playAudioKey = (Keys)(e.KeyChar - 32);
             }
             e.Handled = true;
+            
         }
         private void info_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -579,8 +585,15 @@ namespace MusicalMoments
         }
         public void reLoadList()
         {
+            audioInfo.Clear();
             audioListView.Items.Clear();
             Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
+            foreach (ListViewItem item in audioListView.Items)
+            {
+                string filePath = item.Tag as string;
+                audioInfo.Add(new AudioInfo {Name = item.SubItems[0].Text,FilePath = filePath}); 
+            }
+            
         }
         private void reLoadAudioListsView_Click(object sender, EventArgs e)
         {

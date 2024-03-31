@@ -840,7 +840,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(364, 105);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：0\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240326\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：1\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240331\r\n";
             // 
             // info_Group
             // 
@@ -890,9 +890,9 @@
             info_Label2.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
-            info_Label2.Size = new Size(338, 35);
+            info_Label2.Size = new Size(339, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.0-Release+20240326";
+            info_Label2.Text = "版本号:1.3.1-Release+20240331";
             // 
             // info_Label1
             // 

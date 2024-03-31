@@ -17,10 +17,18 @@ using System.Text.Json;
 using Newtonsoft.Json;
 namespace MusicalMoments
 {
+    public class AudioInfo
+    {
+        public string Name { get; set; }
+        public string FilePath { get; set; }
+    }
+
+
+
     internal class Misc
     {
-        private static WaveOutEvent currentOutputDevice = null;
-        private static AudioFileReader currentAudioFile = null;
+        public static WaveOutEvent currentOutputDevice = null;
+        public static AudioFileReader currentAudioFile = null;
         public static bool checkVB()
         {
             bool isVBCableInstalled = false; // 初始化VB-Cable安装状态为假（未安装）
@@ -282,6 +290,43 @@ namespace MusicalMoments
                     case Keys.F11:
                     case Keys.F12:
                         return keyCode.ToString();
+                    // 处理数字键
+                    case Keys.D0:
+                    case Keys.D1:
+                    case Keys.D2:
+                    case Keys.D3:
+                    case Keys.D4:
+                    case Keys.D5:
+                    case Keys.D6:
+                    case Keys.D7:
+                    case Keys.D8:
+                    case Keys.D9:
+                        return keyCode.ToString().Substring(1);
+                    // 特殊的符号？
+                    case Keys.Oemcomma:
+                        return ",";
+                    case Keys.OemPeriod:
+                        return ".";
+                    case Keys.OemSemicolon:
+                        return ";";
+                    case Keys.OemQuotes:
+                        return "'";
+                    case Keys.OemOpenBrackets:
+                        return "[";
+                    case Keys.OemCloseBrackets:
+                        return "]";
+                    case Keys.OemPipe:
+                        return "\\";
+                    case Keys.OemMinus:
+                        return "-";
+                    case Keys.Oemplus:
+                        return "=";
+                    case Keys.Oemtilde:
+                        return "`";
+                    case Keys.OemQuestion:
+                        return "/";
+                    case Keys.OemBackslash:
+                        return "\\";
                 }
             }
             if (keyPressEventArgs != null)
@@ -291,6 +336,8 @@ namespace MusicalMoments
             }
             return string.Empty;
         }
+
+
         private static WaveInEvent waveIn;
         private static WaveOutEvent waveOut;
         private static BufferedWaveProvider bufferedWaveProvider;
