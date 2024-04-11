@@ -4,6 +4,9 @@
     <_LastSelectedProfileId>K:\Project\C#\MusicalMoments\MusicalMoments\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="BindKeyWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

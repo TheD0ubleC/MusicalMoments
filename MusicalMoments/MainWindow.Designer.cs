@@ -46,8 +46,11 @@
             AudioName = new ColumnHeader();
             AudioTrack = new ColumnHeader();
             AudioType = new ColumnHeader();
+            AudioBindKey = new ColumnHeader();
             tabPage1 = new TabPage();
             tips_Group1 = new GroupBox();
+            toC = new Button();
+            tips_Label5 = new Label();
             mToAudioData = new Button();
             retestVB = new Button();
             label_VBStatus = new Label();
@@ -99,8 +102,12 @@
             info_Label1 = new Label();
             LogoImage = new PictureBox();
             tabPage6 = new TabPage();
+            audioTips = new Button();
+            conversion_Group4 = new GroupBox();
+            conversion_Label5 = new Label();
+            conversion_Label4 = new Label();
             conversion_Group3 = new GroupBox();
-            label2 = new Label();
+            conversion_Label3 = new Label();
             conversion_Group2 = new GroupBox();
             convert_Button = new Button();
             conversion_Label2 = new Label();
@@ -139,6 +146,7 @@
             重命名ToolStripMenuItem = new ToolStripMenuItem();
             设为播放项ToolStripMenuItem = new ToolStripMenuItem();
             打开文件所在位置ToolStripMenuItem = new ToolStripMenuItem();
+            绑定按键ToolStripMenuItem = new ToolStripMenuItem();
             upData = new OpenFileDialog();
             tabPage2.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -159,6 +167,7 @@
             info_Group.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LogoImage).BeginInit();
             tabPage6.SuspendLayout();
+            conversion_Group4.SuspendLayout();
             conversion_Group3.SuspendLayout();
             conversion_Group2.SuspendLayout();
             conversion_Group1.SuspendLayout();
@@ -254,7 +263,7 @@
             // audioListView
             // 
             audioListView.AllowDrop = true;
-            audioListView.Columns.AddRange(new ColumnHeader[] { AudioName, AudioTrack, AudioType });
+            audioListView.Columns.AddRange(new ColumnHeader[] { AudioName, AudioTrack, AudioType, AudioBindKey });
             audioListView.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
             audioListView.ForeColor = SystemColors.WindowFrame;
             audioListView.Location = new Point(6, 6);
@@ -271,7 +280,7 @@
             // AudioName
             // 
             AudioName.Text = "名称";
-            AudioName.Width = 300;
+            AudioName.Width = 240;
             // 
             // AudioTrack
             // 
@@ -280,8 +289,13 @@
             // 
             // AudioType
             // 
-            AudioType.Text = "音频类型";
-            AudioType.Width = 100;
+            AudioType.Text = "类型";
+            AudioType.Width = 80;
+            // 
+            // AudioBindKey
+            // 
+            AudioBindKey.Text = "按键";
+            AudioBindKey.Width = 100;
             // 
             // tabPage1
             // 
@@ -296,6 +310,8 @@
             // 
             // tips_Group1
             // 
+            tips_Group1.Controls.Add(toC);
+            tips_Group1.Controls.Add(tips_Label5);
             tips_Group1.Controls.Add(mToAudioData);
             tips_Group1.Controls.Add(retestVB);
             tips_Group1.Controls.Add(label_VBStatus);
@@ -310,9 +326,30 @@
             tips_Group1.Location = new Point(0, -10);
             tips_Group1.Name = "tips_Group1";
             tips_Group1.RightToLeft = RightToLeft.No;
-            tips_Group1.Size = new Size(565, 207);
+            tips_Group1.Size = new Size(565, 246);
             tips_Group1.TabIndex = 11;
             tips_Group1.TabStop = false;
+            // 
+            // toC
+            // 
+            toC.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            toC.Location = new Point(458, 170);
+            toC.Name = "toC";
+            toC.Size = new Size(97, 25);
+            toC.TabIndex = 17;
+            toC.Text = "前往转换";
+            toC.UseVisualStyleBackColor = true;
+            toC.Click += toC_Click;
+            // 
+            // tips_Label5
+            // 
+            tips_Label5.BorderStyle = BorderStyle.FixedSingle;
+            tips_Label5.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label5.Location = new Point(6, 166);
+            tips_Label5.Name = "tips_Label5";
+            tips_Label5.Size = new Size(553, 34);
+            tips_Label5.TabIndex = 16;
+            tips_Label5.Text = "4.出现电音请先转换音频为指定格式";
             // 
             // mToAudioData
             // 
@@ -328,7 +365,7 @@
             // retestVB
             // 
             retestVB.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
-            retestVB.Location = new Point(458, 170);
+            retestVB.Location = new Point(458, 208);
             retestVB.Name = "retestVB";
             retestVB.Size = new Size(97, 25);
             retestVB.TabIndex = 0;
@@ -340,7 +377,7 @@
             // 
             label_VBStatus.BorderStyle = BorderStyle.FixedSingle;
             label_VBStatus.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            label_VBStatus.Location = new Point(6, 166);
+            label_VBStatus.Location = new Point(6, 204);
             label_VBStatus.Name = "label_VBStatus";
             label_VBStatus.Size = new Size(553, 34);
             label_VBStatus.TabIndex = 1;
@@ -840,7 +877,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(364, 105);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：1\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240331\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：2\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240411\r\n";
             // 
             // info_Group
             // 
@@ -892,7 +929,7 @@
             info_Label2.Name = "info_Label2";
             info_Label2.Size = new Size(339, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.1-Release+20240331";
+            info_Label2.Text = "版本号:1.3.2-Release+20240411";
             // 
             // info_Label1
             // 
@@ -922,6 +959,8 @@
             // 
             tabPage6.AllowDrop = true;
             tabPage6.BackColor = SystemColors.Control;
+            tabPage6.Controls.Add(audioTips);
+            tabPage6.Controls.Add(conversion_Group4);
             tabPage6.Controls.Add(conversion_Group3);
             tabPage6.Controls.Add(conversion_Group2);
             tabPage6.Controls.Add(conversion_Group1);
@@ -934,9 +973,50 @@
             tabPage6.DragDrop += tabPage6_DragDrop;
             tabPage6.DragEnter += tabPage6_DragEnter;
             // 
+            // audioTips
+            // 
+            audioTips.Location = new Point(6, 324);
+            audioTips.Name = "audioTips";
+            audioTips.Size = new Size(152, 32);
+            audioTips.TabIndex = 6;
+            audioTips.Text = "关于电音";
+            audioTips.UseVisualStyleBackColor = true;
+            audioTips.Click += audioTips_Click;
+            // 
+            // conversion_Group4
+            // 
+            conversion_Group4.Controls.Add(conversion_Label5);
+            conversion_Group4.Controls.Add(conversion_Label4);
+            conversion_Group4.ForeColor = Color.FromArgb(90, 90, 90);
+            conversion_Group4.Location = new Point(6, 217);
+            conversion_Group4.Name = "conversion_Group4";
+            conversion_Group4.RightToLeft = RightToLeft.No;
+            conversion_Group4.Size = new Size(553, 101);
+            conversion_Group4.TabIndex = 5;
+            conversion_Group4.TabStop = false;
+            conversion_Group4.Text = "属性";
+            // 
+            // conversion_Label5
+            // 
+            conversion_Label5.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            conversion_Label5.Location = new Point(6, 62);
+            conversion_Label5.Name = "conversion_Label5";
+            conversion_Label5.Size = new Size(531, 31);
+            conversion_Label5.TabIndex = 4;
+            conversion_Label5.Text = "转换一个音频以查看属性";
+            // 
+            // conversion_Label4
+            // 
+            conversion_Label4.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            conversion_Label4.Location = new Point(6, 31);
+            conversion_Label4.Name = "conversion_Label4";
+            conversion_Label4.Size = new Size(531, 31);
+            conversion_Label4.TabIndex = 3;
+            conversion_Label4.Text = "上传一个音频以查看属性";
+            // 
             // conversion_Group3
             // 
-            conversion_Group3.Controls.Add(label2);
+            conversion_Group3.Controls.Add(conversion_Label3);
             conversion_Group3.ForeColor = Color.FromArgb(90, 90, 90);
             conversion_Group3.Location = new Point(6, 150);
             conversion_Group3.Name = "conversion_Group3";
@@ -946,13 +1026,13 @@
             conversion_Group3.TabStop = false;
             conversion_Group3.Text = "提示";
             // 
-            // label2
+            // conversion_Label3
             // 
-            label2.Location = new Point(6, 27);
-            label2.Name = "label2";
-            label2.Size = new Size(541, 31);
-            label2.TabIndex = 3;
-            label2.Text = "支持被转化的格式:<ncm><mp3><wav><ogg><flac>";
+            conversion_Label3.Location = new Point(6, 27);
+            conversion_Label3.Name = "conversion_Label3";
+            conversion_Label3.Size = new Size(541, 31);
+            conversion_Label3.TabIndex = 3;
+            conversion_Label3.Text = "支持被转化的格式:<ncm><mp3><wav><ogg><flac>";
             // 
             // conversion_Group2
             // 
@@ -1298,9 +1378,9 @@
             // 
             // mainContextMenuStrip
             // 
-            mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { 播放ToolStripMenuItem, 停止播放ToolStripMenuItem, 删除ToolStripMenuItem, 重命名ToolStripMenuItem, 设为播放项ToolStripMenuItem, 打开文件所在位置ToolStripMenuItem });
+            mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { 播放ToolStripMenuItem, 停止播放ToolStripMenuItem, 删除ToolStripMenuItem, 重命名ToolStripMenuItem, 设为播放项ToolStripMenuItem, 打开文件所在位置ToolStripMenuItem, 绑定按键ToolStripMenuItem });
             mainContextMenuStrip.Name = "mainContextMenuStrip";
-            mainContextMenuStrip.Size = new Size(173, 136);
+            mainContextMenuStrip.Size = new Size(173, 158);
             // 
             // 播放ToolStripMenuItem
             // 
@@ -1344,6 +1424,13 @@
             打开文件所在位置ToolStripMenuItem.Text = "打开文件所在位置";
             打开文件所在位置ToolStripMenuItem.Click += 打开文件所在位置ToolStripMenuItem_Click;
             // 
+            // 绑定按键ToolStripMenuItem
+            // 
+            绑定按键ToolStripMenuItem.Name = "绑定按键ToolStripMenuItem";
+            绑定按键ToolStripMenuItem.Size = new Size(172, 22);
+            绑定按键ToolStripMenuItem.Text = "绑定按键";
+            绑定按键ToolStripMenuItem.Click += 绑定按键ToolStripMenuItem_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -1384,6 +1471,7 @@
             info_Group.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)LogoImage).EndInit();
             tabPage6.ResumeLayout(false);
+            conversion_Group4.ResumeLayout(false);
             conversion_Group3.ResumeLayout(false);
             conversion_Group2.ResumeLayout(false);
             conversion_Group2.PerformLayout();
@@ -1482,7 +1570,7 @@
         private TextBox name_TextBox;
         private Label conversion_Label1;
         private GroupBox conversion_Group3;
-        private Label label2;
+        private Label conversion_Label3;
         private Button mToAudioData1;
         private ToolStripMenuItem 停止播放ToolStripMenuItem;
         private TabPage tabPage7;
@@ -1505,5 +1593,13 @@
         private Label PluginServerAddress;
         private Button reLoadPluginListsView;
         private Button LoadPlugin;
+        private GroupBox conversion_Group4;
+        private Label conversion_Label4;
+        private Label conversion_Label5;
+        private Button toC;
+        private Label tips_Label5;
+        private Button audioTips;
+        private ColumnHeader AudioBindKey;
+        private ToolStripMenuItem 绑定按键ToolStripMenuItem;
     }
 }

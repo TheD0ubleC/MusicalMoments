@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -16,12 +16,14 @@ using TagLib.Mpeg;
 
 using File = System.IO.File;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Microsoft.VisualBasic.Devices;
+using System.IO;
 
 namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.3.1-release-x64";
+        public static string nowVer = "v1.3.2-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -53,6 +55,7 @@ namespace MusicalMoments
         }
         private void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
+            reLoadList();
             // 检查是否按下了播放音频的按键
             if (e.KeyCode == playAudioKey)
             {
@@ -101,6 +104,30 @@ namespace MusicalMoments
                     }
                 }
                 changedCount = changedCount + 1;
+            }
+
+            foreach (var audio in audioInfo)
+            {
+                if (e.KeyCode == audio.Key)
+                {
+                    if(playAudio)
+                    {
+                        if (File.Exists(audio.FilePath))
+                        {
+                            if (isPlaying)
+                            {
+                                Misc.PlayAudioToSpecificDevice(audio.FilePath, Misc.GetOutputDeviceID(comboBox_VBAudioEquipmentOutput.SelectedItem.ToString()), true, VBvolume, audioEquipmentPlay.Checked, audio.FilePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), volume);
+                                isPlaying = true;
+                            }
+                            else
+                            {
+                                Misc.PlayAudioToSpecificDevice(audio.FilePath, Misc.GetOutputDeviceID(comboBox_VBAudioEquipmentOutput.SelectedItem.ToString()), true, VBvolume, audioEquipmentPlay.Checked, audio.FilePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), volume);
+                                isPlaying = false;
+                            }
+                        }
+                    }
+                    
+                }
             }
         }
         private void sideLists_DrawItem(object sender, DrawListViewItemEventArgs e)
@@ -161,7 +188,9 @@ namespace MusicalMoments
 
 
             LoadUserData();
-
+            reLoadList();
+            CheckDuplicateKeys();
+            Misc.APIStartup();
             //最后再版本验证 以防UI错误
             CheckNewVer();
 
@@ -268,6 +297,7 @@ namespace MusicalMoments
 
             e.Cancel = true;
             Misc.FadeOut(200, this);
+            Misc.APIShutdown();
         }
 
 
@@ -453,7 +483,7 @@ namespace MusicalMoments
                 playAudioKey = (Keys)(e.KeyChar - 32);
             }
             e.Handled = true;
-            
+
         }
         private void info_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -591,9 +621,12 @@ namespace MusicalMoments
             foreach (ListViewItem item in audioListView.Items)
             {
                 string filePath = item.Tag as string;
-                audioInfo.Add(new AudioInfo {Name = item.SubItems[0].Text,FilePath = filePath}); 
+                Keys key = Keys.None;
+                if (item.SubItems[3].Text != "未绑定")
+                { key = (Keys)Enum.Parse(typeof(Keys), item.SubItems[3].Text); }
+                audioInfo.Add(new AudioInfo { Name = item.SubItems[0].Text, FilePath = filePath, Key = key });
             }
-            
+
         }
         private void reLoadAudioListsView_Click(object sender, EventArgs e)
         {
@@ -690,6 +723,8 @@ namespace MusicalMoments
                 MessageBox.Show($"嗨~我是CC，这个软件的开发者。我们第一次见面是在<{firstStart}> 现在是<{System.DateTime.Now.ToString("yyyy年MM月dd日HH时mm分ss秒")}> 这期间你已经播放了<{playedCount}>次音频 还切换了<{changedCount}>次音频流！！(ps:如果数据不太对可能是因为你不小心把运行目录的json删除了吧？)", "恭喜你发现了彩蛋！");
             }
         }
+
+
         private void upData_button_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -699,8 +734,12 @@ namespace MusicalMoments
                 string selectedFile = openFileDialog.FileName;
                 dataPath_TextBox.Text = selectedFile;
                 name_TextBox.Text = Path.GetFileNameWithoutExtension(selectedFile);
+
+                // 显示音频属性
+                conversion_Label4.Text = "源信息:" + Misc.DisplayAudioProperties(selectedFile);
             }
         }
+
         private void tabPage6_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -709,8 +748,12 @@ namespace MusicalMoments
                 string selectedFile = files[0];
                 dataPath_TextBox.Text = selectedFile;
                 name_TextBox.Text = Path.GetFileNameWithoutExtension(selectedFile);
+
+                // 显示音频属性
+                conversion_Label4.Text = "源信息:" + Misc.DisplayAudioProperties(selectedFile);
             }
         }
+
         private void tabPage6_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -729,6 +772,7 @@ namespace MusicalMoments
                 {
                     if (Misc.NCMConvert(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + ".mp3") == 0)
                     {
+                        conversion_Label5.Text = "转换后:" + Misc.DisplayAudioProperties(runningDirectory + "AudioData\\" + name_TextBox.Text + ".mp3");
                         MessageBox.Show("转换成功 已存储至运行目录下的AudioData文件夹", "提示");
                     }
                     else
@@ -741,6 +785,7 @@ namespace MusicalMoments
                     string targetFormat = comboBoxOutputFormat.SelectedItem.ToString().ToLower();
                     if (AudioConverter.ConvertTo(dataPath_TextBox.Text, runningDirectory + "AudioData\\" + name_TextBox.Text + "." + targetFormat, targetFormat))
                     {
+                        conversion_Label5.Text = "转换后:" + Misc.DisplayAudioProperties(runningDirectory + "AudioData\\" + name_TextBox.Text + "." + targetFormat);
                         MessageBox.Show("转换成功 已存储至运行目录下的AudioData文件夹", "提示");
                     }
                     else
@@ -907,17 +952,12 @@ namespace MusicalMoments
 
         private void DownloadSelected_Click(object sender, EventArgs e)
         {
-            // 检查是否选择了项
             if (AudioListBox.SelectedIndex == -1)
             {
                 MessageBox.Show("请选择要下载的音频。", "提示");
                 return;
             }
-
-            // 获取选定项的名称
             string selectedName = AudioListBox.SelectedItem.ToString();
-
-            // 查找选定项的下载链接
             string downloadLink = OriginalAudioList.Find(x => x.Name == selectedName).DownloadLink;
 
             // 如果找到下载链接，则进行下载操作
@@ -1016,7 +1056,7 @@ namespace MusicalMoments
                     // 启动选中的插件应用程序
                     try
                     { Process.Start(startInfo); }
-                    catch(Exception ex) { MessageBox.Show($"请确认该插件是否为可执行文件 错误详情:\r\n{ex}","错误"); }
+                    catch (Exception ex) { MessageBox.Show($"请确认该插件是否为可执行文件 错误详情:\r\n{ex}", "错误"); }
                 }
             }
             else
@@ -1030,5 +1070,52 @@ namespace MusicalMoments
         {
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
         }
+
+        private void toC_Click(object sender, EventArgs e)
+        {
+            mainTabControl.SelectedIndex = 5;
+        }
+
+        private void audioTips_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("如果您的音频格式非44100hz频率那么在播放时可能会出现电音 这是因为VB声卡通道是44100hz频率 \r\n(我都检查多少遍代码了也没有什么缓冲溢出 这是VB的原因关我什么事 别一直吵吵 还是那句话 别人能用为什么你不能用 有时候该换个方位想想究竟是软件的问题还是文件的问题 我在三台机子上都试过了并未出现电音 且委托朋友帮我测试也都没有问题 人不行别怪路不平 代码都开源的 有问题你找出来我能不改吗?关键是你也找不出问题 就什么事都赖我身上 爱用不用没强迫你用 不行就去用SoundPad 没人拦着你)", "提示");
+        }
+        public static Keys nowKey = Keys.None;
+        private void 绑定按键ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ListViewItem selectedItem = audioListView.SelectedItems[0];
+            Keys key = Keys.None;
+            if (selectedItem.SubItems[3].Text != "未绑定")
+            {
+                key = (Keys)Enum.Parse(typeof(Keys), selectedItem.SubItems[3].Text);
+            }
+            BindKeyWindow bindKeyWindow = new BindKeyWindow(key);
+            bindKeyWindow.ShowDialog();
+            nowKey = bindKeyWindow.Key;
+            
+            Misc.WriteKeyJsonInfo(Path.ChangeExtension(selectedItem.Tag.ToString(), ".json"),nowKey.ToString());
+
+            reLoadList();
+            CheckDuplicateKeys();
+        }
+
+        public static void CheckDuplicateKeys()
+        {
+            for (int i = 0; i < audioInfo.Count; i++)
+            {
+                var parentItem = audioInfo[i];
+                for (int j = i + 1; j < audioInfo.Count; j++)
+                {
+                    var childItem = audioInfo[j];
+                    if (parentItem.Key == childItem.Key)
+                    {
+                        MessageBox.Show($"已检测到相同按键 请勿作死将两个或多个音频绑定在同个按键上 该操作可能会导致MM崩溃 此提示会在绑定按键时与软件启动时检测并发出","温馨提示");
+                    }
+                }
+            }
+        }
+
+
+
     }
 }

@@ -21,6 +21,7 @@ namespace MusicalMoments
     {
         public string Name { get; set; }
         public string FilePath { get; set; }
+        public Keys Key { get; set; }
     }
 
 
@@ -185,23 +186,115 @@ namespace MusicalMoments
         public static void AddAudioFilesToListView(string directoryPath, ListView listView)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
-            FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly)
-                                       .Where(f => f.Extension.Equals(".mp3", StringComparison.OrdinalIgnoreCase) ||
-                                                   f.Extension.Equals(".wav", StringComparison.OrdinalIgnoreCase)||
-                                                   f.Extension.Equals(".falc", StringComparison.OrdinalIgnoreCase))
-                                       .ToArray();
-            foreach (FileInfo file in files)
+            FileInfo[] audioFiles = dirInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly)
+                                            .Where(f => f.Extension.Equals(".mp3", StringComparison.OrdinalIgnoreCase) ||
+                                                        f.Extension.Equals(".wav", StringComparison.OrdinalIgnoreCase) ||
+                                                        f.Extension.Equals(".falc", StringComparison.OrdinalIgnoreCase))
+                                            .ToArray();
+            foreach (FileInfo audioFile in audioFiles)
             {
-                var fileTag = TagLib.File.Create(file.FullName);
-                // 尝试读取音频文件的标题作为曲目信息
-                string fileName = Path.GetFileNameWithoutExtension(file.Name); // 获取不带扩展名的文件名
+                // 获取音频文件信息
+                var fileTag = TagLib.File.Create(audioFile.FullName);
+                string fileName = Path.GetFileNameWithoutExtension(audioFile.Name);
                 string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
-                string fileType = file.Extension.TrimStart('.').ToUpper(); // 获取文件类型
-                ListViewItem item = new ListViewItem(new[] { fileName, track, fileType });
-                item.Tag = file.FullName; // 将文件的完整路径存储在Tag属性中
+                string fileType = audioFile.Extension.TrimStart('.').ToUpper();
+
+                // 获取 JSON 文件路径并读取信息
+                string jsonFilePath = Path.ChangeExtension(audioFile.FullName, ".json");
+                string jsonInfo = ReadKeyJsonInfo(jsonFilePath);
+
+                // 将文件信息添加到 ListView 中
+                ListViewItem item = new ListViewItem(new[] { fileName, track, fileType, jsonInfo });
+                item.Tag = audioFile.FullName;
                 listView.Items.Add(item);
             }
         }
+
+        private static string ReadKeyJsonInfo(string jsonFilePath)
+        {
+            string info = "未绑定";
+            try
+            {
+                // 检查 JSON 文件是否存在
+                if (File.Exists(jsonFilePath))
+                {
+                    // 读取 JSON 文件内容并尝试解析
+                    string jsonContent = File.ReadAllText(jsonFilePath);
+                    dynamic jsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonContent);
+
+                    // 如果成功解析，则尝试读取 "Key" 值
+                    if (jsonObject != null && jsonObject["Key"] != null)
+                    {
+                        string key = jsonObject["Key"].ToString();
+
+                        // 如果 "Key" 值为空字符串，则将 info 设置为 "未绑定"
+                        if (string.IsNullOrEmpty(key) || key == "None")
+                        {
+                            info = "未绑定";
+                        }
+                        else
+                        {
+                            info = key;
+                        }
+                    }
+                    else
+                    {
+                        // 如果没有 "Key" 值，则添加一个空的 "Key" 值并返回 "未绑定"
+                        jsonObject = new Newtonsoft.Json.Linq.JObject();
+                        jsonObject["Key"] = "";
+                        File.WriteAllText(jsonFilePath, jsonObject.ToString());
+                    }
+                }
+                else
+                {
+                    // 如果 JSON 文件不存在，则创建一个并添加一个空的 "Key" 值并返回 "未绑定"
+                    File.WriteAllText(jsonFilePath, "{\"Key\":\"\"}");
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常
+                MessageBox.Show($"{ex.Message}");
+            }
+            return info;
+        }
+        public static void WriteKeyJsonInfo(string jsonFilePath, string valueToWrite)
+        {
+            try
+            {
+                // 检查 JSON 文件是否存在
+                if (File.Exists(jsonFilePath))
+                {
+                    // 读取 JSON 文件内容
+                    string jsonContent = File.ReadAllText(jsonFilePath);
+                    dynamic jsonObject = JsonConvert.DeserializeObject(jsonContent);
+
+                    // 更新 "Key" 值
+                    jsonObject["Key"] = valueToWrite;
+
+                    // 将更新后的 JSON 重新写入文件
+                    File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(jsonObject));
+                }
+                else
+                {
+                    // 创建一个新的 JSON 对象并设置 "Key" 值
+                    var jsonObject = new JObject();
+                    jsonObject["Key"] = valueToWrite;
+
+                    // 将 JSON 对象写入文件
+                    File.WriteAllText(jsonFilePath, jsonObject.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常
+                MessageBox.Show($"{ex.Message}");
+            }
+        }
+
+
+
+
         public static void AddPluginFilesToListView(string rootDirectoryPath, ListView listView)
         {
             // 清空列表视图中的项
@@ -275,7 +368,7 @@ namespace MusicalMoments
                     case Keys.PageDown:
                         return "PAGE DOWN";
                     case Keys.Escape:
-                        return "ESCAPE";
+                        return "None";
                     // 处理 F1-F12
                     case Keys.F1:
                     case Keys.F2:
@@ -349,7 +442,7 @@ namespace MusicalMoments
             waveIn = new WaveInEvent
             {
                 DeviceNumber = inputDeviceIndex,
-                WaveFormat = new WaveFormat(44100, 16, 1) // 设置为44100Hz, 16位, 单声道
+                WaveFormat = new WaveFormat(44100, 16, 2) // 设置为44100Hz, 16位, 2声道
             };
             waveOut = new WaveOutEvent
             {
@@ -628,6 +721,68 @@ namespace MusicalMoments
             return string.Empty;
         }
 
+        public static string DisplayAudioProperties(string audioFilePath)
+        {
+            try
+            {
+                using (var audioFile = new AudioFileReader(audioFilePath))
+                {
+                    string frequency = audioFile.WaveFormat.SampleRate.ToString();
+                    string bits = (audioFile.WaveFormat.BitsPerSample / 8).ToString(); // 位数
+                    string channels = audioFile.WaveFormat.Channels.ToString(); // 声道
+                    string format = Path.GetExtension(audioFilePath).TrimStart('.'); // 格式
 
+                    // 将音频属性显示在标签上
+                    return $"格式: {format.ToUpper()}, 频率: {frequency} Hz, 位数: {bits} bit, 声道: {channels}";
+                }
+            }
+            catch
+            {
+                return "无法读取音频属性";
+            }
+        }
+
+        private static readonly HttpClient client = new HttpClient();
+
+        public static async Task APIStartup()
+        {
+            try
+            {
+                // 生成一个唯一标识符（GUID）
+                string clientId = Guid.NewGuid().ToString();
+
+                // 添加唯一标识符到请求头
+                client.DefaultRequestHeaders.Add("X-Client-ID", clientId);
+
+                string url = "https://api.scmd.cc/MM.php?action=startup";
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode(); // 确保响应成功
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody); // 输出响应内容
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"HTTP 请求错误: {e.Message}");
+            }
+        }
+
+        public static async Task APIShutdown()
+        {
+            try
+            {
+                string url = "https://api.scmd.cc/MM.php?action=shutdown";
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode(); // 确保响应成功
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody); // 输出响应内容
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"HTTP 请求错误: {e.Message}");
+            }
+        }
     }
+
 }

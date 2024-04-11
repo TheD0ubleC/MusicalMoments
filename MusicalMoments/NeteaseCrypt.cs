@@ -20,7 +20,8 @@ namespace MusicalMoments
         /// <param name="FileName">网易云音乐 ncm 加密文件路径</param>
         public NeteaseCrypt(string FileName)
         {
-            NeteaseCryptClass = CreateNeteaseCrypt(FileName);
+            try{ NeteaseCryptClass = CreateNeteaseCrypt(FileName); }
+            catch(Exception ex) { MessageBox.Show($"未在运行目录找到\"taurusxin.LibNcmDump.dll\"文件 这是ncm格式转为mp3的重要文件 请从压缩包内完整解压至同一目录 \r\n\r\n详情错误信息:\r\n{ex}","错误"); return; }
         }
         /// <summary>
         /// 启动转换过程。
@@ -28,14 +29,16 @@ namespace MusicalMoments
         /// <returns>返回一个整数，指示转储过程的结果。如果成功，返回0；如果失败，返回1。</returns>
         public int Dump()
         {
-            return Dump(NeteaseCryptClass);
+            try { return Dump(NeteaseCryptClass); }
+            catch { return 1; }
         }
         /// <summary>
         /// 修复音乐文件元数据。
         /// </summary>
         public void FixMetadata()
         {
-            FixMetadata(NeteaseCryptClass);
+            try { FixMetadata(NeteaseCryptClass); }
+            catch { return; }
         }
         // 实现 IDisposable 接口，释放资源
         public void Dispose()
