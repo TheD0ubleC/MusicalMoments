@@ -9,8 +9,10 @@
 ## 省流
 Musical Moments (MM) 的主要目的是提供一个全面的实时音频解决方案，旨在对标如SoundPad等在游戏、直播和语音领域广泛使用的音效/音频播放工具。
 
-视频版教程:
-<iframe src="//player.bilibili.com/player.html?aid=1002230504&bvid=BV1qx4y127ue&cid=1477633099&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+### [视频版教程点我](https://www.bilibili.com/video/BV1qx4y127ue)
+
+
+
 
 MM的优点：
 多功能生态：MM不仅支持音频格式转换，还提供一个音频发现平台，用户可以在此发现、分享心仪音频。
