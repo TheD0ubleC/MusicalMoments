@@ -26,15 +26,15 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem8 = new ListViewItem("编辑", 7);
-            ListViewItem listViewItem9 = new ListViewItem("插件", 8);
+            ListViewItem listViewItem10 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem11 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem12 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem13 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem14 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem15 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem16 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem17 = new ListViewItem("插件", 8);
+            ListViewItem listViewItem18 = new ListViewItem("反馈", 9);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -124,8 +124,6 @@
             AudioListBox = new ListBox();
             DownloadLinkListBox = new ListBox();
             LoadList = new Button();
-            tabPage8 = new TabPage();
-            RTipLabel = new Label();
             tabPage9 = new TabPage();
             LoadPlugin = new Button();
             reLoadPluginListsView = new Button();
@@ -137,6 +135,19 @@
             PluginName = new ColumnHeader();
             PluginAuthor = new ColumnHeader();
             PluginVer = new ColumnHeader();
+            tabPage10 = new TabPage();
+            FeedbackTipsButton = new Button();
+            FeedbackContent = new TextBox();
+            FeedbackTips4 = new Label();
+            FeedbackButton = new Button();
+            FeedbackDisaster = new RadioButton();
+            FeedbackAverage = new RadioButton();
+            FeedbackUrgent = new RadioButton();
+            Contact = new TextBox();
+            FeedbackTips3 = new Label();
+            FeedbackTips2 = new Label();
+            FeedbackTitle = new TextBox();
+            FeedbackTips1 = new Label();
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
@@ -172,8 +183,8 @@
             conversion_Group2.SuspendLayout();
             conversion_Group1.SuspendLayout();
             tabPage7.SuspendLayout();
-            tabPage8.SuspendLayout();
             tabPage9.SuspendLayout();
+            tabPage10.SuspendLayout();
             mainGroupBox.SuspendLayout();
             groupBox1.SuspendLayout();
             mainContextMenuStrip.SuspendLayout();
@@ -186,7 +197,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -214,6 +225,7 @@
             sideListsImage.Images.SetKeyName(6, "发现.png");
             sideListsImage.Images.SetKeyName(7, "编辑.png");
             sideListsImage.Images.SetKeyName(8, "插件.png");
+            sideListsImage.Images.SetKeyName(9, "反馈.png");
             // 
             // tabPage2
             // 
@@ -454,8 +466,8 @@
             mainTabControl.Controls.Add(tabPage5);
             mainTabControl.Controls.Add(tabPage6);
             mainTabControl.Controls.Add(tabPage7);
-            mainTabControl.Controls.Add(tabPage8);
             mainTabControl.Controls.Add(tabPage9);
+            mainTabControl.Controls.Add(tabPage10);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
@@ -875,9 +887,9 @@
             info_Label3.Location = new Point(172, 72);
             info_Label3.Name = "info_Label3";
             info_Label3.RightToLeft = RightToLeft.No;
-            info_Label3.Size = new Size(364, 105);
+            info_Label3.Size = new Size(364, 126);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：2\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240411\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：3\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240414\r\n\r\n";
             // 
             // info_Group
             // 
@@ -929,7 +941,7 @@
             info_Label2.Name = "info_Label2";
             info_Label2.Size = new Size(339, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.2-Release+20240411";
+            info_Label2.Text = "版本号:1.3.3-Release+20240414";
             // 
             // info_Label1
             // 
@@ -1225,27 +1237,6 @@
             LoadList.UseVisualStyleBackColor = true;
             LoadList.Click += LoadList_Click;
             // 
-            // tabPage8
-            // 
-            tabPage8.BackColor = SystemColors.Control;
-            tabPage8.Controls.Add(RTipLabel);
-            tabPage8.Location = new Point(0, 22);
-            tabPage8.Name = "tabPage8";
-            tabPage8.Padding = new Padding(3);
-            tabPage8.Size = new Size(565, 341);
-            tabPage8.TabIndex = 7;
-            tabPage8.Text = "编辑";
-            // 
-            // RTipLabel
-            // 
-            RTipLabel.AutoSize = true;
-            RTipLabel.Font = new Font("NLXJT", 50F, FontStyle.Bold, GraphicsUnit.Point);
-            RTipLabel.Location = new Point(134, 127);
-            RTipLabel.Name = "RTipLabel";
-            RTipLabel.Size = new Size(305, 88);
-            RTipLabel.TabIndex = 0;
-            RTipLabel.Text = "敬请期待";
-            // 
             // tabPage9
             // 
             tabPage9.BackColor = SystemColors.Control;
@@ -1353,6 +1344,154 @@
             // 
             PluginVer.Text = "版本";
             PluginVer.Width = 100;
+            // 
+            // tabPage10
+            // 
+            tabPage10.BackColor = SystemColors.Control;
+            tabPage10.Controls.Add(FeedbackTipsButton);
+            tabPage10.Controls.Add(FeedbackContent);
+            tabPage10.Controls.Add(FeedbackTips4);
+            tabPage10.Controls.Add(FeedbackButton);
+            tabPage10.Controls.Add(FeedbackDisaster);
+            tabPage10.Controls.Add(FeedbackAverage);
+            tabPage10.Controls.Add(FeedbackUrgent);
+            tabPage10.Controls.Add(Contact);
+            tabPage10.Controls.Add(FeedbackTips3);
+            tabPage10.Controls.Add(FeedbackTips2);
+            tabPage10.Controls.Add(FeedbackTitle);
+            tabPage10.Controls.Add(FeedbackTips1);
+            tabPage10.Location = new Point(0, 22);
+            tabPage10.Name = "tabPage10";
+            tabPage10.Padding = new Padding(3);
+            tabPage10.Size = new Size(565, 341);
+            tabPage10.TabIndex = 9;
+            tabPage10.Text = "反馈";
+            // 
+            // FeedbackTipsButton
+            // 
+            FeedbackTipsButton.Location = new Point(333, 299);
+            FeedbackTipsButton.Name = "FeedbackTipsButton";
+            FeedbackTipsButton.Size = new Size(110, 32);
+            FeedbackTipsButton.TabIndex = 14;
+            FeedbackTipsButton.Text = "必看";
+            FeedbackTipsButton.UseVisualStyleBackColor = true;
+            FeedbackTipsButton.Click += FeedbackTipsButton_Click;
+            // 
+            // FeedbackContent
+            // 
+            FeedbackContent.BorderStyle = BorderStyle.FixedSingle;
+            FeedbackContent.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackContent.ForeColor = Color.FromArgb(90, 90, 90);
+            FeedbackContent.Location = new Point(59, 41);
+            FeedbackContent.Multiline = true;
+            FeedbackContent.Name = "FeedbackContent";
+            FeedbackContent.RightToLeft = RightToLeft.No;
+            FeedbackContent.Size = new Size(500, 181);
+            FeedbackContent.TabIndex = 5;
+            // 
+            // FeedbackTips4
+            // 
+            FeedbackTips4.Location = new Point(9, 304);
+            FeedbackTips4.Name = "FeedbackTips4";
+            FeedbackTips4.RightToLeft = RightToLeft.No;
+            FeedbackTips4.Size = new Size(67, 31);
+            FeedbackTips4.TabIndex = 13;
+            FeedbackTips4.Text = "等级:";
+            // 
+            // FeedbackButton
+            // 
+            FeedbackButton.Location = new Point(449, 299);
+            FeedbackButton.Name = "FeedbackButton";
+            FeedbackButton.Size = new Size(110, 32);
+            FeedbackButton.TabIndex = 12;
+            FeedbackButton.Text = "反馈";
+            FeedbackButton.UseVisualStyleBackColor = true;
+            FeedbackButton.Click += FeedbackButton_Click;
+            // 
+            // FeedbackDisaster
+            // 
+            FeedbackDisaster.AutoSize = true;
+            FeedbackDisaster.Location = new Point(244, 301);
+            FeedbackDisaster.Name = "FeedbackDisaster";
+            FeedbackDisaster.RightToLeft = RightToLeft.No;
+            FeedbackDisaster.Size = new Size(77, 33);
+            FeedbackDisaster.TabIndex = 11;
+            FeedbackDisaster.Text = "灾难";
+            FeedbackDisaster.UseVisualStyleBackColor = true;
+            // 
+            // FeedbackAverage
+            // 
+            FeedbackAverage.AutoSize = true;
+            FeedbackAverage.Checked = true;
+            FeedbackAverage.Location = new Point(78, 301);
+            FeedbackAverage.Name = "FeedbackAverage";
+            FeedbackAverage.RightToLeft = RightToLeft.No;
+            FeedbackAverage.Size = new Size(77, 33);
+            FeedbackAverage.TabIndex = 10;
+            FeedbackAverage.TabStop = true;
+            FeedbackAverage.Text = "普通";
+            FeedbackAverage.UseVisualStyleBackColor = true;
+            // 
+            // FeedbackUrgent
+            // 
+            FeedbackUrgent.AutoSize = true;
+            FeedbackUrgent.Location = new Point(161, 301);
+            FeedbackUrgent.Name = "FeedbackUrgent";
+            FeedbackUrgent.RightToLeft = RightToLeft.No;
+            FeedbackUrgent.Size = new Size(77, 33);
+            FeedbackUrgent.TabIndex = 9;
+            FeedbackUrgent.Text = "紧急";
+            FeedbackUrgent.UseVisualStyleBackColor = true;
+            // 
+            // Contact
+            // 
+            Contact.BorderStyle = BorderStyle.FixedSingle;
+            Contact.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            Contact.ForeColor = Color.FromArgb(90, 90, 90);
+            Contact.Location = new Point(59, 233);
+            Contact.Name = "Contact";
+            Contact.RightToLeft = RightToLeft.No;
+            Contact.Size = new Size(500, 28);
+            Contact.TabIndex = 7;
+            // 
+            // FeedbackTips3
+            // 
+            FeedbackTips3.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackTips3.Location = new Point(3, 222);
+            FeedbackTips3.Name = "FeedbackTips3";
+            FeedbackTips3.RightToLeft = RightToLeft.No;
+            FeedbackTips3.Size = new Size(70, 62);
+            FeedbackTips3.TabIndex = 8;
+            FeedbackTips3.Text = "联系\r\n方式";
+            // 
+            // FeedbackTips2
+            // 
+            FeedbackTips2.Location = new Point(3, 43);
+            FeedbackTips2.Name = "FeedbackTips2";
+            FeedbackTips2.RightToLeft = RightToLeft.No;
+            FeedbackTips2.Size = new Size(73, 31);
+            FeedbackTips2.TabIndex = 6;
+            FeedbackTips2.Text = "内容";
+            // 
+            // FeedbackTitle
+            // 
+            FeedbackTitle.BorderStyle = BorderStyle.FixedSingle;
+            FeedbackTitle.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackTitle.ForeColor = Color.FromArgb(90, 90, 90);
+            FeedbackTitle.Location = new Point(59, 7);
+            FeedbackTitle.Name = "FeedbackTitle";
+            FeedbackTitle.RightToLeft = RightToLeft.No;
+            FeedbackTitle.Size = new Size(500, 28);
+            FeedbackTitle.TabIndex = 2;
+            // 
+            // FeedbackTips1
+            // 
+            FeedbackTips1.Location = new Point(3, 9);
+            FeedbackTips1.Name = "FeedbackTips1";
+            FeedbackTips1.RightToLeft = RightToLeft.No;
+            FeedbackTips1.Size = new Size(73, 31);
+            FeedbackTips1.TabIndex = 4;
+            FeedbackTips1.Text = "标题";
             // 
             // mainGroupBox
             // 
@@ -1479,10 +1618,10 @@
             conversion_Group1.PerformLayout();
             tabPage7.ResumeLayout(false);
             tabPage7.PerformLayout();
-            tabPage8.ResumeLayout(false);
-            tabPage8.PerformLayout();
             tabPage9.ResumeLayout(false);
             tabPage9.PerformLayout();
+            tabPage10.ResumeLayout(false);
+            tabPage10.PerformLayout();
             mainGroupBox.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             mainContextMenuStrip.ResumeLayout(false);
@@ -1580,8 +1719,6 @@
         private Button DownloadSelected;
         private TextBox SearchBarTextBox;
         private Label numberLabel;
-        private TabPage tabPage8;
-        private Label RTipLabel;
         private TabPage tabPage9;
         private ListView pluginListView;
         private ColumnHeader PluginName;
@@ -1601,5 +1738,18 @@
         private Button audioTips;
         private ColumnHeader AudioBindKey;
         private ToolStripMenuItem 绑定按键ToolStripMenuItem;
+        private TabPage tabPage10;
+        private TextBox FeedbackContent;
+        private Label FeedbackTips2;
+        private TextBox FeedbackTitle;
+        private Label FeedbackTips1;
+        private Label FeedbackTips4;
+        private Button FeedbackButton;
+        private RadioButton FeedbackDisaster;
+        private RadioButton FeedbackAverage;
+        private RadioButton FeedbackUrgent;
+        private TextBox Contact;
+        private Label FeedbackTips3;
+        private Button FeedbackTipsButton;
     }
 }

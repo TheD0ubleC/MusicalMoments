@@ -7,8 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>image\MMLOGO.ico</ApplicationIcon>
     <Product>MusicalMoments</Product>
-    <AssemblyVersion>1.3.2</AssemblyVersion>
-    <FileVersion>1.3.2</FileVersion>
+    <AssemblyVersion>1.3.3</AssemblyVersion>
+    <FileVersion>1.3.3</FileVersion>
     <StartupObject>MusicalMoments.Program</StartupObject>
     <UseWPF>False</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>

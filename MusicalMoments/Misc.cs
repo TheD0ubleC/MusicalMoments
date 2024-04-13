@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Resources;
 using System.Text.Json;
 using Newtonsoft.Json;
+using System.Globalization;
 namespace MusicalMoments
 {
     public class AudioInfo
@@ -783,6 +784,31 @@ namespace MusicalMoments
                 Console.WriteLine($"HTTP 请求错误: {e.Message}");
             }
         }
-    }
 
+        public static int CalculateDaysBetweenDates(string dateStr1, string dateStr2)
+        {
+            DateTime date1, date2;
+            string[] formats = {
+            "yyyy年MM月dd日HH时mm分ss秒",
+            "yyyy年MM月dd日HH时mm分",
+            "yyyy年MM月dd日HH时",
+            "yyyy年MM月dd日",
+            "yyyy年MM月dd",
+            "yyyy年MM月",
+            "yyyy年MM",
+            "yyyy年"
+        };
+            dateStr1 = dateStr1.Replace(" ", "");
+            dateStr2 = dateStr2.Replace(" ", "");
+            if (!DateTime.TryParseExact(dateStr1, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date1))
+            {
+                throw new ArgumentException("Invalid date format for the first date.");
+            }
+            if (!DateTime.TryParseExact(dateStr2, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date2))
+            {
+                throw new ArgumentException("Invalid date format for the second date.");
+            }
+            return Math.Abs((date2 - date1).Days);
+        }
+    }
 }
