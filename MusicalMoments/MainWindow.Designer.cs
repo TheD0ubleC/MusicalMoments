@@ -26,15 +26,15 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem10 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem11 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem12 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem13 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem14 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem15 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem16 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem17 = new ListViewItem("插件", 8);
-            ListViewItem listViewItem18 = new ListViewItem("反馈", 9);
+            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem8 = new ListViewItem("插件", 8);
+            ListViewItem listViewItem9 = new ListViewItem("反馈", 9);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -148,6 +148,8 @@
             FeedbackTips2 = new Label();
             FeedbackTitle = new TextBox();
             FeedbackTips1 = new Label();
+            tabPage8 = new TabPage();
+            tips10 = new Label();
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
@@ -185,6 +187,7 @@
             tabPage7.SuspendLayout();
             tabPage9.SuspendLayout();
             tabPage10.SuspendLayout();
+            tabPage8.SuspendLayout();
             mainGroupBox.SuspendLayout();
             groupBox1.SuspendLayout();
             mainContextMenuStrip.SuspendLayout();
@@ -197,7 +200,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -468,6 +471,8 @@
             mainTabControl.Controls.Add(tabPage7);
             mainTabControl.Controls.Add(tabPage9);
             mainTabControl.Controls.Add(tabPage10);
+            mainTabControl.Controls.Add(tabPage8);
+            mainTabControl.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
@@ -868,11 +873,11 @@
             // tabPage5
             // 
             tabPage5.BackColor = SystemColors.Control;
-            tabPage5.Controls.Add(info_Label3);
             tabPage5.Controls.Add(info_Group);
             tabPage5.Controls.Add(info_Label2);
             tabPage5.Controls.Add(info_Label1);
             tabPage5.Controls.Add(LogoImage);
+            tabPage5.Controls.Add(info_Label3);
             tabPage5.Location = new Point(0, 22);
             tabPage5.Name = "tabPage5";
             tabPage5.Padding = new Padding(3);
@@ -889,7 +894,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(364, 126);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：3\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240414\r\n\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：5\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240415\r\n\r\n";
             // 
             // info_Group
             // 
@@ -941,7 +946,7 @@
             info_Label2.Name = "info_Label2";
             info_Label2.Size = new Size(339, 35);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.3-Release+20240414";
+            info_Label2.Text = "版本号:1.3.5-Release+20240415\r\n";
             // 
             // info_Label1
             // 
@@ -1078,7 +1083,7 @@
             conversion_Label2.AutoSize = true;
             conversion_Label2.Location = new Point(286, 31);
             conversion_Label2.Name = "conversion_Label2";
-            conversion_Label2.Size = new Size(64, 29);
+            conversion_Label2.Size = new Size(57, 25);
             conversion_Label2.TabIndex = 5;
             conversion_Label2.Text = "格式:";
             // 
@@ -1097,7 +1102,7 @@
             conversion_Label1.AutoSize = true;
             conversion_Label1.Location = new Point(6, 31);
             conversion_Label1.Name = "conversion_Label1";
-            conversion_Label1.Size = new Size(64, 29);
+            conversion_Label1.Size = new Size(57, 25);
             conversion_Label1.TabIndex = 3;
             conversion_Label1.Text = "名称:";
             // 
@@ -1300,7 +1305,7 @@
             PluginStatus.AutoSize = true;
             PluginStatus.Location = new Point(6, 269);
             PluginStatus.Name = "PluginStatus";
-            PluginStatus.Size = new Size(179, 29);
+            PluginStatus.Size = new Size(157, 25);
             PluginStatus.TabIndex = 3;
             PluginStatus.Text = "插件状态:未启动";
             // 
@@ -1414,7 +1419,7 @@
             FeedbackDisaster.Location = new Point(244, 301);
             FeedbackDisaster.Name = "FeedbackDisaster";
             FeedbackDisaster.RightToLeft = RightToLeft.No;
-            FeedbackDisaster.Size = new Size(77, 33);
+            FeedbackDisaster.Size = new Size(70, 29);
             FeedbackDisaster.TabIndex = 11;
             FeedbackDisaster.Text = "灾难";
             FeedbackDisaster.UseVisualStyleBackColor = true;
@@ -1426,7 +1431,7 @@
             FeedbackAverage.Location = new Point(78, 301);
             FeedbackAverage.Name = "FeedbackAverage";
             FeedbackAverage.RightToLeft = RightToLeft.No;
-            FeedbackAverage.Size = new Size(77, 33);
+            FeedbackAverage.Size = new Size(70, 29);
             FeedbackAverage.TabIndex = 10;
             FeedbackAverage.TabStop = true;
             FeedbackAverage.Text = "普通";
@@ -1438,7 +1443,7 @@
             FeedbackUrgent.Location = new Point(161, 301);
             FeedbackUrgent.Name = "FeedbackUrgent";
             FeedbackUrgent.RightToLeft = RightToLeft.No;
-            FeedbackUrgent.Size = new Size(77, 33);
+            FeedbackUrgent.Size = new Size(70, 29);
             FeedbackUrgent.TabIndex = 9;
             FeedbackUrgent.Text = "紧急";
             FeedbackUrgent.UseVisualStyleBackColor = true;
@@ -1492,6 +1497,30 @@
             FeedbackTips1.Size = new Size(73, 31);
             FeedbackTips1.TabIndex = 4;
             FeedbackTips1.Text = "标题";
+            // 
+            // tabPage8
+            // 
+            tabPage8.BackColor = SystemColors.Control;
+            tabPage8.Controls.Add(tips10);
+            tabPage8.Location = new Point(0, 22);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Padding = new Padding(3);
+            tabPage8.Size = new Size(565, 341);
+            tabPage8.TabIndex = 10;
+            tabPage8.Text = "挂机";
+            // 
+            // tips10
+            // 
+            tips10.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tips10.AutoSize = true;
+            tips10.BorderStyle = BorderStyle.FixedSingle;
+            tips10.Font = new Font("NLXJT", 28F, FontStyle.Bold, GraphicsUnit.Point);
+            tips10.Location = new Point(9, 141);
+            tips10.Name = "tips10";
+            tips10.RightToLeft = RightToLeft.No;
+            tips10.Size = new Size(545, 52);
+            tips10.TabIndex = 5;
+            tips10.Text = "当前为挂机页 切回窗口将恢复";
             // 
             // mainGroupBox
             // 
@@ -1582,6 +1611,8 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainWindow";
             Text = "Musical Moments - 音乐时刻";
+            Activated += MainWindow_Activated;
+            Deactivate += MainWindow_Deactivate;
             FormClosing += MainWindow_FormClosing;
             Load += MainWindow_Load;
             tabPage2.ResumeLayout(false);
@@ -1622,6 +1653,8 @@
             tabPage9.PerformLayout();
             tabPage10.ResumeLayout(false);
             tabPage10.PerformLayout();
+            tabPage8.ResumeLayout(false);
+            tabPage8.PerformLayout();
             mainGroupBox.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             mainContextMenuStrip.ResumeLayout(false);
@@ -1646,11 +1679,7 @@
         private Label label_AudioEquipment3;
         private Label label_AudioEquipment2;
         private Label label_AudioEquipment1;
-        private ComboBox comboBox_AudioEquipmentInput;
-        private ComboBox comboBox_VBAudioEquipmentOutput;
-        private ComboBox comboBox_VBAudioEquipmentInput;
         private GroupBox group_AudioEquipment;
-        private ComboBox comboBox_AudioEquipmentOutput;
         private Label label_AudioEquipment4;
         private ListView audioListView;
         private ColumnHeader AudioName;
@@ -1667,7 +1696,6 @@
         private TextBox PlayAudio;
         private Label label_Key1;
         private GroupBox group_Misc;
-        private CheckBox audioEquipmentPlay;
         private PictureBox LogoImage;
         private Label info_Label1;
         private GroupBox info_Group;
@@ -1751,5 +1779,12 @@
         private TextBox Contact;
         private Label FeedbackTips3;
         private Button FeedbackTipsButton;
+        public ComboBox comboBox_AudioEquipmentInput;
+        private TabPage tabPage8;
+        private Label tips10;
+        public static ComboBox comboBox_VBAudioEquipmentOutput;
+        public static ComboBox comboBox_VBAudioEquipmentInput;
+        public static ComboBox comboBox_AudioEquipmentOutput;
+        public static CheckBox audioEquipmentPlay;
     }
 }

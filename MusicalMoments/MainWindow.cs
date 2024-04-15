@@ -24,7 +24,7 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.3.3-release-x64";
+        public static string nowVer = "v1.3.5-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -54,12 +54,14 @@ namespace MusicalMoments
             m_GlobalHook = Hook.GlobalEvents();
             m_GlobalHook.KeyDown += GlobalHookKeyDown;
         }
+
         private void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
             reLoadList();
             // 检查是否按下了播放音频的按键
             if (e.KeyCode == playAudioKey)
             {
+                playedCount = playedCount + 1;
                 if (playAudio)
                 {
                     if (File.Exists(selectedAudioPath))
@@ -76,11 +78,12 @@ namespace MusicalMoments
                         }
                     }
                 }
-                playedCount = playedCount + 1;
+
             }
             // 检查是否按下了切换流的按键
             if (e.KeyCode == toggleStreamKey)
             {
+                changedCount = changedCount + 1;
                 if (switchStreamTips.Checked)
                 {
                     playAudio = !playAudio;
@@ -104,13 +107,14 @@ namespace MusicalMoments
                         Misc.StopMicrophoneToSpeaker();
                     }
                 }
-                changedCount = changedCount + 1;
+
             }
 
             foreach (var audio in audioInfo)
             {
                 if (e.KeyCode == audio.Key)
                 {
+                    playedCount = playedCount + 1;
                     if (playAudio)
                     {
                         if (File.Exists(audio.FilePath))
@@ -1003,7 +1007,7 @@ namespace MusicalMoments
                 PluginStatus.Text = "插件状态:已开启";
                 LoadPlugin.Enabled = true;
                 pluginListView.Enabled = true;
-                PluginServerAddress.Text = PluginSDK.PluginServer.GetServerAddress();
+                PluginServerAddress.Text = $"{PluginSDK.PluginServer.GetServerAddress()}";
             }
             else
             {
@@ -1106,9 +1110,15 @@ namespace MusicalMoments
             for (int i = 0; i < audioInfo.Count; i++)
             {
                 var parentItem = audioInfo[i];
+                if (parentItem.Key == Keys.None)
+                    continue;
+
                 for (int j = i + 1; j < audioInfo.Count; j++)
                 {
                     var childItem = audioInfo[j];
+                    if (childItem.Key == Keys.None)
+                        continue;
+
                     if (parentItem.Key == childItem.Key)
                     {
                         return true;
@@ -1118,9 +1128,10 @@ namespace MusicalMoments
             return false;
         }
 
+
         private void FeedbackTipsButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("请留下您的问题与您的联系方式 如电子邮箱、QQ等 收到反馈后会在72小时内回复您\r\n但请注意 切勿滥用","提示");
+            MessageBox.Show("请留下您的问题与您的联系方式 如电子邮箱、QQ等 收到反馈后会在72小时内回复您\r\n但请注意 切勿滥用", "提示");
         }
 
         private void FeedbackButton_Click(object sender, EventArgs e)
@@ -1247,6 +1258,22 @@ namespace MusicalMoments
                 }
             }
             return true;
+        }
+        private static TabPage oripage;
+        private void MainWindow_Deactivate(object sender, EventArgs e)
+        {
+            oripage = mainTabControl.SelectedTab;
+            mainTabControl.SelectedTab = tabPage8;//tab10为挂机页
+            mainGroupBox.Text = "挂机";
+        }
+
+        private void MainWindow_Activated(object sender, EventArgs e)
+        {
+            if (oripage != null)
+            {
+                mainTabControl.SelectedTab = oripage;
+                mainGroupBox.Text = mainTabControl.SelectedTab.Text;
+            }
         }
     }
 }

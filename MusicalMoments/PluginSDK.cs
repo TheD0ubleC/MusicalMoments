@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace MusicalMoments
 {
@@ -160,30 +161,93 @@ namespace MusicalMoments
                     else if (endpointWithoutParams == "/api/listViewInfo")
                     {
                         string result = "";
+                        string contentType = "text/plain; charset=utf-8";
+                        if (queryParams != null)
+                        {
+                            foreach (string param in queryParams)
+                            {
+                                string[] parts = param.Split('=');
+                                if (parts.Length == 2 && parts[0] == "type")
+                                {
+                                    switch (parts[1].ToLower())
+                                    {
+                                        case "json":
+                                            result = JsonConvert.SerializeObject(MainWindow.audioInfo, Formatting.Indented);
+                                            contentType = "application/json; charset=utf-8";
+                                            break;
+                                        case "xml":
+                                            using (var stringWriter = new StringWriter())
+                                            {
+                                                var serializer = new XmlSerializer(typeof(List<AudioInfo>));
+                                                serializer.Serialize(stringWriter, MainWindow.audioInfo);
+                                                result = stringWriter.ToString();
+                                            }
+                                            contentType = "application/xml; charset=utf-8";
+                                            break;
+                                        case "text":
+                                            result = string.Join("\n", MainWindow.audioInfo.Select(a => $"Name: {a.Name}, FilePath: {a.FilePath}, Key: {a.Key}"));
+                                            contentType = "text/plain; charset=utf-8";
+                                            break;
+                                        default:
+                                            result = "Unsupported type parameter";
+                                            contentType = "text/plain; charset=utf-8";
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        string response = $"HTTP/1.1 200 OK\r\nContent-Type: {contentType}\r\n\r\n" + result;
+                        byte[] responseData = Encoding.UTF8.GetBytes(response);
+                        stream.Write(responseData, 0, responseData.Length);
+                    }
+                    else if (endpointWithoutParams == "/api/playAudio")
+                    {
+                        string result = "false";  // 默认为false，表示未找到或未播放
+                        string contentType = "text/plain; charset=utf-8";
+                        string audioPath = "";
 
                         if (queryParams != null)
                         {
                             foreach (string param in queryParams)
                             {
-                                string[] Parts = param.Split('=');
-                                if (Parts[0] == "type" && Parts[1] == "json")
+                                string[] parts = param.Split('=');
+                                if (parts.Length == 2 && parts[0] == "name")
                                 {
-                                    result = JsonConvert.SerializeObject(MainWindow.audioInfo, Formatting.None);
-                                    break;
+                                    // 使用System.Net.WebUtility.UrlDecode来解码参数值
+                                    string requestedName = WebUtility.UrlDecode(parts[1]); // 解码音频名称
+
+                                    // 使用LINQ查找对应的AudioInfo对象
+                                    var audioInfo = MainWindow.audioInfo.FirstOrDefault(ai => ai.Name == requestedName);
+                                    if (audioInfo != null)
+                                    {
+                                        audioPath = audioInfo.FilePath; // 获取对应的FilePath
+                                        MainWindow.playedCount += 1;
+
+                                        if (MainWindow.playAudio)
+                                        {
+                                            if (File.Exists(audioPath))
+                                            {
+                                                int outputDeviceID = Misc.GetOutputDeviceID(MainWindow.comboBox_VBAudioEquipmentOutput.SelectedItem.ToString());
+                                                int alternateOutputDeviceID = Misc.GetOutputDeviceID(MainWindow.comboBox_AudioEquipmentOutput.SelectedItem.ToString());
+
+                                                // 进行播放
+                                                Misc.PlayAudioToSpecificDevice(audioPath, outputDeviceID, true, MainWindow.VBvolume, MainWindow.audioEquipmentPlay.Checked, audioPath, alternateOutputDeviceID, MainWindow.volume);
+                                                MainWindow.isPlaying = !MainWindow.isPlaying; // 切换播放状态
+                                                result = "true";  // 设置结果为true，表示找到并且播放了
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
-                        string response = "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\n\r\n" + result;
+                        string response = $"HTTP/1.1 200 OK\r\nContent-Type: {contentType}\r\n\r\n" + result;
                         byte[] responseData = Encoding.UTF8.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
-
-
-
                 }
                 client.Close();
             }
-
             private static int GetAvailablePort()
             {
                 TcpListener tempListener = new TcpListener(IPAddress.Any, 0);
