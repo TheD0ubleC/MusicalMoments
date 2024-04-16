@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BindKeyWindow));
             BindKey = new TextBox();
             Tip = new Label();
             removeKey = new Button();
@@ -82,6 +83,7 @@
             Controls.Add(Tip);
             Controls.Add(BindKey);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "BindKeyWindow";
             Text = "绑定按键";
             Load += BindKeyWindow_Load;

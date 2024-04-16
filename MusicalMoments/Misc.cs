@@ -184,7 +184,7 @@ namespace MusicalMoments
                 Application.DoEvents();
             }
         }
-        public static void AddAudioFilesToListView(string directoryPath, ListView listView)
+        public static async Task AddAudioFilesToListView(string directoryPath, ListView listView)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
             FileInfo[] audioFiles = dirInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly)
@@ -192,24 +192,33 @@ namespace MusicalMoments
                                                         f.Extension.Equals(".wav", StringComparison.OrdinalIgnoreCase) ||
                                                         f.Extension.Equals(".falc", StringComparison.OrdinalIgnoreCase))
                                             .ToArray();
+
             foreach (FileInfo audioFile in audioFiles)
             {
-                // 获取音频文件信息
-                var fileTag = TagLib.File.Create(audioFile.FullName);
-                string fileName = Path.GetFileNameWithoutExtension(audioFile.Name);
-                string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
-                string fileType = audioFile.Extension.TrimStart('.').ToUpper();
-
-                // 获取 JSON 文件路径并读取信息
-                string jsonFilePath = Path.ChangeExtension(audioFile.FullName, ".json");
-                string jsonInfo = ReadKeyJsonInfo(jsonFilePath);
-
-                // 将文件信息添加到 ListView 中
-                ListViewItem item = new ListViewItem(new[] { fileName, track, fileType, jsonInfo });
-                item.Tag = audioFile.FullName;
-                listView.Items.Add(item);
+                await Task.Run(() => AddFileToListView(audioFile, listView));
             }
         }
+
+        private static void AddFileToListView(FileInfo audioFile, ListView listView)
+        {
+            // 这里调用已经存在的同步方法读取Tag和JSON信息
+            var fileTag = TagLib.File.Create(audioFile.FullName);
+            string fileName = Path.GetFileNameWithoutExtension(audioFile.Name);
+            string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
+            string fileType = audioFile.Extension.TrimStart('.').ToUpper();
+
+            string jsonFilePath = Path.ChangeExtension(audioFile.FullName, ".json");
+            string jsonInfo = ReadKeyJsonInfo(jsonFilePath);
+
+            ListViewItem item = new ListViewItem(new[] { fileName, track, fileType, jsonInfo });
+            item.Tag = audioFile.FullName;
+
+            // 确保UI更新在UI线程上执行
+            listView.Invoke(new Action(() => {
+                listView.Items.Add(item);
+            }));
+        }
+
 
         private static string ReadKeyJsonInfo(string jsonFilePath)
         {
@@ -421,6 +430,70 @@ namespace MusicalMoments
                         return "/";
                     case Keys.OemBackslash:
                         return "\\";
+                    // 添加小键盘按键
+                    case Keys.NumPad0:
+                        return "NUMPAD 0";
+                    case Keys.NumPad1:
+                        return "NUMPAD 1";
+                    case Keys.NumPad2:
+                        return "NUMPAD 2";
+                    case Keys.NumPad3:
+                        return "NUMPAD 3";
+                    case Keys.NumPad4:
+                        return "NUMPAD 4";
+                    case Keys.NumPad5:
+                        return "NUMPAD 5";
+                    case Keys.NumPad6:
+                        return "NUMPAD 6";
+                    case Keys.NumPad7:
+                        return "NUMPAD 7";
+                    case Keys.NumPad8:
+                        return "NUMPAD 8";
+                    case Keys.NumPad9:
+                        return "NUMPAD 9";
+                    case Keys.Multiply:
+                        return "NUMPAD *";
+                    case Keys.Add:
+                        return "NUMPAD +";
+                    case Keys.Subtract:
+                        return "NUMPAD -";
+                    case Keys.Decimal:
+                        return "NUMPAD .";
+                    case Keys.Divide:
+                        return "NUMPAD /";
+                    case Keys.NumLock:
+                        return "NUM LOCK";
+                    case Keys.Scroll:
+                        return "SCROLL LOCK";
+                    // 其他不常用按键
+                    case Keys.Pause:
+                        return "PAUSE/BREAK";
+                    case Keys.Insert:
+                        return "INSERT";
+                    case Keys.PrintScreen:
+                        return "PRINT SCREEN";
+                    case Keys.CapsLock:
+                        return "CAPS LOCK";
+                    case Keys.LWin:
+                    case Keys.RWin:
+                        return "WINDOWS";
+                    case Keys.Apps:
+                        return "APPLICATION";
+                    case Keys.Tab:
+                        return "TAB";
+                    case Keys.Enter:
+                        return "ENTER";
+                    case Keys.ShiftKey:
+                    case Keys.LShiftKey:
+                    case Keys.RShiftKey:
+                        return "SHIFT";
+                    case Keys.ControlKey:
+                    case Keys.LControlKey:
+                    case Keys.RControlKey:
+                        return "CONTROL";
+                    case Keys.Alt:
+                    case Keys.Menu:
+                        return "ALT";
                 }
             }
             if (keyPressEventArgs != null)

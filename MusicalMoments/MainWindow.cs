@@ -24,7 +24,7 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.3.5-release-x64";
+        public static string nowVer = "v1.3.6-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -55,7 +55,7 @@ namespace MusicalMoments
             m_GlobalHook.KeyDown += GlobalHookKeyDown;
         }
 
-        private void GlobalHookKeyDown(object sender, KeyEventArgs e)
+        private async void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
             reLoadList();
             // 检查是否按下了播放音频的按键
@@ -337,7 +337,7 @@ namespace MusicalMoments
             }
 
         }
-        private void sideLists_SelectedIndexChanged(object sender, EventArgs e)
+        private async void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
             reLoadList();
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
@@ -473,7 +473,6 @@ namespace MusicalMoments
                 PlayAudio.Enabled = true;
                 e.SuppressKeyPress = true;
             }
-            MessageBox.Show(playAudioKey.ToString());
         }
         private void PlayAudio_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -586,7 +585,6 @@ namespace MusicalMoments
             catch (Exception ex)
             {
                 MessageBox.Show($"播放音频时出错: {ex.Message}", "错误");
-                reLoadList();
             }
         }
         public void StopPlayback()
@@ -618,7 +616,7 @@ namespace MusicalMoments
             selectedAudioPath = filePath;
             SelectedAudioLabel.Text = $"已选择:{selectedItem.Text}";
         }
-        public void reLoadList()
+        public async void reLoadList()
         {
             audioInfo.Clear();
             audioListView.Items.Clear();
@@ -633,7 +631,7 @@ namespace MusicalMoments
             }
 
         }
-        private void reLoadAudioListsView_Click(object sender, EventArgs e)
+        private async void reLoadAudioListsView_Click(object sender, EventArgs e)
         {
             reLoadList();
         }
@@ -687,7 +685,7 @@ namespace MusicalMoments
                 UseShellExecute = true
             });
         }
-        private void 打开文件所在位置ToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void 打开文件所在位置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (audioListView.SelectedItems.Count > 0)
             {
@@ -804,7 +802,7 @@ namespace MusicalMoments
                 }
             }
         }
-        private void audioListView_DragDrop(object sender, DragEventArgs e)
+        private async void audioListView_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             string audioDataPath = Path.Combine(runningDirectory, "AudioData");
@@ -1086,7 +1084,7 @@ namespace MusicalMoments
             MessageBox.Show("如果您的音频格式非44100hz频率那么在播放时可能会出现电音 这是因为VB声卡通道是44100hz频率 \r\n(我都检查多少遍代码了也没有什么缓冲溢出 这是VB的原因关我什么事 别一直吵吵 还是那句话 别人能用为什么你不能用 有时候该换个方位想想究竟是软件的问题还是文件的问题 我在三台机子上都试过了并未出现电音 且委托朋友帮我测试也都没有问题 人不行别怪路不平 代码都开源的 有问题你找出来我能不改吗?关键是你也找不出问题 就什么事都赖我身上 爱用不用没强迫你用 不行就去用SoundPad 没人拦着你)", "提示");
         }
         public static Keys nowKey = Keys.None;
-        private void 绑定按键ToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void 绑定按键ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ListViewItem selectedItem = audioListView.SelectedItems[0];
             Keys key = Keys.None;
@@ -1258,22 +1256,6 @@ namespace MusicalMoments
                 }
             }
             return true;
-        }
-        private static TabPage oripage;
-        private void MainWindow_Deactivate(object sender, EventArgs e)
-        {
-            oripage = mainTabControl.SelectedTab;
-            mainTabControl.SelectedTab = tabPage8;//tab10为挂机页
-            mainGroupBox.Text = "挂机";
-        }
-
-        private void MainWindow_Activated(object sender, EventArgs e)
-        {
-            if (oripage != null)
-            {
-                mainTabControl.SelectedTab = oripage;
-                mainGroupBox.Text = mainTabControl.SelectedTab.Text;
-            }
         }
     }
 }
