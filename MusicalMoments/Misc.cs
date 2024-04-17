@@ -192,31 +192,23 @@ namespace MusicalMoments
                                                         f.Extension.Equals(".wav", StringComparison.OrdinalIgnoreCase) ||
                                                         f.Extension.Equals(".falc", StringComparison.OrdinalIgnoreCase))
                                             .ToArray();
-
             foreach (FileInfo audioFile in audioFiles)
             {
-                await Task.Run(() => AddFileToListView(audioFile, listView));
-            }
-        }
+                // 获取音频文件信息
+                var fileTag = TagLib.File.Create(audioFile.FullName);
+                string fileName = Path.GetFileNameWithoutExtension(audioFile.Name);
+                string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
+                string fileType = audioFile.Extension.TrimStart('.').ToUpper();
 
-        private static void AddFileToListView(FileInfo audioFile, ListView listView)
-        {
-            // 这里调用已经存在的同步方法读取Tag和JSON信息
-            var fileTag = TagLib.File.Create(audioFile.FullName);
-            string fileName = Path.GetFileNameWithoutExtension(audioFile.Name);
-            string track = string.IsNullOrWhiteSpace(fileTag.Tag.Title) ? "无" : fileTag.Tag.Title;
-            string fileType = audioFile.Extension.TrimStart('.').ToUpper();
+                // 获取 JSON 文件路径并读取信息
+                string jsonFilePath = Path.ChangeExtension(audioFile.FullName, ".json");
+                string jsonInfo = ReadKeyJsonInfo(jsonFilePath);
 
-            string jsonFilePath = Path.ChangeExtension(audioFile.FullName, ".json");
-            string jsonInfo = ReadKeyJsonInfo(jsonFilePath);
-
-            ListViewItem item = new ListViewItem(new[] { fileName, track, fileType, jsonInfo });
-            item.Tag = audioFile.FullName;
-
-            // 确保UI更新在UI线程上执行
-            listView.Invoke(new Action(() => {
+                // 将文件信息添加到 ListView 中
+                ListViewItem item = new ListViewItem(new[] { fileName, track, fileType, jsonInfo });
+                item.Tag = audioFile.FullName;
                 listView.Items.Add(item);
-            }));
+            }
         }
 
 
@@ -261,11 +253,7 @@ namespace MusicalMoments
                     File.WriteAllText(jsonFilePath, "{\"Key\":\"\"}");
                 }
             }
-            catch (Exception ex)
-            {
-                // 处理异常
-                MessageBox.Show($"{ex.Message}");
-            }
+            catch{}
             return info;
         }
         public static void WriteKeyJsonInfo(string jsonFilePath, string valueToWrite)
@@ -295,11 +283,7 @@ namespace MusicalMoments
                     File.WriteAllText(jsonFilePath, jsonObject.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                // 处理异常
-                MessageBox.Show($"{ex.Message}");
-            }
+            catch {}
         }
 
 

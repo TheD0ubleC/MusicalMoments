@@ -33,8 +33,8 @@
             ListViewItem listViewItem5 = new ListViewItem("关于", 4);
             ListViewItem listViewItem6 = new ListViewItem("转换", 5);
             ListViewItem listViewItem7 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem8 = new ListViewItem("插件", 8);
-            ListViewItem listViewItem9 = new ListViewItem("反馈", 9);
+            ListViewItem listViewItem8 = new ListViewItem("插件", 7);
+            ListViewItem listViewItem9 = new ListViewItem("反馈", 8);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -195,7 +195,7 @@
             sideLists.BackColor = SystemColors.Control;
             sideLists.BorderStyle = BorderStyle.None;
             sideLists.Cursor = Cursors.Hand;
-            sideLists.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
+            sideLists.Font = new Font("Microsoft JhengHei UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
             sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
             sideLists.LargeImageList = sideListsImage;
@@ -203,7 +203,7 @@
             sideLists.Name = "sideLists";
             sideLists.OwnerDraw = true;
             sideLists.Scrollable = false;
-            sideLists.Size = new Size(98, 363);
+            sideLists.Size = new Size(78, 363);
             sideLists.SmallImageList = sideListsImage;
             sideLists.TabIndex = 0;
             sideLists.UseCompatibleStateImageBehavior = false;
@@ -216,16 +216,15 @@
             sideListsImage.ColorDepth = ColorDepth.Depth32Bit;
             sideListsImage.ImageStream = (ImageListStreamer)resources.GetObject("sideListsImage.ImageStream");
             sideListsImage.TransparentColor = Color.Transparent;
-            sideListsImage.Images.SetKeyName(0, "首页.png");
-            sideListsImage.Images.SetKeyName(1, "声音.png");
+            sideListsImage.Images.SetKeyName(0, "主页.png");
+            sideListsImage.Images.SetKeyName(1, "音频.png");
             sideListsImage.Images.SetKeyName(2, "设置.png");
-            sideListsImage.Images.SetKeyName(3, "赞.png");
-            sideListsImage.Images.SetKeyName(4, "一般提示.png");
+            sideListsImage.Images.SetKeyName(3, "赞助.png");
+            sideListsImage.Images.SetKeyName(4, "关于.png");
             sideListsImage.Images.SetKeyName(5, "转换.png");
             sideListsImage.Images.SetKeyName(6, "发现.png");
-            sideListsImage.Images.SetKeyName(7, "编辑.png");
-            sideListsImage.Images.SetKeyName(8, "插件.png");
-            sideListsImage.Images.SetKeyName(9, "反馈.png");
+            sideListsImage.Images.SetKeyName(7, "插件.png");
+            sideListsImage.Images.SetKeyName(8, "反馈.png");
             // 
             // tabPage2
             // 
@@ -243,6 +242,7 @@
             // 
             // mToAudioData1
             // 
+            mToAudioData1.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             mToAudioData1.Location = new Point(399, 303);
             mToAudioData1.Name = "mToAudioData1";
             mToAudioData1.Size = new Size(160, 32);
@@ -254,16 +254,17 @@
             // SelectedAudioLabel
             // 
             SelectedAudioLabel.AutoSize = true;
-            SelectedAudioLabel.Font = new Font("NLXJT", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            SelectedAudioLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             SelectedAudioLabel.Location = new Point(6, 303);
             SelectedAudioLabel.Name = "SelectedAudioLabel";
             SelectedAudioLabel.RightToLeft = RightToLeft.No;
-            SelectedAudioLabel.Size = new Size(58, 19);
+            SelectedAudioLabel.Size = new Size(50, 17);
             SelectedAudioLabel.TabIndex = 2;
             SelectedAudioLabel.Text = "已选择:";
             // 
             // reLoadAudioListsView
             // 
+            reLoadAudioListsView.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             reLoadAudioListsView.Location = new Point(317, 303);
             reLoadAudioListsView.Name = "reLoadAudioListsView";
             reLoadAudioListsView.Size = new Size(75, 32);
@@ -276,7 +277,7 @@
             // 
             audioListView.AllowDrop = true;
             audioListView.Columns.AddRange(new ColumnHeader[] { AudioName, AudioTrack, AudioType, AudioBindKey });
-            audioListView.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            audioListView.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             audioListView.ForeColor = SystemColors.WindowFrame;
             audioListView.Location = new Point(6, 6);
             audioListView.Name = "audioListView";
@@ -338,13 +339,13 @@
             tips_Group1.Location = new Point(0, -10);
             tips_Group1.Name = "tips_Group1";
             tips_Group1.RightToLeft = RightToLeft.No;
-            tips_Group1.Size = new Size(565, 246);
+            tips_Group1.Size = new Size(565, 334);
             tips_Group1.TabIndex = 11;
             tips_Group1.TabStop = false;
             // 
             // toC
             // 
-            toC.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            toC.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             toC.Location = new Point(458, 170);
             toC.Name = "toC";
             toC.Size = new Size(97, 25);
@@ -356,7 +357,7 @@
             // tips_Label5
             // 
             tips_Label5.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label5.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label5.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             tips_Label5.Location = new Point(6, 166);
             tips_Label5.Name = "tips_Label5";
             tips_Label5.Size = new Size(553, 34);
@@ -365,7 +366,7 @@
             // 
             // mToAudioData
             // 
-            mToAudioData.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            mToAudioData.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             mToAudioData.Location = new Point(458, 132);
             mToAudioData.Name = "mToAudioData";
             mToAudioData.Size = new Size(97, 25);
@@ -376,7 +377,7 @@
             // 
             // retestVB
             // 
-            retestVB.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            retestVB.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             retestVB.Location = new Point(458, 208);
             retestVB.Name = "retestVB";
             retestVB.Size = new Size(97, 25);
@@ -388,7 +389,7 @@
             // label_VBStatus
             // 
             label_VBStatus.BorderStyle = BorderStyle.FixedSingle;
-            label_VBStatus.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            label_VBStatus.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             label_VBStatus.Location = new Point(6, 204);
             label_VBStatus.Name = "label_VBStatus";
             label_VBStatus.Size = new Size(553, 34);
@@ -397,7 +398,7 @@
             // 
             // toSettings
             // 
-            toSettings.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            toSettings.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             toSettings.Location = new Point(458, 94);
             toSettings.Name = "toSettings";
             toSettings.Size = new Size(97, 25);
@@ -409,7 +410,7 @@
             // tips_Label4
             // 
             tips_Label4.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label4.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label4.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             tips_Label4.Location = new Point(6, 128);
             tips_Label4.Name = "tips_Label4";
             tips_Label4.Size = new Size(553, 34);
@@ -419,7 +420,7 @@
             // tips_Label3
             // 
             tips_Label3.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label3.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label3.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             tips_Label3.Location = new Point(6, 90);
             tips_Label3.Name = "tips_Label3";
             tips_Label3.Size = new Size(553, 34);
@@ -428,7 +429,7 @@
             // 
             // toVB
             // 
-            toVB.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            toVB.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             toVB.Location = new Point(458, 55);
             toVB.Name = "toVB";
             toVB.Size = new Size(97, 25);
@@ -440,7 +441,7 @@
             // tips_Label2
             // 
             tips_Label2.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label2.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             tips_Label2.Location = new Point(6, 51);
             tips_Label2.Name = "tips_Label2";
             tips_Label2.Size = new Size(553, 34);
@@ -449,7 +450,7 @@
             // 
             // tips_Label1
             // 
-            tips_Label1.Font = new Font("NLXJT", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label1.Font = new Font("Microsoft JhengHei UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
             tips_Label1.Location = new Point(6, 13);
             tips_Label1.Name = "tips_Label1";
             tips_Label1.Size = new Size(553, 34);
@@ -468,7 +469,7 @@
             mainTabControl.Controls.Add(tabPage7);
             mainTabControl.Controls.Add(tabPage9);
             mainTabControl.Controls.Add(tabPage10);
-            mainTabControl.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            mainTabControl.Font = new Font("Microsoft JhengHei UI", 10.25F, FontStyle.Regular, GraphicsUnit.Point);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
@@ -500,7 +501,7 @@
             volume_Group.Controls.Add(VolumeTrackBar);
             volume_Group.Controls.Add(volume_Label1);
             volume_Group.Controls.Add(VBVolumeTrackBar);
-            volume_Group.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            volume_Group.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
             volume_Group.ForeColor = Color.FromArgb(90, 90, 90);
             volume_Group.Location = new Point(6, 227);
             volume_Group.Name = "volume_Group";
@@ -512,7 +513,7 @@
             // 
             // volume_Label3
             // 
-            volume_Label3.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            volume_Label3.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             volume_Label3.Location = new Point(363, 20);
             volume_Label3.Name = "volume_Label3";
             volume_Label3.Size = new Size(61, 45);
@@ -534,7 +535,7 @@
             // 
             // volume_Label2
             // 
-            volume_Label2.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            volume_Label2.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             volume_Label2.Location = new Point(186, 20);
             volume_Label2.Name = "volume_Label2";
             volume_Label2.Size = new Size(61, 45);
@@ -556,7 +557,7 @@
             // 
             // volume_Label1
             // 
-            volume_Label1.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            volume_Label1.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             volume_Label1.Location = new Point(4, 20);
             volume_Label1.Name = "volume_Label1";
             volume_Label1.Size = new Size(63, 45);
@@ -582,7 +583,7 @@
             group_Misc.Controls.Add(languageComboBox);
             group_Misc.Controls.Add(switchStreamTips);
             group_Misc.Controls.Add(audioEquipmentPlay);
-            group_Misc.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            group_Misc.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
             group_Misc.ForeColor = Color.FromArgb(90, 90, 90);
             group_Misc.Location = new Point(6, 304);
             group_Misc.Name = "group_Misc";
@@ -595,22 +596,22 @@
             // Languagelabel
             // 
             Languagelabel.AutoSize = true;
-            Languagelabel.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
-            Languagelabel.Location = new Point(367, 17);
+            Languagelabel.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            Languagelabel.Location = new Point(312, 19);
             Languagelabel.Name = "Languagelabel";
-            Languagelabel.Size = new Size(57, 25);
+            Languagelabel.Size = new Size(40, 18);
             Languagelabel.TabIndex = 12;
             Languagelabel.Text = "语言:";
             // 
             // languageComboBox
             // 
-            languageComboBox.Font = new Font("NLXJT", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            languageComboBox.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             languageComboBox.ForeColor = Color.FromArgb(90, 90, 90);
             languageComboBox.FormattingEnabled = true;
             languageComboBox.Items.AddRange(new object[] { "简体中文", "English", "日本語" });
-            languageComboBox.Location = new Point(429, 15);
+            languageComboBox.Location = new Point(363, 15);
             languageComboBox.Name = "languageComboBox";
-            languageComboBox.Size = new Size(121, 25);
+            languageComboBox.Size = new Size(184, 25);
             languageComboBox.TabIndex = 2;
             languageComboBox.Text = "简体中文";
             languageComboBox.SelectedIndexChanged += languageComboBox_SelectedIndexChanged;
@@ -620,9 +621,10 @@
             switchStreamTips.AutoSize = true;
             switchStreamTips.Checked = true;
             switchStreamTips.CheckState = CheckState.Checked;
-            switchStreamTips.Location = new Point(196, 18);
+            switchStreamTips.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            switchStreamTips.Location = new Point(167, 18);
             switchStreamTips.Name = "switchStreamTips";
-            switchStreamTips.Size = new Size(165, 25);
+            switchStreamTips.Size = new Size(139, 22);
             switchStreamTips.TabIndex = 1;
             switchStreamTips.Text = "切换源时播放提示";
             switchStreamTips.UseVisualStyleBackColor = true;
@@ -632,12 +634,14 @@
             audioEquipmentPlay.AutoSize = true;
             audioEquipmentPlay.Checked = true;
             audioEquipmentPlay.CheckState = CheckState.Checked;
+            audioEquipmentPlay.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
             audioEquipmentPlay.Location = new Point(8, 18);
             audioEquipmentPlay.Name = "audioEquipmentPlay";
-            audioEquipmentPlay.Size = new Size(182, 25);
+            audioEquipmentPlay.Size = new Size(153, 22);
             audioEquipmentPlay.TabIndex = 0;
             audioEquipmentPlay.Text = "物理扬声器同步播放";
             audioEquipmentPlay.UseVisualStyleBackColor = true;
+            audioEquipmentPlay.CheckedChanged += audioEquipmentPlay_CheckedChanged;
             // 
             // group_Key
             // 
@@ -645,7 +649,7 @@
             group_Key.Controls.Add(PlayAudio);
             group_Key.Controls.Add(label_Key1);
             group_Key.Controls.Add(ToggleStream);
-            group_Key.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            group_Key.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
             group_Key.ForeColor = Color.FromArgb(90, 90, 90);
             group_Key.Location = new Point(6, 163);
             group_Key.Name = "group_Key";
@@ -658,23 +662,23 @@
             // label_Key2
             // 
             label_Key2.AutoSize = true;
-            label_Key2.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label_Key2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label_Key2.Location = new Point(267, 23);
             label_Key2.Name = "label_Key2";
-            label_Key2.Size = new Size(132, 25);
+            label_Key2.Size = new Size(124, 24);
             label_Key2.TabIndex = 11;
             label_Key2.Text = "播放音频按键";
             // 
             // PlayAudio
             // 
             PlayAudio.BorderStyle = BorderStyle.FixedSingle;
-            PlayAudio.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            PlayAudio.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             PlayAudio.ForeColor = Color.FromArgb(90, 90, 90);
             PlayAudio.ImeMode = ImeMode.Disable;
-            PlayAudio.Location = new Point(405, 20);
+            PlayAudio.Location = new Point(405, 22);
             PlayAudio.Name = "PlayAudio";
             PlayAudio.RightToLeft = RightToLeft.No;
-            PlayAudio.Size = new Size(135, 28);
+            PlayAudio.Size = new Size(135, 25);
             PlayAudio.TabIndex = 10;
             PlayAudio.Text = "Key";
             PlayAudio.TextAlign = HorizontalAlignment.Center;
@@ -684,23 +688,23 @@
             // label_Key1
             // 
             label_Key1.AutoSize = true;
-            label_Key1.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label_Key1.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label_Key1.Location = new Point(8, 24);
             label_Key1.Name = "label_Key1";
-            label_Key1.Size = new Size(112, 25);
+            label_Key1.Size = new Size(105, 24);
             label_Key1.TabIndex = 9;
             label_Key1.Text = "切换源按键";
             // 
             // ToggleStream
             // 
             ToggleStream.BorderStyle = BorderStyle.FixedSingle;
-            ToggleStream.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            ToggleStream.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             ToggleStream.ForeColor = Color.FromArgb(90, 90, 90);
             ToggleStream.ImeMode = ImeMode.Disable;
-            ToggleStream.Location = new Point(126, 21);
+            ToggleStream.Location = new Point(126, 23);
             ToggleStream.Name = "ToggleStream";
             ToggleStream.RightToLeft = RightToLeft.No;
-            ToggleStream.Size = new Size(135, 28);
+            ToggleStream.Size = new Size(135, 25);
             ToggleStream.TabIndex = 8;
             ToggleStream.Text = "Key";
             ToggleStream.TextAlign = HorizontalAlignment.Center;
@@ -717,7 +721,7 @@
             group_AudioEquipment.Controls.Add(comboBox_VBAudioEquipmentOutput);
             group_AudioEquipment.Controls.Add(label_AudioEquipment3);
             group_AudioEquipment.Controls.Add(comboBox_VBAudioEquipmentInput);
-            group_AudioEquipment.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            group_AudioEquipment.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
             group_AudioEquipment.ForeColor = Color.FromArgb(90, 90, 90);
             group_AudioEquipment.Location = new Point(6, 6);
             group_AudioEquipment.Name = "group_AudioEquipment";
@@ -730,86 +734,90 @@
             // comboBox_AudioEquipmentOutput
             // 
             comboBox_AudioEquipmentOutput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_AudioEquipmentOutput.Font = new Font("NLXJT", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_AudioEquipmentOutput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             comboBox_AudioEquipmentOutput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_AudioEquipmentOutput.FormattingEnabled = true;
             comboBox_AudioEquipmentOutput.Location = new Point(126, 117);
             comboBox_AudioEquipmentOutput.Name = "comboBox_AudioEquipmentOutput";
             comboBox_AudioEquipmentOutput.Size = new Size(421, 25);
             comboBox_AudioEquipmentOutput.TabIndex = 7;
+            comboBox_AudioEquipmentOutput.SelectedIndexChanged += comboBox_AudioEquipmentOutput_SelectedIndexChanged;
             // 
             // label_AudioEquipment4
             // 
             label_AudioEquipment4.AutoSize = true;
-            label_AudioEquipment4.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label_AudioEquipment4.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label_AudioEquipment4.Location = new Point(8, 117);
             label_AudioEquipment4.Name = "label_AudioEquipment4";
-            label_AudioEquipment4.Size = new Size(112, 25);
+            label_AudioEquipment4.Size = new Size(105, 24);
             label_AudioEquipment4.TabIndex = 6;
             label_AudioEquipment4.Text = "物理扬声器";
             // 
             // label_AudioEquipment1
             // 
             label_AudioEquipment1.AutoSize = true;
-            label_AudioEquipment1.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label_AudioEquipment1.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label_AudioEquipment1.Location = new Point(8, 24);
             label_AudioEquipment1.Name = "label_AudioEquipment1";
-            label_AudioEquipment1.Size = new Size(114, 25);
+            label_AudioEquipment1.Size = new Size(111, 24);
             label_AudioEquipment1.TabIndex = 0;
             label_AudioEquipment1.Text = "VB声卡输入";
             // 
             // comboBox_AudioEquipmentInput
             // 
             comboBox_AudioEquipmentInput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_AudioEquipmentInput.Font = new Font("NLXJT", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_AudioEquipmentInput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             comboBox_AudioEquipmentInput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_AudioEquipmentInput.FormattingEnabled = true;
             comboBox_AudioEquipmentInput.Location = new Point(126, 86);
             comboBox_AudioEquipmentInput.Name = "comboBox_AudioEquipmentInput";
             comboBox_AudioEquipmentInput.Size = new Size(421, 25);
             comboBox_AudioEquipmentInput.TabIndex = 5;
+            comboBox_AudioEquipmentInput.SelectedIndexChanged += comboBox_AudioEquipmentInput_SelectedIndexChanged;
             // 
             // label_AudioEquipment2
             // 
             label_AudioEquipment2.AutoSize = true;
-            label_AudioEquipment2.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label_AudioEquipment2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label_AudioEquipment2.Location = new Point(6, 55);
             label_AudioEquipment2.Name = "label_AudioEquipment2";
-            label_AudioEquipment2.Size = new Size(114, 25);
+            label_AudioEquipment2.Size = new Size(111, 24);
             label_AudioEquipment2.TabIndex = 1;
             label_AudioEquipment2.Text = "VB声卡输出";
             // 
             // comboBox_VBAudioEquipmentOutput
             // 
             comboBox_VBAudioEquipmentOutput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_VBAudioEquipmentOutput.Font = new Font("NLXJT", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_VBAudioEquipmentOutput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             comboBox_VBAudioEquipmentOutput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_VBAudioEquipmentOutput.FormattingEnabled = true;
             comboBox_VBAudioEquipmentOutput.Location = new Point(126, 55);
             comboBox_VBAudioEquipmentOutput.Name = "comboBox_VBAudioEquipmentOutput";
             comboBox_VBAudioEquipmentOutput.Size = new Size(421, 25);
             comboBox_VBAudioEquipmentOutput.TabIndex = 4;
+            comboBox_VBAudioEquipmentOutput.SelectedIndexChanged += comboBox_VBAudioEquipmentOutput_SelectedIndexChanged;
             // 
             // label_AudioEquipment3
             // 
             label_AudioEquipment3.AutoSize = true;
-            label_AudioEquipment3.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            label_AudioEquipment3.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             label_AudioEquipment3.Location = new Point(8, 86);
             label_AudioEquipment3.Name = "label_AudioEquipment3";
-            label_AudioEquipment3.Size = new Size(112, 25);
+            label_AudioEquipment3.Size = new Size(105, 24);
             label_AudioEquipment3.TabIndex = 2;
             label_AudioEquipment3.Text = "物理麦克风";
             // 
             // comboBox_VBAudioEquipmentInput
             // 
             comboBox_VBAudioEquipmentInput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_VBAudioEquipmentInput.Font = new Font("NLXJT", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_VBAudioEquipmentInput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             comboBox_VBAudioEquipmentInput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_VBAudioEquipmentInput.FormattingEnabled = true;
             comboBox_VBAudioEquipmentInput.Location = new Point(126, 24);
             comboBox_VBAudioEquipmentInput.Name = "comboBox_VBAudioEquipmentInput";
             comboBox_VBAudioEquipmentInput.Size = new Size(421, 25);
             comboBox_VBAudioEquipmentInput.TabIndex = 3;
+            comboBox_VBAudioEquipmentInput.SelectedIndexChanged += comboBox_VBAudioEquipmentInput_SelectedIndexChanged;
             // 
             // tabPage4
             // 
@@ -827,7 +835,7 @@
             // 
             // aifadian
             // 
-            aifadian.Font = new Font("NLXJT", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            aifadian.Font = new Font("Microsoft JhengHei UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
             aifadian.Location = new Point(6, 282);
             aifadian.Name = "aifadian";
             aifadian.Size = new Size(99, 32);
@@ -859,10 +867,10 @@
             // thankTip
             // 
             thankTip.AutoSize = true;
-            thankTip.Font = new Font("NLXJT", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            thankTip.Font = new Font("Microsoft JhengHei UI", 24F, FontStyle.Bold, GraphicsUnit.Point);
             thankTip.Location = new Point(179, 305);
             thankTip.Name = "thankTip";
-            thankTip.Size = new Size(216, 42);
+            thankTip.Size = new Size(210, 41);
             thankTip.TabIndex = 5;
             thankTip.Text = "感谢您的支持";
             // 
@@ -885,7 +893,7 @@
             // 
             info_Group.Controls.Add(info_ListBox);
             info_Group.Controls.Add(info_Label5);
-            info_Group.Font = new Font("NLXJT", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Group.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             info_Group.ForeColor = Color.FromArgb(90, 90, 90);
             info_Group.Location = new Point(5, 172);
             info_Group.Name = "info_Group";
@@ -899,21 +907,22 @@
             // 
             info_ListBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             info_ListBox.BackColor = SystemColors.Control;
+            info_ListBox.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             info_ListBox.ForeColor = Color.FromArgb(90, 90, 90);
             info_ListBox.FormattingEnabled = true;
-            info_ListBox.ItemHeight = 17;
+            info_ListBox.ItemHeight = 14;
             info_ListBox.Items.AddRange(new object[] { "NAudio", "Newtonsoft.Json", "System.Management", "taglib-sharp-netstandard2.0", "MouseKeyHook", "MediaToolkit", "HtmlAgilityPack" });
             info_ListBox.Location = new Point(389, 16);
             info_ListBox.Name = "info_ListBox";
             info_ListBox.RightToLeft = RightToLeft.No;
-            info_ListBox.Size = new Size(162, 157);
+            info_ListBox.Size = new Size(162, 158);
             info_ListBox.TabIndex = 5;
             info_ListBox.SelectedIndexChanged += info_ListBox_SelectedIndexChanged;
             // 
             // info_Label5
             // 
             info_Label5.BorderStyle = BorderStyle.FixedSingle;
-            info_Label5.Font = new Font("NLXJT", 12.5F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Label5.Font = new Font("Microsoft JhengHei UI Light", 12F, FontStyle.Regular, GraphicsUnit.Point);
             info_Label5.ForeColor = Color.FromArgb(90, 90, 90);
             info_Label5.Location = new Point(6, 16);
             info_Label5.Name = "info_Label5";
@@ -926,21 +935,21 @@
             // info_Label2
             // 
             info_Label2.AutoSize = true;
-            info_Label2.Font = new Font("NLXJT", 20F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Label2.Font = new Font("Microsoft JhengHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
-            info_Label2.Size = new Size(339, 35);
+            info_Label2.Size = new Size(336, 26);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.6-Release+20240417\r\n";
+            info_Label2.Text = "版本号:1.3.7-Release+20240417\r\n";
             // 
             // info_Label1
             // 
             info_Label1.AutoSize = true;
-            info_Label1.Font = new Font("NLXJT", 23F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Label1.Font = new Font("Microsoft JhengHei UI", 20F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             info_Label1.ForeColor = Color.FromArgb(128, 128, 255);
             info_Label1.Location = new Point(167, 6);
             info_Label1.Name = "info_Label1";
-            info_Label1.Size = new Size(392, 40);
+            info_Label1.Size = new Size(381, 35);
             info_Label1.TabIndex = 1;
             info_Label1.Text = "Musical Moments - 音乐时刻";
             // 
@@ -960,13 +969,13 @@
             // info_Label3
             // 
             info_Label3.AutoSize = true;
-            info_Label3.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Label3.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             info_Label3.Location = new Point(172, 72);
             info_Label3.Name = "info_Label3";
             info_Label3.RightToLeft = RightToLeft.No;
-            info_Label3.Size = new Size(364, 168);
+            info_Label3.Size = new Size(323, 144);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：6\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240417\r\n\r\n\r\n\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：7\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240417\r\n\r\n\r\n\r\n";
             // 
             // tabPage6
             // 
@@ -988,7 +997,7 @@
             // 
             // audioTips
             // 
-            audioTips.Location = new Point(6, 324);
+            audioTips.Location = new Point(6, 312);
             audioTips.Name = "audioTips";
             audioTips.Size = new Size(152, 32);
             audioTips.TabIndex = 6;
@@ -1001,7 +1010,7 @@
             conversion_Group4.Controls.Add(conversion_Label5);
             conversion_Group4.Controls.Add(conversion_Label4);
             conversion_Group4.ForeColor = Color.FromArgb(90, 90, 90);
-            conversion_Group4.Location = new Point(6, 217);
+            conversion_Group4.Location = new Point(6, 205);
             conversion_Group4.Name = "conversion_Group4";
             conversion_Group4.RightToLeft = RightToLeft.No;
             conversion_Group4.Size = new Size(553, 101);
@@ -1011,7 +1020,7 @@
             // 
             // conversion_Label5
             // 
-            conversion_Label5.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            conversion_Label5.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             conversion_Label5.Location = new Point(6, 62);
             conversion_Label5.Name = "conversion_Label5";
             conversion_Label5.Size = new Size(531, 31);
@@ -1020,7 +1029,7 @@
             // 
             // conversion_Label4
             // 
-            conversion_Label4.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            conversion_Label4.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             conversion_Label4.Location = new Point(6, 31);
             conversion_Label4.Name = "conversion_Label4";
             conversion_Label4.Size = new Size(531, 31);
@@ -1034,16 +1043,16 @@
             conversion_Group3.Location = new Point(6, 150);
             conversion_Group3.Name = "conversion_Group3";
             conversion_Group3.RightToLeft = RightToLeft.No;
-            conversion_Group3.Size = new Size(553, 61);
+            conversion_Group3.Size = new Size(553, 49);
             conversion_Group3.TabIndex = 4;
             conversion_Group3.TabStop = false;
             conversion_Group3.Text = "提示";
             // 
             // conversion_Label3
             // 
-            conversion_Label3.Location = new Point(6, 27);
+            conversion_Label3.Location = new Point(6, 21);
             conversion_Label3.Name = "conversion_Label3";
-            conversion_Label3.Size = new Size(541, 31);
+            conversion_Label3.Size = new Size(541, 25);
             conversion_Label3.TabIndex = 3;
             conversion_Label3.Text = "支持被转化的格式:<ncm><mp3><wav><ogg><flac>";
             // 
@@ -1065,8 +1074,8 @@
             // 
             // convert_Button
             // 
-            convert_Button.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
-            convert_Button.Location = new Point(472, 29);
+            convert_Button.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            convert_Button.Location = new Point(472, 26);
             convert_Button.Name = "convert_Button";
             convert_Button.Size = new Size(75, 28);
             convert_Button.TabIndex = 6;
@@ -1077,20 +1086,20 @@
             // conversion_Label2
             // 
             conversion_Label2.AutoSize = true;
-            conversion_Label2.Location = new Point(286, 31);
+            conversion_Label2.Location = new Point(311, 31);
             conversion_Label2.Name = "conversion_Label2";
-            conversion_Label2.Size = new Size(57, 25);
+            conversion_Label2.Size = new Size(39, 18);
             conversion_Label2.TabIndex = 5;
             conversion_Label2.Text = "格式:";
             // 
             // name_TextBox
             // 
             name_TextBox.BorderStyle = BorderStyle.FixedSingle;
-            name_TextBox.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            name_TextBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             name_TextBox.ForeColor = Color.FromArgb(90, 90, 90);
-            name_TextBox.Location = new Point(66, 29);
+            name_TextBox.Location = new Point(51, 26);
             name_TextBox.Name = "name_TextBox";
-            name_TextBox.Size = new Size(214, 28);
+            name_TextBox.Size = new Size(254, 28);
             name_TextBox.TabIndex = 4;
             // 
             // conversion_Label1
@@ -1098,19 +1107,19 @@
             conversion_Label1.AutoSize = true;
             conversion_Label1.Location = new Point(6, 31);
             conversion_Label1.Name = "conversion_Label1";
-            conversion_Label1.Size = new Size(57, 25);
+            conversion_Label1.Size = new Size(39, 18);
             conversion_Label1.TabIndex = 3;
             conversion_Label1.Text = "名称:";
             // 
             // comboBoxOutputFormat
             // 
-            comboBoxOutputFormat.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            comboBoxOutputFormat.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             comboBoxOutputFormat.ForeColor = Color.FromArgb(90, 90, 90);
             comboBoxOutputFormat.FormattingEnabled = true;
             comboBoxOutputFormat.Items.AddRange(new object[] { "mp3", "wav" });
-            comboBoxOutputFormat.Location = new Point(356, 28);
+            comboBoxOutputFormat.Location = new Point(356, 26);
             comboBoxOutputFormat.Name = "comboBoxOutputFormat";
-            comboBoxOutputFormat.Size = new Size(110, 29);
+            comboBoxOutputFormat.Size = new Size(110, 28);
             comboBoxOutputFormat.TabIndex = 2;
             // 
             // conversion_Group1
@@ -1129,17 +1138,17 @@
             // dataPath_TextBox
             // 
             dataPath_TextBox.BorderStyle = BorderStyle.FixedSingle;
-            dataPath_TextBox.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            dataPath_TextBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             dataPath_TextBox.ForeColor = Color.FromArgb(90, 90, 90);
-            dataPath_TextBox.Location = new Point(6, 28);
+            dataPath_TextBox.Location = new Point(6, 24);
             dataPath_TextBox.Name = "dataPath_TextBox";
             dataPath_TextBox.Size = new Size(460, 28);
             dataPath_TextBox.TabIndex = 1;
             // 
             // upData_button
             // 
-            upData_button.Font = new Font("NLXJT", 13F, FontStyle.Bold, GraphicsUnit.Point);
-            upData_button.Location = new Point(472, 28);
+            upData_button.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            upData_button.Location = new Point(472, 24);
             upData_button.Name = "upData_button";
             upData_button.Size = new Size(75, 28);
             upData_button.TabIndex = 0;
@@ -1166,16 +1175,16 @@
             // numberLabel
             // 
             numberLabel.AutoSize = true;
-            numberLabel.Font = new Font("NLXJT", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            numberLabel.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             numberLabel.Location = new Point(436, 70);
             numberLabel.Name = "numberLabel";
             numberLabel.RightToLeft = RightToLeft.No;
-            numberLabel.Size = new Size(0, 19);
+            numberLabel.Size = new Size(0, 14);
             numberLabel.TabIndex = 5;
             // 
             // DownloadSelected
             // 
-            DownloadSelected.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            DownloadSelected.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             DownloadSelected.Location = new Point(436, 39);
             DownloadSelected.Name = "DownloadSelected";
             DownloadSelected.Size = new Size(123, 28);
@@ -1187,12 +1196,12 @@
             // SearchBarTextBox
             // 
             SearchBarTextBox.BorderStyle = BorderStyle.FixedSingle;
-            SearchBarTextBox.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            SearchBarTextBox.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
             SearchBarTextBox.ForeColor = Color.FromArgb(90, 90, 90);
             SearchBarTextBox.Location = new Point(6, 6);
             SearchBarTextBox.Name = "SearchBarTextBox";
             SearchBarTextBox.RightToLeft = RightToLeft.No;
-            SearchBarTextBox.Size = new Size(424, 28);
+            SearchBarTextBox.Size = new Size(424, 25);
             SearchBarTextBox.TabIndex = 4;
             SearchBarTextBox.Text = "搜索";
             SearchBarTextBox.TextAlign = HorizontalAlignment.Center;
@@ -1202,23 +1211,23 @@
             // 
             // AudioListBox
             // 
-            AudioListBox.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            AudioListBox.Font = new Font("Microsoft JhengHei UI Light", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             AudioListBox.ForeColor = Color.FromArgb(90, 90, 90);
             AudioListBox.FormattingEnabled = true;
-            AudioListBox.ItemHeight = 21;
+            AudioListBox.ItemHeight = 18;
             AudioListBox.Location = new Point(6, 39);
             AudioListBox.Name = "AudioListBox";
             AudioListBox.RightToLeft = RightToLeft.No;
             AudioListBox.ScrollAlwaysVisible = true;
-            AudioListBox.Size = new Size(424, 319);
+            AudioListBox.Size = new Size(424, 310);
             AudioListBox.TabIndex = 0;
             // 
             // DownloadLinkListBox
             // 
-            DownloadLinkListBox.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            DownloadLinkListBox.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             DownloadLinkListBox.ForeColor = Color.FromArgb(90, 90, 90);
             DownloadLinkListBox.FormattingEnabled = true;
-            DownloadLinkListBox.ItemHeight = 21;
+            DownloadLinkListBox.ItemHeight = 14;
             DownloadLinkListBox.Location = new Point(436, 247);
             DownloadLinkListBox.Name = "DownloadLinkListBox";
             DownloadLinkListBox.RightToLeft = RightToLeft.No;
@@ -1229,7 +1238,7 @@
             // 
             // LoadList
             // 
-            LoadList.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            LoadList.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             LoadList.Location = new Point(436, 6);
             LoadList.Name = "LoadList";
             LoadList.Size = new Size(123, 28);
@@ -1301,7 +1310,7 @@
             PluginStatus.AutoSize = true;
             PluginStatus.Location = new Point(6, 269);
             PluginStatus.Name = "PluginStatus";
-            PluginStatus.Size = new Size(157, 25);
+            PluginStatus.Size = new Size(109, 18);
             PluginStatus.TabIndex = 3;
             PluginStatus.Text = "插件状态:未启动";
             // 
@@ -1320,7 +1329,7 @@
             pluginListView.AllowDrop = true;
             pluginListView.Columns.AddRange(new ColumnHeader[] { PluginName, PluginAuthor, PluginVer });
             pluginListView.Enabled = false;
-            pluginListView.Font = new Font("NLXJT", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            pluginListView.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             pluginListView.ForeColor = SystemColors.WindowFrame;
             pluginListView.Location = new Point(6, 6);
             pluginListView.MultiSelect = false;
@@ -1370,7 +1379,7 @@
             // 
             // FeedbackTipsButton
             // 
-            FeedbackTipsButton.Location = new Point(333, 299);
+            FeedbackTipsButton.Location = new Point(333, 272);
             FeedbackTipsButton.Name = "FeedbackTipsButton";
             FeedbackTipsButton.Size = new Size(110, 32);
             FeedbackTipsButton.TabIndex = 14;
@@ -1392,7 +1401,7 @@
             // 
             // FeedbackTips4
             // 
-            FeedbackTips4.Location = new Point(9, 304);
+            FeedbackTips4.Location = new Point(9, 279);
             FeedbackTips4.Name = "FeedbackTips4";
             FeedbackTips4.RightToLeft = RightToLeft.No;
             FeedbackTips4.Size = new Size(67, 31);
@@ -1401,7 +1410,7 @@
             // 
             // FeedbackButton
             // 
-            FeedbackButton.Location = new Point(449, 299);
+            FeedbackButton.Location = new Point(449, 272);
             FeedbackButton.Name = "FeedbackButton";
             FeedbackButton.Size = new Size(110, 32);
             FeedbackButton.TabIndex = 12;
@@ -1412,10 +1421,10 @@
             // FeedbackDisaster
             // 
             FeedbackDisaster.AutoSize = true;
-            FeedbackDisaster.Location = new Point(244, 301);
+            FeedbackDisaster.Location = new Point(202, 278);
             FeedbackDisaster.Name = "FeedbackDisaster";
             FeedbackDisaster.RightToLeft = RightToLeft.No;
-            FeedbackDisaster.Size = new Size(70, 29);
+            FeedbackDisaster.Size = new Size(54, 22);
             FeedbackDisaster.TabIndex = 11;
             FeedbackDisaster.Text = "灾难";
             FeedbackDisaster.UseVisualStyleBackColor = true;
@@ -1424,10 +1433,10 @@
             // 
             FeedbackAverage.AutoSize = true;
             FeedbackAverage.Checked = true;
-            FeedbackAverage.Location = new Point(78, 301);
+            FeedbackAverage.Location = new Point(82, 278);
             FeedbackAverage.Name = "FeedbackAverage";
             FeedbackAverage.RightToLeft = RightToLeft.No;
-            FeedbackAverage.Size = new Size(70, 29);
+            FeedbackAverage.Size = new Size(54, 22);
             FeedbackAverage.TabIndex = 10;
             FeedbackAverage.TabStop = true;
             FeedbackAverage.Text = "普通";
@@ -1436,10 +1445,10 @@
             // FeedbackUrgent
             // 
             FeedbackUrgent.AutoSize = true;
-            FeedbackUrgent.Location = new Point(161, 301);
+            FeedbackUrgent.Location = new Point(142, 278);
             FeedbackUrgent.Name = "FeedbackUrgent";
             FeedbackUrgent.RightToLeft = RightToLeft.No;
-            FeedbackUrgent.Size = new Size(70, 29);
+            FeedbackUrgent.Size = new Size(54, 22);
             FeedbackUrgent.TabIndex = 9;
             FeedbackUrgent.Text = "紧急";
             FeedbackUrgent.UseVisualStyleBackColor = true;
@@ -1457,17 +1466,17 @@
             // 
             // FeedbackTips3
             // 
-            FeedbackTips3.Font = new Font("NLXJT", 14F, FontStyle.Bold, GraphicsUnit.Point);
-            FeedbackTips3.Location = new Point(3, 222);
+            FeedbackTips3.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            FeedbackTips3.Location = new Point(9, 228);
             FeedbackTips3.Name = "FeedbackTips3";
             FeedbackTips3.RightToLeft = RightToLeft.No;
-            FeedbackTips3.Size = new Size(70, 62);
+            FeedbackTips3.Size = new Size(70, 45);
             FeedbackTips3.TabIndex = 8;
             FeedbackTips3.Text = "联系\r\n方式";
             // 
             // FeedbackTips2
             // 
-            FeedbackTips2.Location = new Point(3, 43);
+            FeedbackTips2.Location = new Point(9, 43);
             FeedbackTips2.Name = "FeedbackTips2";
             FeedbackTips2.RightToLeft = RightToLeft.No;
             FeedbackTips2.Size = new Size(73, 31);
@@ -1487,7 +1496,7 @@
             // 
             // FeedbackTips1
             // 
-            FeedbackTips1.Location = new Point(3, 9);
+            FeedbackTips1.Location = new Point(9, 12);
             FeedbackTips1.Name = "FeedbackTips1";
             FeedbackTips1.RightToLeft = RightToLeft.No;
             FeedbackTips1.Size = new Size(73, 31);
@@ -1497,9 +1506,9 @@
             // mainGroupBox
             // 
             mainGroupBox.Controls.Add(mainTabControl);
-            mainGroupBox.Font = new Font("NLXJT", 16F, FontStyle.Bold, GraphicsUnit.Point);
+            mainGroupBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             mainGroupBox.ForeColor = Color.FromArgb(90, 90, 90);
-            mainGroupBox.Location = new Point(127, 4);
+            mainGroupBox.Location = new Point(105, 4);
             mainGroupBox.Name = "mainGroupBox";
             mainGroupBox.RightToLeft = RightToLeft.Yes;
             mainGroupBox.Size = new Size(577, 391);
@@ -1510,9 +1519,9 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(sideLists);
-            groupBox1.Location = new Point(12, 10);
+            groupBox1.Location = new Point(12, 6);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(109, 385);
+            groupBox1.Size = new Size(87, 389);
             groupBox1.TabIndex = 3;
             groupBox1.TabStop = false;
             // 
@@ -1575,7 +1584,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(713, 407);
+            ClientSize = new Size(692, 407);
             Controls.Add(groupBox1);
             Controls.Add(mainGroupBox);
             DoubleBuffered = true;
@@ -1735,10 +1744,8 @@
         private ColumnHeader AudioBindKey;
         private ToolStripMenuItem 绑定按键ToolStripMenuItem;
         private TabPage tabPage10;
+        private Button FeedbackTipsButton;
         private TextBox FeedbackContent;
-        private Label FeedbackTips2;
-        private TextBox FeedbackTitle;
-        private Label FeedbackTips1;
         private Label FeedbackTips4;
         private Button FeedbackButton;
         private RadioButton FeedbackDisaster;
@@ -1746,11 +1753,13 @@
         private RadioButton FeedbackUrgent;
         private TextBox Contact;
         private Label FeedbackTips3;
-        private Button FeedbackTipsButton;
-        public static ComboBox comboBox_AudioEquipmentInput;
-        public static ComboBox comboBox_VBAudioEquipmentOutput;
-        public static ComboBox comboBox_VBAudioEquipmentInput;
-        public static ComboBox comboBox_AudioEquipmentOutput;
-        public static CheckBox audioEquipmentPlay;
+        private Label FeedbackTips2;
+        private TextBox FeedbackTitle;
+        private Label FeedbackTips1;
+        public ComboBox comboBox_AudioEquipmentInput;
+        public ComboBox comboBox_VBAudioEquipmentOutput;
+        public ComboBox comboBox_VBAudioEquipmentInput;
+        public ComboBox comboBox_AudioEquipmentOutput;
+        public CheckBox audioEquipmentPlay;
     }
 }

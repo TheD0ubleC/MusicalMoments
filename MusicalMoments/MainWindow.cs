@@ -24,7 +24,7 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.3.6-release-x64";
+        public static string nowVer = "v1.3.7-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -40,6 +40,12 @@ namespace MusicalMoments
         public static float VBvolume = 1f;
         public static float volume = 1f;
         public static float tipsvolume = 1f;
+
+        public static int VBInputComboSelect = 0;
+        public static int VBOutputComboSelect = 0;
+        public static int InputComboSelect = 0;
+        public static int OutputComboSelect = 0;
+        public static bool AudioEquipmentPlayCheck = true;
 
         public static List<AudioInfo> audioInfo = new List<AudioInfo>();
         public MainWindow()
@@ -57,11 +63,10 @@ namespace MusicalMoments
 
         private async void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
-            reLoadList();
-            // 检查是否按下了播放音频的按键
+            await reLoadList();
+
             if (e.KeyCode == playAudioKey)
             {
-                playedCount = playedCount + 1;
                 if (playAudio)
                 {
                     if (File.Exists(selectedAudioPath))
@@ -78,12 +83,11 @@ namespace MusicalMoments
                         }
                     }
                 }
-
+                playedCount = playedCount + 1;
             }
             // 检查是否按下了切换流的按键
             if (e.KeyCode == toggleStreamKey)
             {
-                changedCount = changedCount + 1;
                 if (switchStreamTips.Checked)
                 {
                     playAudio = !playAudio;
@@ -107,14 +111,13 @@ namespace MusicalMoments
                         Misc.StopMicrophoneToSpeaker();
                     }
                 }
-
+                changedCount = changedCount + 1;
             }
 
             foreach (var audio in audioInfo)
             {
                 if (e.KeyCode == audio.Key)
                 {
-                    playedCount = playedCount + 1;
                     if (playAudio)
                     {
                         if (File.Exists(audio.FilePath))
@@ -165,7 +168,7 @@ namespace MusicalMoments
             mainTabControl.ItemSize = new System.Drawing.Size(0, 1);
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioData"));//创建存放音频的文件夹
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugin"));//创建存放插件的文件夹
-            Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
+            await Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
             if (!Misc.IsAdministrator()) { Text += " [当前非管理员运行,可能会出现按下按键无反应]"; }
 
@@ -193,7 +196,6 @@ namespace MusicalMoments
 
 
             LoadUserData();
-            reLoadList();
             if (CheckDuplicateKeys()) { MessageBox.Show($"已检测到相同按键 请勿作死将两个或多个音频绑定在同个按键上 该操作可能会导致MM崩溃 此提示会在绑定按键时与软件启动时检测并发出", "温馨提示"); }
             Misc.APIStartup();
             //最后再版本验证 以防UI错误
@@ -212,6 +214,12 @@ namespace MusicalMoments
                 {
                     string json = File.ReadAllText(configPath);
                     var settings = JsonConvert.DeserializeObject<UserSettings>(json);
+                    VBInputComboSelect = comboBox_VBAudioEquipmentInput.SelectedIndex;
+                    VBOutputComboSelect = comboBox_AudioEquipmentInput.SelectedIndex;
+                    InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
+                    OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
+                    AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+
                     comboBox_VBAudioEquipmentInput.SelectedIndex = settings.VBAudioEquipmentInputIndex >= comboBox_VBAudioEquipmentInput.Items.Count ? 0 : settings.VBAudioEquipmentInputIndex;
                     comboBox_AudioEquipmentInput.SelectedIndex = settings.AudioEquipmentInputIndex >= comboBox_AudioEquipmentInput.Items.Count ? 0 : settings.AudioEquipmentInputIndex;
                     comboBox_VBAudioEquipmentOutput.SelectedIndex = settings.VBAudioEquipmentOutputIndex >= comboBox_VBAudioEquipmentOutput.Items.Count ? 0 : settings.VBAudioEquipmentOutputIndex;
@@ -339,7 +347,7 @@ namespace MusicalMoments
         }
         private async void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
-            reLoadList();
+            
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
             foreach (int index in sideLists.SelectedIndices)
             {
@@ -349,6 +357,8 @@ namespace MusicalMoments
             {
                 mainGroupBox.Text = $"{item.Text}";
             }
+            AudioListBox.Items.Clear();
+            reLoadList();
         }
         private void retestVB_Click(object sender, EventArgs e)
         {
@@ -616,11 +626,11 @@ namespace MusicalMoments
             selectedAudioPath = filePath;
             SelectedAudioLabel.Text = $"已选择:{selectedItem.Text}";
         }
-        public async void reLoadList()
+        public async Task reLoadList()
         {
             audioInfo.Clear();
             audioListView.Items.Clear();
-            Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
+            await Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
             foreach (ListViewItem item in audioListView.Items)
             {
                 string filePath = item.Tag as string;
@@ -1256,6 +1266,51 @@ namespace MusicalMoments
                 }
             }
             return true;
+        }
+
+        private void audioEquipmentPlay_CheckedChanged(object sender, EventArgs e)
+        {
+            VBInputComboSelect = comboBox_VBAudioEquipmentInput.SelectedIndex;
+            VBOutputComboSelect = comboBox_AudioEquipmentInput.SelectedIndex;
+            InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
+            OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
+            AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+        }
+
+        private void comboBox_VBAudioEquipmentInput_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VBInputComboSelect = comboBox_VBAudioEquipmentInput.SelectedIndex;
+            VBOutputComboSelect = comboBox_AudioEquipmentInput.SelectedIndex;
+            InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
+            OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
+            AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+        }
+
+        private void comboBox_VBAudioEquipmentOutput_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VBInputComboSelect = comboBox_VBAudioEquipmentInput.SelectedIndex;
+            VBOutputComboSelect = comboBox_AudioEquipmentInput.SelectedIndex;
+            InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
+            OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
+            AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+        }
+
+        private void comboBox_AudioEquipmentInput_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VBInputComboSelect = comboBox_VBAudioEquipmentInput.SelectedIndex;
+            VBOutputComboSelect = comboBox_AudioEquipmentInput.SelectedIndex;
+            InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
+            OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
+            AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+        }
+
+        private void comboBox_AudioEquipmentOutput_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VBInputComboSelect = comboBox_VBAudioEquipmentInput.SelectedIndex;
+            VBOutputComboSelect = comboBox_AudioEquipmentInput.SelectedIndex;
+            InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
+            OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
+            AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
         }
     }
 }

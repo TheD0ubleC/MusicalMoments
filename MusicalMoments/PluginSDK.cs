@@ -228,11 +228,11 @@ namespace MusicalMoments
                                         {
                                             if (File.Exists(audioPath))
                                             {
-                                                int outputDeviceID = Misc.GetOutputDeviceID(MainWindow.comboBox_VBAudioEquipmentOutput.SelectedItem.ToString());
-                                                int alternateOutputDeviceID = Misc.GetOutputDeviceID(MainWindow.comboBox_AudioEquipmentOutput.SelectedItem.ToString());
+                                                int outputDeviceID = Misc.GetOutputDeviceID(MainWindow.VBOutputComboSelect.ToString());
+                                                int alternateOutputDeviceID = Misc.GetOutputDeviceID(MainWindow.OutputComboSelect.ToString());
 
                                                 // 进行播放
-                                                Misc.PlayAudioToSpecificDevice(audioPath, outputDeviceID, true, MainWindow.VBvolume, MainWindow.audioEquipmentPlay.Checked, audioPath, alternateOutputDeviceID, MainWindow.volume);
+                                                Misc.PlayAudioToSpecificDevice(audioPath, outputDeviceID, true, MainWindow.VBvolume, MainWindow.AudioEquipmentPlayCheck, audioPath, alternateOutputDeviceID, MainWindow.volume);
                                                 MainWindow.isPlaying = !MainWindow.isPlaying; // 切换播放状态
                                                 result = "true";  // 设置结果为true，表示找到并且播放了
                                             }
