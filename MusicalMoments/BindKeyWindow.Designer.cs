@@ -37,7 +37,7 @@
             // BindKey
             // 
             BindKey.BorderStyle = BorderStyle.FixedSingle;
-            BindKey.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            BindKey.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             BindKey.ForeColor = Color.FromArgb(90, 90, 90);
             BindKey.ImeMode = ImeMode.Disable;
             BindKey.Location = new Point(12, 38);
@@ -54,17 +54,17 @@
             // Tip
             // 
             Tip.AutoSize = true;
-            Tip.Font = new Font("NLXJT", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            Tip.Font = new Font("Microsoft JhengHei UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
             Tip.ForeColor = Color.FromArgb(90, 90, 90);
             Tip.Location = new Point(12, 9);
             Tip.Name = "Tip";
-            Tip.Size = new Size(192, 26);
+            Tip.Size = new Size(192, 25);
             Tip.TabIndex = 10;
             Tip.Text = "请按下欲绑定的按键";
             // 
             // removeKey
             // 
-            removeKey.Font = new Font("NLXJT", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            removeKey.Font = new Font("Microsoft JhengHei UI", 10.25F, FontStyle.Regular, GraphicsUnit.Point);
             removeKey.ForeColor = Color.FromArgb(90, 90, 90);
             removeKey.Location = new Point(12, 72);
             removeKey.Name = "removeKey";

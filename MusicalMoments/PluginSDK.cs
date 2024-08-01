@@ -146,6 +146,13 @@ namespace MusicalMoments
                         byte[] responseData = Encoding.ASCII.GetBytes(response);
                         stream.Write(responseData, 0, responseData.Length);
                     }
+                    else if (endpoint == "/api/isVBinstalled")
+                    {
+                        // 调用Misc.checkVB()并返回结果
+                        string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n" + (Misc.checkVB() ? "true" : "false");
+                        byte[] responseData = Encoding.ASCII.GetBytes(response);
+                        stream.Write(responseData, 0, responseData.Length);
+                    }
                     else if (endpoint == "/api/volume") // 切换源按键
                     {
                         string response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n"  + (MainWindow.volume * 100f).ToString();

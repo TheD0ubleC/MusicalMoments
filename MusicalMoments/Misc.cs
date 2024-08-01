@@ -117,7 +117,7 @@ namespace MusicalMoments
                 else if (currentOutputDevice == null)
                 {
                     var audioFile = new AudioFileReader(audioFilePath);
-                    var outputDevice = new WaveOutEvent { DeviceNumber = deviceNumber };
+                    var outputDevice = new WaveOutEvent { DeviceNumber = deviceNumber, DesiredLatency = 50 };
                     outputDevice.Volume = Math.Max(0, Math.Min(1, volume));
                     int totalMilliseconds = (int)audioFile.TotalTime.TotalMilliseconds;
                     if(rplay)
@@ -158,7 +158,7 @@ namespace MusicalMoments
                     currentAudioFileEX?.Dispose();
                 }
                 var audioFile = new AudioFileReader(audioFilePath);
-                var outputDevice = new WaveOutEvent { DeviceNumber = deviceNumber };
+                var outputDevice = new WaveOutEvent { DeviceNumber = deviceNumber, DesiredLatency = 50 };
                 // 应用音量设置
                 outputDevice.Volume = volume; // 确保 volume 值在 0 到 1 之间
                 outputDevice.PlaybackStopped += (sender, e) =>
@@ -315,21 +315,21 @@ namespace MusicalMoments
                         }
                         else
                         {
-                            ListViewItem item = new ListViewItem(new[] { directoryName, "无数据", "无数据" });
+                            ListViewItem item = new ListViewItem(new[] { directoryName, "无描述", "无描述" });
                             item.Tag = exeFilePath;
                             listView.Items.Add(item);
                         }
                     }
                     catch (Exception ex)
                     {
-                        ListViewItem item = new ListViewItem(new[] { directoryName, "无数据", "无数据" });
+                        ListViewItem item = new ListViewItem(new[] { directoryName, "无描述", "无描述" });
                         item.Tag = exeFilePath;
                         listView.Items.Add(item);
                     }
                 }
                 else
                 {
-                    ListViewItem item = new ListViewItem(new[] { directoryName, "无数据", "无数据" });
+                    ListViewItem item = new ListViewItem(new[] { directoryName, "无描述", "无描述" });
                     item.Tag = exeFilePath;
                     listView.Items.Add(item);
                 }
@@ -500,7 +500,7 @@ namespace MusicalMoments
             waveIn = new WaveInEvent
             {
                 DeviceNumber = inputDeviceIndex,
-                WaveFormat = new WaveFormat(44100, 16, 2) // 设置为44100Hz, 16位, 2声道
+                WaveFormat = new WaveFormat(192000, 16, 2) // 设置为192000Hz, 16位, 2声道
             };
             waveOut = new WaveOutEvent
             {

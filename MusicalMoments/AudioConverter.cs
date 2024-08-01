@@ -25,7 +25,7 @@ namespace MusicalMoments
             {
                 using (var reader = new AudioFileReader(inputFilePath))
                 {
-                    var format = new WaveFormat(44100, 16, reader.WaveFormat.Channels);
+                    var format = new WaveFormat(192000, 16, reader.WaveFormat.Channels);
                     using (var resampler = new MediaFoundationResampler(reader, format))
                     {
                         WaveFileWriter.CreateWaveFile(outputFilePath, resampler);

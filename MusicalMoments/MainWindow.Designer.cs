@@ -26,15 +26,15 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem8 = new ListViewItem("插件", 7);
-            ListViewItem listViewItem9 = new ListViewItem("反馈", 8);
+            ListViewItem listViewItem10 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem11 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem12 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem13 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem14 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem15 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem16 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem17 = new ListViewItem("插件", 7);
+            ListViewItem listViewItem18 = new ListViewItem("反馈", 8);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -197,7 +197,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("Microsoft JhengHei UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -940,7 +940,7 @@
             info_Label2.Name = "info_Label2";
             info_Label2.Size = new Size(336, 26);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.7-Release+20240417\r\n";
+            info_Label2.Text = "版本号:1.3.8-Release+20240802";
             // 
             // info_Label1
             // 
@@ -975,7 +975,7 @@
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(323, 144);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：7\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240417\r\n\r\n\r\n\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：8\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240802\r\n\r\n\r\n\r\n";
             // 
             // tabPage6
             // 
@@ -1288,10 +1288,10 @@
             // PluginServerAddress
             // 
             PluginServerAddress.AutoSize = true;
-            PluginServerAddress.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            PluginServerAddress.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             PluginServerAddress.Location = new Point(6, 298);
             PluginServerAddress.Name = "PluginServerAddress";
-            PluginServerAddress.Size = new Size(0, 21);
+            PluginServerAddress.Size = new Size(0, 20);
             PluginServerAddress.TabIndex = 5;
             PluginServerAddress.Click += PluginServerAddress_Click;
             // 
@@ -1591,7 +1591,6 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainWindow";
-            Text = "Musical Moments - 音乐时刻";
             FormClosing += MainWindow_FormClosing;
             Load += MainWindow_Load;
             tabPage2.ResumeLayout(false);

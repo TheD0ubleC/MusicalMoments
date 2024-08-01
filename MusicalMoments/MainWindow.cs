@@ -24,7 +24,7 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.3.7-release-x64";
+        public static string nowVer = "v1.3.8-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -63,8 +63,6 @@ namespace MusicalMoments
 
         private async void GlobalHookKeyDown(object sender, KeyEventArgs e)
         {
-            await reLoadList();
-
             if (e.KeyCode == playAudioKey)
             {
                 if (playAudio)
@@ -332,7 +330,10 @@ namespace MusicalMoments
                         using (WebClient wc = new WebClient())
                         {
                             wc.DownloadFile(downloadUrl, $"{runningDirectory}MM.Release-{version}.zip");
-                            MessageBox.Show($"下载成功 已存放至运行目录 详情路径:{runningDirectory}MM.Release-{version}.zip", "提示");
+                            MessageBox.Show($"下载成功 已存放至运行目录 即将开始更新 详情路径:{runningDirectory}MM.Release-{version}.zip", "提示");
+                            Process currentProcess = Process.GetCurrentProcess();
+                            int pid = currentProcess.Id;
+                            StartApplication(Path.Combine(runningDirectory, "Updater.exe"), $"{pid} {runningDirectory}MM.Release-{version}.zip {runningDirectory}");
                         }
                     }
                     catch (Exception ex)
@@ -344,6 +345,30 @@ namespace MusicalMoments
                 }
             }
 
+        }
+        static void StartApplication(string applicationPath, string arguments)
+        {
+            try
+            {
+                if (File.Exists(applicationPath))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = applicationPath,
+                        Arguments = arguments
+                    };
+                    Process.Start(startInfo);
+                    Console.WriteLine($"Started application: {applicationPath} with arguments: {arguments}");
+                }
+                else
+                {
+                    Console.WriteLine($"Application not found: {applicationPath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error starting application: {ex.Message}");
+            }
         }
         private async void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -358,7 +383,6 @@ namespace MusicalMoments
                 mainGroupBox.Text = $"{item.Text}";
             }
             AudioListBox.Items.Clear();
-            reLoadList();
         }
         private void retestVB_Click(object sender, EventArgs e)
         {
@@ -1091,7 +1115,7 @@ namespace MusicalMoments
 
         private void audioTips_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("如果您的音频格式非44100hz频率那么在播放时可能会出现电音 这是因为VB声卡通道是44100hz频率 \r\n(我都检查多少遍代码了也没有什么缓冲溢出 这是VB的原因关我什么事 别一直吵吵 还是那句话 别人能用为什么你不能用 有时候该换个方位想想究竟是软件的问题还是文件的问题 我在三台机子上都试过了并未出现电音 且委托朋友帮我测试也都没有问题 人不行别怪路不平 代码都开源的 有问题你找出来我能不改吗?关键是你也找不出问题 就什么事都赖我身上 爱用不用没强迫你用 不行就去用SoundPad 没人拦着你)", "提示");
+            MessageBox.Show("如果您的音频格式非192000hz频率那么在播放时可能会出现电音 这是因为VB声卡通道是192000hz频率 \r\n(我都检查多少遍代码了也没有什么缓冲溢出 这是VB的原因关我什么事 别一直吵吵 还是那句话 别人能用为什么你不能用 有时候该换个方位想想究竟是软件的问题还是文件的问题 我在三台机子上都试过了并未出现电音 且委托朋友帮我测试也都没有问题 人不行别怪路不平 代码都开源的 有问题你找出来我能不改吗?关键是你也找不出问题 就什么事都赖我身上 爱用不用没强迫你用 不行就去用SoundPad 没人拦着你)", "提示");
         }
         public static Keys nowKey = Keys.None;
         private async void 绑定按键ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1107,8 +1131,6 @@ namespace MusicalMoments
             nowKey = bindKeyWindow.Key;
 
             Misc.WriteKeyJsonInfo(Path.ChangeExtension(selectedItem.Tag.ToString(), ".json"), nowKey.ToString());
-
-            reLoadList();
             if (CheckDuplicateKeys()) { MessageBox.Show($"已检测到相同按键 请勿作死将两个或多个音频绑定在同个按键上 该操作可能会导致MM崩溃 此提示会在绑定按键时与软件启动时检测并发出", "温馨提示"); }
 
         }
