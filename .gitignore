@@ -1,0 +1,59 @@
+# =============== Visual Studio / C# 基础配置 ===============
+
+# 编译输出目录
+bin/
+obj/
+
+# Visual Studio 用户相关配置文件
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vs/
+
+# 依赖包缓存
+packages/
+*.nupkg
+project.lock.json
+
+# NuGet 缓存
+*.nuget/
+.nuget/
+
+# 发布目录
+publish/
+out/
+AppPackages/
+
+# Rider / Resharper 配置
+.idea/
+*.DotSettings.user
+
+# Windows 相关
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# 其他临时文件
+*.tmp
+*.bak
+*.swp
+*.sln.cache
+
+# =============== ASP.NET Core 相关 ===============
+appsettings.json
+appsettings.Development.json
+appsettings.Local.json
+
+# 证书
+*.pfx
+*.cer
+secrets.json
+
+# 服务器日志
+iisexpress/
+logs/
+
+# Docker 相关
+docker-compose.override.yml
+.env

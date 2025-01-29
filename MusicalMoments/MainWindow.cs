@@ -19,6 +19,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Microsoft.VisualBasic.Devices;
 using System.IO;
 using System.Net.Mail;
+using Newtonsoft.Json.Linq;
 
 namespace MusicalMoments
 {
@@ -173,6 +174,7 @@ namespace MusicalMoments
 
             label_VBStatus.Text = Misc.checkVB() ? "VB声卡已安装" : "VB声卡未安装";
             comboBoxOutputFormat.SelectedIndex = 0;
+            
             foreach (string device in Misc.GetInputAudioDeviceNames())
             {
                 comboBox_VBAudioEquipmentInput.Items.Add(device);
@@ -372,7 +374,20 @@ namespace MusicalMoments
         }
         private async void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            comboBox_VBAudioEquipmentInput.Items.Clear();
+            comboBox_AudioEquipmentInput.Items.Clear();
+            foreach (string device in Misc.GetInputAudioDeviceNames())
+            {
+                comboBox_VBAudioEquipmentInput.Items.Add(device);
+                comboBox_AudioEquipmentInput.Items.Add(device);
+            }
+            comboBox_VBAudioEquipmentOutput.Items.Clear();
+            comboBox_AudioEquipmentOutput.Items.Clear();
+            foreach (string device in Misc.GetOutputAudioDeviceNames())
+            {
+                comboBox_VBAudioEquipmentOutput.Items.Add(device);
+                comboBox_AudioEquipmentOutput.Items.Add(device);
+            }
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
             foreach (int index in sideLists.SelectedIndices)
             {
@@ -382,7 +397,8 @@ namespace MusicalMoments
             {
                 mainGroupBox.Text = $"{item.Text}";
             }
-            AudioListBox.Items.Clear();
+            AudioListView_fd.Items.Clear();
+            if (mainTabControl.SelectedIndex == 1) { reLoadList(); }
         }
         private void retestVB_Click(object sender, EventArgs e)
         {
@@ -922,24 +938,61 @@ namespace MusicalMoments
 
         // 定义一个全局变量来存储原始音频列表和对应链接
         List<AudioItem> OriginalAudioList = new List<AudioItem>();
-        private void LoadList_Click(object sender, EventArgs e)
+        private async void LoadList_Click(object sender, EventArgs e)
         {
-            AudioListBox.Items.Clear();
-            // 清空原始音频列表
-            OriginalAudioList.Clear();
+            string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download.json");
+            string jsonUrl = "https://www.scmd.cc/api/all-audio";
+            string hashUrl = "https://www.scmd.cc/api/all-audio-hash";
 
-            // 获取下载卡片并加载到列表框中
-            Misc.GetDownloadCards("https://slam.scmd.cc/", AudioListBox, DownloadLinkListBox);
-
-            // 将下载卡片信息添加到原始音频列表
-            for (int i = 0; i < AudioListBox.Items.Count; i++)
+            try
             {
-                OriginalAudioList.Add(new AudioItem(AudioListBox.Items[i].ToString(), DownloadLinkListBox.Items[i].ToString()));
-            }
-            numberLabel.Text = $"{AudioListBox.Items.Count} 个项目";
-            if (!Debugger.IsAttached) { Misc.ButtonStabilization(5, LoadList); }
+                bool useLocalJson = false;
 
+                if (File.Exists(jsonFilePath))
+                {
+                    bool isHashMatching = await Misc.VerifyFileHashAsync(jsonFilePath, hashUrl);
+                    if (isHashMatching)
+                    {
+                        Console.WriteLine("✅ 本地 JSON 文件哈希匹配，直接加载数据！");
+                        useLocalJson = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("❌ 本地 JSON 文件已过期，重新下载！");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("⚠️ 本地 JSON 文件不存在，开始下载！");
+                }
+
+                if (!useLocalJson)
+                {
+                    await Misc.DownloadJsonFile(jsonUrl, jsonFilePath);
+                }
+
+                // 清空 ListView 和 ListBox
+                AudioListView_fd.Items.Clear();
+                DownloadLinkListBox.Items.Clear();
+
+                // 加载 JSON 数据到 ListView 和 ListBox
+                await Misc.GetDownloadJsonFromFile(jsonFilePath, AudioListView_fd, DownloadLinkListBox);
+
+                // 获取 total 并更新 numberLabel
+                int? total = await Misc.GetTotalFromJsonFile(jsonFilePath);
+                numberLabel.Text = total.HasValue ? $"{total.Value} 个项目" : $"{AudioListView_fd.Items.Count} 个项目";
+
+                if (!Debugger.IsAttached) { Misc.ButtonStabilization(5, LoadList); }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"加载列表时发生错误: {ex.Message}");
+            }
         }
+
+
+
+
 
         private void SearchBarTextBox_Enter(object sender, EventArgs e)
         {
@@ -960,7 +1013,7 @@ namespace MusicalMoments
         private void SearchBarTextBox_TextChanged(object sender, EventArgs e)
         {
             // 清空列表框
-            AudioListBox.Items.Clear();
+            AudioListView_fd.Items.Clear();
 
             // 获取搜索关键词
             string keyword = SearchBarTextBox.Text.ToLower();
@@ -970,7 +1023,7 @@ namespace MusicalMoments
             {
                 foreach (var item in OriginalAudioList)
                 {
-                    AudioListBox.Items.Add(item.Name);
+                    AudioListView_fd.Items.Add(item.Name);
                 }
             }
             else
@@ -980,53 +1033,67 @@ namespace MusicalMoments
                 {
                     if (item.Name.ToLower().Contains(keyword))
                     {
-                        AudioListBox.Items.Add(item.Name);
+                        AudioListView_fd.Items.Add(item.Name);
                     }
                 }
             }
-            numberLabel.Text = $"{AudioListBox.Items.Count} 个项目";
+            numberLabel.Text = $"{AudioListView_fd.Items.Count} 个项目";
         }
 
-        private void DownloadSelected_Click(object sender, EventArgs e)
+        private async void DownloadSelected_Click(object sender, EventArgs e)
         {
-            if (AudioListBox.SelectedIndex == -1)
+            if (AudioListView_fd.SelectedIndices.Count == 0)
             {
                 MessageBox.Show("请选择要下载的音频。", "提示");
                 return;
             }
-            string selectedName = AudioListBox.SelectedItem.ToString();
-            string downloadLink = OriginalAudioList.Find(x => x.Name == selectedName).DownloadLink;
 
-            // 如果找到下载链接，则进行下载操作
-            if (!string.IsNullOrEmpty(downloadLink))
+            int selectedIndex = AudioListView_fd.SelectedIndices[0];
+
+            // 确保 `ListBox` 也有对应的链接
+            if (selectedIndex >= DownloadLinkListBox.Items.Count)
             {
-                // 使用 WebClient 进行下载
-                using (WebClient webClient = new WebClient())
-                {
-                    try
-                    {
-                        // 获取文件名（从下载链接中提取）
-                        string fileName = Path.GetFileName(downloadLink);
-
-                        // 指定下载的保存路径
-                        string savePath = Path.Combine(Application.StartupPath, "AudioData", fileName);
-
-                        // 下载文件
-                        webClient.DownloadFile(downloadLink, savePath);
-
-                        MessageBox.Show($"已成功下载：{fileName}", "提示");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"下载失败：{ex.Message}", "错误");
-                    }
-                }
+                MessageBox.Show("未找到对应的下载链接。", "错误");
+                return;
             }
-            else
+
+            // 获取下载链接
+            string downloadLink = DownloadLinkListBox.Items[selectedIndex].ToString();
+
+            // 获取原始 URL 文件名
+            string rawFileName = Path.GetFileName(new Uri(downloadLink).AbsolutePath);
+
+            // ✅ 解码 URL 编码的文件名
+            string decodedFileName = Uri.UnescapeDataString(rawFileName);
+
+            // 指定下载的保存路径
+            string saveDirectory = Path.Combine(Application.StartupPath, "AudioData");
+            string savePath = Path.Combine(saveDirectory, decodedFileName);
+
+            try
             {
-                MessageBox.Show("未找到选定项的下载链接。", "错误");
+                if (!Directory.Exists(saveDirectory))
+                {
+                    Directory.CreateDirectory(saveDirectory);
+                }
+
+                using (HttpClient client = new HttpClient())
+                {
+                    byte[] fileBytes = await client.GetByteArrayAsync(downloadLink);
+                    await File.WriteAllBytesAsync(savePath, fileBytes);
+                }
+
+                MessageBox.Show($"已成功下载到音频文件夹：{decodedFileName}\n保存路径：{savePath}", "下载完成");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"下载失败：{ex.Message}", "错误");
             }
         }
+
+
+
+
 
         bool pluginServer = false;
         private void TogglePluginServer_Click(object sender, EventArgs e)

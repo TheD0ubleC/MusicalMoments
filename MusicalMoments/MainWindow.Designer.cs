@@ -26,15 +26,15 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem10 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem11 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem12 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem13 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem14 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem15 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem16 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem17 = new ListViewItem("插件", 7);
-            ListViewItem listViewItem18 = new ListViewItem("反馈", 8);
+            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem8 = new ListViewItem("插件", 7);
+            ListViewItem listViewItem9 = new ListViewItem("反馈", 8);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -49,6 +49,8 @@
             AudioBindKey = new ColumnHeader();
             tabPage1 = new TabPage();
             tips_Group1 = new GroupBox();
+            to_audio_page = new Button();
+            audio_page_tips = new Label();
             toC = new Button();
             tips_Label5 = new Label();
             mToAudioData = new Button();
@@ -118,10 +120,13 @@
             dataPath_TextBox = new TextBox();
             upData_button = new Button();
             tabPage7 = new TabPage();
+            AudioListView_fd = new ListView();
+            columnHeader1 = new ColumnHeader();
+            columnHeader2 = new ColumnHeader();
+            columnHeader5 = new ColumnHeader();
             numberLabel = new Label();
             DownloadSelected = new Button();
             SearchBarTextBox = new TextBox();
-            AudioListBox = new ListBox();
             DownloadLinkListBox = new ListBox();
             LoadList = new Button();
             tabPage9 = new TabPage();
@@ -159,6 +164,7 @@
             打开文件所在位置ToolStripMenuItem = new ToolStripMenuItem();
             绑定按键ToolStripMenuItem = new ToolStripMenuItem();
             upData = new OpenFileDialog();
+            to_mmdownloader = new Button();
             tabPage2.SuspendLayout();
             tabPage1.SuspendLayout();
             tips_Group1.SuspendLayout();
@@ -197,7 +203,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("Microsoft JhengHei UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -323,6 +329,8 @@
             // 
             // tips_Group1
             // 
+            tips_Group1.Controls.Add(to_audio_page);
+            tips_Group1.Controls.Add(audio_page_tips);
             tips_Group1.Controls.Add(toC);
             tips_Group1.Controls.Add(tips_Label5);
             tips_Group1.Controls.Add(mToAudioData);
@@ -334,7 +342,7 @@
             tips_Group1.Controls.Add(toVB);
             tips_Group1.Controls.Add(tips_Label2);
             tips_Group1.Controls.Add(tips_Label1);
-            tips_Group1.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Group1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             tips_Group1.ForeColor = Color.FromArgb(90, 90, 90);
             tips_Group1.Location = new Point(0, -10);
             tips_Group1.Name = "tips_Group1";
@@ -342,6 +350,26 @@
             tips_Group1.Size = new Size(565, 334);
             tips_Group1.TabIndex = 11;
             tips_Group1.TabStop = false;
+            // 
+            // to_audio_page
+            // 
+            to_audio_page.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            to_audio_page.Location = new Point(458, 246);
+            to_audio_page.Name = "to_audio_page";
+            to_audio_page.Size = new Size(97, 25);
+            to_audio_page.TabIndex = 18;
+            to_audio_page.Text = "前往尝试";
+            to_audio_page.UseVisualStyleBackColor = true;
+            // 
+            // audio_page_tips
+            // 
+            audio_page_tips.BorderStyle = BorderStyle.FixedSingle;
+            audio_page_tips.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            audio_page_tips.Location = new Point(6, 242);
+            audio_page_tips.Name = "audio_page_tips";
+            audio_page_tips.Size = new Size(553, 34);
+            audio_page_tips.TabIndex = 19;
+            audio_page_tips.Text = "在音频页对音频右键可绑定按键或执行其他功能";
             // 
             // toC
             // 
@@ -940,7 +968,7 @@
             info_Label2.Name = "info_Label2";
             info_Label2.Size = new Size(336, 26);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.3.8-Release+20240802";
+            info_Label2.Text = "版本号:1.4.0-Release+20250129";
             // 
             // info_Label1
             // 
@@ -973,9 +1001,9 @@
             info_Label3.Location = new Point(172, 72);
             info_Label3.Name = "info_Label3";
             info_Label3.RightToLeft = RightToLeft.No;
-            info_Label3.Size = new Size(323, 144);
+            info_Label3.Size = new Size(323, 162);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：3\r\n- 修订号（Patch Version）：8\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20240802\r\n\r\n\r\n\r\n";
+            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：4\r\n- 修订号（Patch Version）：0\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20250129\r\n\r\n\r\n\r\n\r\n";
             // 
             // tabPage6
             // 
@@ -1159,10 +1187,11 @@
             // tabPage7
             // 
             tabPage7.BackColor = SystemColors.Control;
+            tabPage7.Controls.Add(to_mmdownloader);
+            tabPage7.Controls.Add(AudioListView_fd);
             tabPage7.Controls.Add(numberLabel);
             tabPage7.Controls.Add(DownloadSelected);
             tabPage7.Controls.Add(SearchBarTextBox);
-            tabPage7.Controls.Add(AudioListBox);
             tabPage7.Controls.Add(DownloadLinkListBox);
             tabPage7.Controls.Add(LoadList);
             tabPage7.Location = new Point(0, 22);
@@ -1171,6 +1200,36 @@
             tabPage7.Size = new Size(565, 341);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "发现";
+            // 
+            // AudioListView_fd
+            // 
+            AudioListView_fd.AllowDrop = true;
+            AudioListView_fd.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader5 });
+            AudioListView_fd.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            AudioListView_fd.ForeColor = SystemColors.WindowFrame;
+            AudioListView_fd.HideSelection = true;
+            AudioListView_fd.Location = new Point(6, 37);
+            AudioListView_fd.Name = "AudioListView_fd";
+            AudioListView_fd.RightToLeft = RightToLeft.No;
+            AudioListView_fd.Size = new Size(424, 301);
+            AudioListView_fd.TabIndex = 6;
+            AudioListView_fd.UseCompatibleStateImageBehavior = false;
+            AudioListView_fd.View = View.Details;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "名称";
+            columnHeader1.Width = 265;
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "下载次数";
+            columnHeader2.Width = 80;
+            // 
+            // columnHeader5
+            // 
+            columnHeader5.Text = "上传者";
+            columnHeader5.Width = 80;
             // 
             // numberLabel
             // 
@@ -1208,19 +1267,6 @@
             SearchBarTextBox.TextChanged += SearchBarTextBox_TextChanged;
             SearchBarTextBox.Enter += SearchBarTextBox_Enter;
             SearchBarTextBox.Leave += SearchBarTextBox_Leave;
-            // 
-            // AudioListBox
-            // 
-            AudioListBox.Font = new Font("Microsoft JhengHei UI Light", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
-            AudioListBox.ForeColor = Color.FromArgb(90, 90, 90);
-            AudioListBox.FormattingEnabled = true;
-            AudioListBox.ItemHeight = 18;
-            AudioListBox.Location = new Point(6, 39);
-            AudioListBox.Name = "AudioListBox";
-            AudioListBox.RightToLeft = RightToLeft.No;
-            AudioListBox.ScrollAlwaysVisible = true;
-            AudioListBox.Size = new Size(424, 310);
-            AudioListBox.TabIndex = 0;
             // 
             // DownloadLinkListBox
             // 
@@ -1390,7 +1436,7 @@
             // FeedbackContent
             // 
             FeedbackContent.BorderStyle = BorderStyle.FixedSingle;
-            FeedbackContent.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackContent.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             FeedbackContent.ForeColor = Color.FromArgb(90, 90, 90);
             FeedbackContent.Location = new Point(59, 41);
             FeedbackContent.Multiline = true;
@@ -1456,12 +1502,12 @@
             // Contact
             // 
             Contact.BorderStyle = BorderStyle.FixedSingle;
-            Contact.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            Contact.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             Contact.ForeColor = Color.FromArgb(90, 90, 90);
             Contact.Location = new Point(59, 233);
             Contact.Name = "Contact";
             Contact.RightToLeft = RightToLeft.No;
-            Contact.Size = new Size(500, 28);
+            Contact.Size = new Size(500, 26);
             Contact.TabIndex = 7;
             // 
             // FeedbackTips3
@@ -1486,12 +1532,12 @@
             // FeedbackTitle
             // 
             FeedbackTitle.BorderStyle = BorderStyle.FixedSingle;
-            FeedbackTitle.Font = new Font("NLXJT", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackTitle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             FeedbackTitle.ForeColor = Color.FromArgb(90, 90, 90);
             FeedbackTitle.Location = new Point(59, 7);
             FeedbackTitle.Name = "FeedbackTitle";
             FeedbackTitle.RightToLeft = RightToLeft.No;
-            FeedbackTitle.Size = new Size(500, 28);
+            FeedbackTitle.Size = new Size(500, 26);
             FeedbackTitle.TabIndex = 2;
             // 
             // FeedbackTips1
@@ -1579,6 +1625,16 @@
             绑定按键ToolStripMenuItem.Size = new Size(172, 22);
             绑定按键ToolStripMenuItem.Text = "绑定按键";
             绑定按键ToolStripMenuItem.Click += 绑定按键ToolStripMenuItem_Click;
+            // 
+            // to_mmdownloader
+            // 
+            to_mmdownloader.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            to_mmdownloader.Location = new Point(436, 73);
+            to_mmdownloader.Name = "to_mmdownloader";
+            to_mmdownloader.Size = new Size(123, 110);
+            to_mmdownloader.TabIndex = 7;
+            to_mmdownloader.Text = "前往网页版\r\n\r\n更丝滑更流畅\r\n上传并分享您的音频\r\n";
+            to_mmdownloader.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
@@ -1717,7 +1773,6 @@
         private Button mToAudioData1;
         private ToolStripMenuItem 停止播放ToolStripMenuItem;
         private TabPage tabPage7;
-        private ListBox AudioListBox;
         private Button LoadList;
         private ListBox DownloadLinkListBox;
         private Button DownloadSelected;
@@ -1760,5 +1815,12 @@
         public ComboBox comboBox_VBAudioEquipmentInput;
         public ComboBox comboBox_AudioEquipmentOutput;
         public CheckBox audioEquipmentPlay;
+        private Button to_audio_page;
+        private Label audio_page_tips;
+        private ListView AudioListView_fd;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader5;
+        private Button to_mmdownloader;
     }
 }

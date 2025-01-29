@@ -500,7 +500,7 @@ namespace MusicalMoments
             waveIn = new WaveInEvent
             {
                 DeviceNumber = inputDeviceIndex,
-                WaveFormat = new WaveFormat(192000, 16, 2) // 设置为192000Hz, 16位, 2声道
+                WaveFormat = new WaveFormat(44100, 16, 2) // 设置为44100Hz, 16位, 2声道
             };
             waveOut = new WaveOutEvent
             {
@@ -555,35 +555,169 @@ namespace MusicalMoments
             return result;
         }
 
-        public static void GetDownloadCards(string url, ListBox nameListBox, ListBox linkListBox)
+        public static async Task GetDownloadJsonFromFile(string filePath, ListView listView, ListBox downloadLinkListBox)
         {
-            string htmlContent;
-            WebClient client = new WebClient();
             try
             {
-                htmlContent = client.DownloadString(url);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show($"加载错误，请检查您的网络是否可以正常链接至<slam.scmd.cc>。在重试之前请确保您已关闭VPN或网络代理工具\r\n具体错误信息:{e.ToString()}","错误");
-                return;
-            }
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(htmlContent);
-            HtmlNodeCollection cardNodes = doc.DocumentNode.SelectNodes("//div[contains(@class, 'download-card')]");
-            if (cardNodes != null)
-            {
-                foreach (HtmlNode cardNode in cardNodes)
+                if (!File.Exists(filePath))
                 {
-                    string title = GetInnerText(cardNode.InnerHtml, "<h2>", "</h2>").Trim();
-                    string downloadUrl = GetAttribute(cardNode.InnerHtml, "href=\"(.*?)\"", "href");
-                    nameListBox.Items.Add(title);
-                    linkListBox.Items.Add(url + downloadUrl);
+                    MessageBox.Show($"文件不存在: {filePath}");
+                    return;
                 }
+
+                string jsonResponse = await File.ReadAllTextAsync(filePath);
+                JObject json = JObject.Parse(jsonResponse);
+
+                if (json["files"] == null || json["files"].Type != JTokenType.Array)
+                {
+                    MessageBox.Show("本地 JSON 异常！将尝试重新获取");
+                    await DownloadJsonFile("https://www.scmd.cc/api/all-audio", filePath);
+                    return;
+                }
+
+                listView.Items.Clear();         // 先清空 ListView
+                downloadLinkListBox.Items.Clear(); // 先清空 ListBox
+
+                foreach (var file in json["files"])
+                {
+                    string link = file["download-link"]?.ToString();
+                    if (string.IsNullOrEmpty(link))
+                    {
+                        continue;
+                    }
+
+                    if (!link.Contains("/DATA/"))
+                    {
+                        Console.WriteLine($"链接中未找到 '/DATA/'：{link}");
+                        continue;
+                    }
+
+                    // 提取 "/DATA/" 后的文件名
+                    string name = link.Substring(link.IndexOf("/DATA/") + 6);
+
+                    // 获取其他信息
+                    string uploader = file["uploader"]?.ToString() ?? "未知";
+                    string downloadCount = file["download-count"]?.ToString() ?? "0";
+
+                    // 添加到 ListView
+                    ListViewItem item = new ListViewItem(name);  // 第一列（名称）
+                    item.SubItems.Add(downloadCount);           // 第二列（下载次数）
+                    item.SubItems.Add(uploader);               // 第三列（上传者）
+
+                    listView.Items.Add(item);
+
+                    // ⚡ 同时添加到 ListBox
+                    downloadLinkListBox.Items.Add(link);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"读取 JSON 文件时出错: {ex.Message}");
             }
         }
 
 
+        public static async Task<int?> GetTotalFromJsonFile(string filePath)
+        {
+            try
+            {
+                // 检查文件是否存在
+                if (!File.Exists(filePath))
+                {
+                    return null;
+                }
+
+                // 读取 JSON 文件内容
+                string jsonResponse = await File.ReadAllTextAsync(filePath);
+                JObject json = JObject.Parse(jsonResponse);
+
+                // 检查 "total" 是否存在并且是一个整数
+                if (json["total"] == null || !json["total"].Type.Equals(JTokenType.Integer))
+                {
+                    MessageBox.Show("JSON 数据中未找到 'total' 字段或格式错误！");
+                    return null;
+                }
+
+                int total = json["total"].Value<int>(); // 提取 total 的值
+                return total;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"读取 JSON 文件时出错: {ex.Message}");
+                return null;
+            }
+        }
+
+
+        public static async Task DownloadJsonFile(string url, string filePath)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // 发送 HTTP 请求获取 JSON 数据
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    // 将 JSON 内容写入文件
+                    await File.WriteAllTextAsync(filePath, jsonResponse);
+
+                    Console.WriteLine($"✅ JSON 数据已保存至: {filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ 下载 JSON 时出错: {ex.Message}");
+                MessageBox.Show($"下载 JSON 时出错: {ex.Message}");
+            }
+        }
+
+        public static async Task<bool> VerifyFileHashAsync(string filePath, string hashUrl)
+        {
+            try
+            {
+                // 检查文件是否存在
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine($"文件未找到: {filePath}");
+                    return false;
+                }
+
+                // 计算本地文件的 MD5 哈希值
+                string localHash;
+                using (var md5 = MD5.Create())
+                {
+                    await using (var stream = File.OpenRead(filePath))
+                    {
+                        var hashBytes = await md5.ComputeHashAsync(stream);
+                        localHash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                    }
+                }
+
+                // 获取云端哈希值
+                using (var client = new HttpClient())
+                {
+                    var response = await client.GetStringAsync(hashUrl);
+                    var json = JObject.Parse(response);
+                    string cloudHash = json["hash"]?.ToString();
+
+                    if (string.IsNullOrEmpty(cloudHash))
+                    {
+                        Console.WriteLine("未能从云端获取哈希值。");
+                        return false;
+                    }
+
+                    // 比较哈希值是否一致
+                    return string.Equals(localHash, cloudHash, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"验证哈希值时出错: {ex.Message}");
+                return false;
+            }
+        }
         private static string GetInnerText(string input, string startTag, string endTag)
         {
             int startIndex = input.IndexOf(startTag) + startTag.Length;
