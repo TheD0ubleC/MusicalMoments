@@ -67,7 +67,7 @@ MM移动端操作器：开发移动应用，让用户能够在移动设备上操
 
 ## 第二步: 配置MM(Musical Moments)
 
-### [下载最新版本](https://github.com/TheD0ubleC/MusicalMoments/releases/tag/Release)
+### [下载最新版本](https://github.com/TheD0ubleC/MusicalMoments/releases)
 
 - 下载并解压到任意位置。
 
