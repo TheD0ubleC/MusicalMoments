@@ -170,11 +170,12 @@ namespace MusicalMoments
             await Misc.AddAudioFilesToListView(runningDirectory + @"\AudioData\", audioListView);
             Misc.AddPluginFilesToListView(runningDirectory + @"\Plugin\", pluginListView);
             if (!Misc.IsAdministrator()) { Text += " [当前非管理员运行,可能会出现按下按键无反应]"; }
+            else { Text += " MusicalMoments"; }
 
 
             label_VBStatus.Text = Misc.checkVB() ? "VB声卡已安装" : "VB声卡未安装";
             comboBoxOutputFormat.SelectedIndex = 0;
-            
+
             foreach (string device in Misc.GetInputAudioDeviceNames())
             {
                 comboBox_VBAudioEquipmentInput.Items.Add(device);
@@ -192,7 +193,7 @@ namespace MusicalMoments
             VBVolumeTrackBar_Scroll(null, null);
             VolumeTrackBar_Scroll(null, null);
             TipsVolumeTrackBar_Scroll(null, null);
-
+            numberLabel.Text = "";
 
 
             LoadUserData();
@@ -203,13 +204,17 @@ namespace MusicalMoments
 
         }
 
-        private void LoadUserData()
+        private void LoadUserData(bool changeToAudioPage = true)
         {
             string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "userSettings.json");
             if (File.Exists(configPath))
             {
-                mainTabControl.SelectedIndex = 1;
-                mainGroupBox.Text = "音频";
+                if (changeToAudioPage)
+                {
+                    mainTabControl.SelectedIndex = 1;
+                    mainGroupBox.Text = "音频";
+                }
+
                 try
                 {
                     string json = File.ReadAllText(configPath);
@@ -287,6 +292,15 @@ namespace MusicalMoments
         }
         private async void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            SaveUserData(true);
+
+            e.Cancel = true;
+            Misc.FadeOut(200, this);
+            Misc.APIShutdown();
+        }
+
+        private void SaveUserData(bool addCloseCount = false)
+        {
             var settings = new UserSettings
             {
                 VBAudioEquipmentInputIndex = comboBox_VBAudioEquipmentInput.SelectedIndex,
@@ -300,18 +314,17 @@ namespace MusicalMoments
                 VBVolume = VBVolumeTrackBar.Value / 100f,
                 Volume = VolumeTrackBar.Value / 100f,
                 TipsVolume = TipsVolumeTrackBar.Value / 100f,
-                CloseCount = closeCount + 1,
+
+                CloseCount = closeCount + (addCloseCount ? 1 : 0),
                 PlayedCount = playedCount,
                 ChangedCount = changedCount,
                 FirstStart = firstStart,
             };
             string json = JsonConvert.SerializeObject(settings);
             File.WriteAllText(Path.Combine(runningDirectory, "userSettings.json"), json);
-
-            e.Cancel = true;
-            Misc.FadeOut(200, this);
-            Misc.APIShutdown();
         }
+
+
 
 
         private async void CheckNewVer()
@@ -374,6 +387,7 @@ namespace MusicalMoments
         }
         private async void sideLists_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveUserData();
             comboBox_VBAudioEquipmentInput.Items.Clear();
             comboBox_AudioEquipmentInput.Items.Clear();
             foreach (string device in Misc.GetInputAudioDeviceNames())
@@ -399,6 +413,7 @@ namespace MusicalMoments
             }
             AudioListView_fd.Items.Clear();
             if (mainTabControl.SelectedIndex == 1) { reLoadList(); }
+            LoadUserData(false);
         }
         private void retestVB_Click(object sender, EventArgs e)
         {
@@ -937,7 +952,7 @@ namespace MusicalMoments
         }
 
         // 定义一个全局变量来存储原始音频列表和对应链接
-        List<AudioItem> OriginalAudioList = new List<AudioItem>();
+        List<ListViewItem> OriginalAudioItems = new List<ListViewItem>();
         private async void LoadList_Click(object sender, EventArgs e)
         {
             string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download.json");
@@ -953,17 +968,17 @@ namespace MusicalMoments
                     bool isHashMatching = await Misc.VerifyFileHashAsync(jsonFilePath, hashUrl);
                     if (isHashMatching)
                     {
-                        Console.WriteLine("✅ 本地 JSON 文件哈希匹配，直接加载数据！");
+                        Console.WriteLine("本地 JSON 文件哈希匹配，直接加载数据！");
                         useLocalJson = true;
                     }
                     else
                     {
-                        Console.WriteLine("❌ 本地 JSON 文件已过期，重新下载！");
+                        Console.WriteLine("本地 JSON 文件已过期，重新下载！");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("⚠️ 本地 JSON 文件不存在，开始下载！");
+                    Console.WriteLine("本地 JSON 文件不存在，开始下载！");
                 }
 
                 if (!useLocalJson)
@@ -981,6 +996,11 @@ namespace MusicalMoments
                 // 获取 total 并更新 numberLabel
                 int? total = await Misc.GetTotalFromJsonFile(jsonFilePath);
                 numberLabel.Text = total.HasValue ? $"{total.Value} 个项目" : $"{AudioListView_fd.Items.Count} 个项目";
+                OriginalAudioItems.Clear();
+                foreach (ListViewItem item in AudioListView_fd.Items)
+                {
+                    OriginalAudioItems.Add((ListViewItem)item.Clone());
+                }
 
                 if (!Debugger.IsAttached) { Misc.ButtonStabilization(5, LoadList); }
             }
@@ -1012,33 +1032,40 @@ namespace MusicalMoments
 
         private void SearchBarTextBox_TextChanged(object sender, EventArgs e)
         {
-            // 清空列表框
+            string keyword = SearchBarTextBox.Text.Trim().ToLower();
+
+            // 如果备份列表为空，就直接返回
+            if (OriginalAudioItems == null || OriginalAudioItems.Count == 0)
+                return;
+
+            AudioListView_fd.BeginUpdate();
             AudioListView_fd.Items.Clear();
 
-            // 获取搜索关键词
-            string keyword = SearchBarTextBox.Text.ToLower();
+            IEnumerable<ListViewItem> filteredItems;
 
-            // 如果关键词为空，则显示所有项
             if (string.IsNullOrWhiteSpace(keyword) || keyword == "搜索")
             {
-                foreach (var item in OriginalAudioList)
-                {
-                    AudioListView_fd.Items.Add(item.Name);
-                }
+                filteredItems = OriginalAudioItems;
             }
             else
             {
-                // 遍历原始列表中的所有项，仅显示包含搜索关键词的项
-                foreach (var item in OriginalAudioList)
-                {
-                    if (item.Name.ToLower().Contains(keyword))
-                    {
-                        AudioListView_fd.Items.Add(item.Name);
-                    }
-                }
+                filteredItems = OriginalAudioItems.Where(item =>
+                    (item.SubItems.Count > 0 && item.SubItems[0].Text.ToLower().Contains(keyword)) || // 名称列
+                    (item.SubItems.Count > 1 && item.SubItems[1].Text.ToLower().Contains(keyword)) || // 下载次数列
+                    (item.SubItems.Count > 2 && item.SubItems[2].Text.ToLower().Contains(keyword))    // 上传者列
+                );
             }
+
+            foreach (var item in filteredItems)
+            {
+                AudioListView_fd.Items.Add((ListViewItem)item.Clone());
+            }
+
+            AudioListView_fd.EndUpdate();
+
             numberLabel.Text = $"{AudioListView_fd.Items.Count} 个项目";
         }
+
 
         private async void DownloadSelected_Click(object sender, EventArgs e)
         {

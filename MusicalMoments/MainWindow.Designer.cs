@@ -26,15 +26,15 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem4 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem5 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem6 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem7 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem8 = new ListViewItem("插件", 7);
-            ListViewItem listViewItem9 = new ListViewItem("反馈", 8);
+            ListViewItem listViewItem10 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem11 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem12 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem13 = new ListViewItem("赞助", 3);
+            ListViewItem listViewItem14 = new ListViewItem("关于", 4);
+            ListViewItem listViewItem15 = new ListViewItem("转换", 5);
+            ListViewItem listViewItem16 = new ListViewItem("发现", 6);
+            ListViewItem listViewItem17 = new ListViewItem("插件", 7);
+            ListViewItem listViewItem18 = new ListViewItem("反馈", 8);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -120,6 +120,7 @@
             dataPath_TextBox = new TextBox();
             upData_button = new Button();
             tabPage7 = new TabPage();
+            to_mmdownloader = new Button();
             AudioListView_fd = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
@@ -164,7 +165,6 @@
             打开文件所在位置ToolStripMenuItem = new ToolStripMenuItem();
             绑定按键ToolStripMenuItem = new ToolStripMenuItem();
             upData = new OpenFileDialog();
-            to_mmdownloader = new Button();
             tabPage2.SuspendLayout();
             tabPage1.SuspendLayout();
             tips_Group1.SuspendLayout();
@@ -203,7 +203,7 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("Microsoft JhengHei UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
             sideLists.LargeImageList = sideListsImage;
             sideLists.Location = new Point(3, 16);
             sideLists.Name = "sideLists";
@@ -1201,6 +1201,16 @@
             tabPage7.TabIndex = 6;
             tabPage7.Text = "发现";
             // 
+            // to_mmdownloader
+            // 
+            to_mmdownloader.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            to_mmdownloader.Location = new Point(436, 71);
+            to_mmdownloader.Name = "to_mmdownloader";
+            to_mmdownloader.Size = new Size(123, 110);
+            to_mmdownloader.TabIndex = 7;
+            to_mmdownloader.Text = "前往网页版\r\n\r\n更丝滑更流畅\r\n上传并分享您的音频\r\n";
+            to_mmdownloader.UseVisualStyleBackColor = true;
+            // 
             // AudioListView_fd
             // 
             AudioListView_fd.AllowDrop = true;
@@ -1235,16 +1245,17 @@
             // 
             numberLabel.AutoSize = true;
             numberLabel.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            numberLabel.Location = new Point(436, 70);
+            numberLabel.Location = new Point(436, 184);
             numberLabel.Name = "numberLabel";
             numberLabel.RightToLeft = RightToLeft.No;
-            numberLabel.Size = new Size(0, 14);
+            numberLabel.Size = new Size(51, 14);
             numberLabel.TabIndex = 5;
+            numberLabel.Text = "显示数量";
             // 
             // DownloadSelected
             // 
             DownloadSelected.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
-            DownloadSelected.Location = new Point(436, 39);
+            DownloadSelected.Location = new Point(436, 37);
             DownloadSelected.Name = "DownloadSelected";
             DownloadSelected.Size = new Size(123, 28);
             DownloadSelected.TabIndex = 3;
@@ -1625,16 +1636,6 @@
             绑定按键ToolStripMenuItem.Size = new Size(172, 22);
             绑定按键ToolStripMenuItem.Text = "绑定按键";
             绑定按键ToolStripMenuItem.Click += 绑定按键ToolStripMenuItem_Click;
-            // 
-            // to_mmdownloader
-            // 
-            to_mmdownloader.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
-            to_mmdownloader.Location = new Point(436, 73);
-            to_mmdownloader.Name = "to_mmdownloader";
-            to_mmdownloader.Size = new Size(123, 110);
-            to_mmdownloader.TabIndex = 7;
-            to_mmdownloader.Text = "前往网页版\r\n\r\n更丝滑更流畅\r\n上传并分享您的音频\r\n";
-            to_mmdownloader.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
