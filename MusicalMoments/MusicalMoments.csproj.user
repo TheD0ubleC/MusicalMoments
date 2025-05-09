@@ -7,6 +7,9 @@
     <Compile Update="BindKeyWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="HelpWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

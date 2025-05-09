@@ -25,7 +25,7 @@ namespace MusicalMoments
 {
     public partial class MainWindow : Form
     {
-        public static string nowVer = "v1.4.0-release-x64";
+        public static string nowVer = "v1.4.1-release-x64";
         public static string runningDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static Keys toggleStreamKey;
         public static Keys playAudioKey;
@@ -327,7 +327,7 @@ namespace MusicalMoments
 
 
 
-        private async void CheckNewVer()
+        private async void CheckNewVer(bool noUpdateShowMessage = false)
         {
             var newVerTips = await Misc.GetLatestVersionTipsAsync();
             var latestVer = await Misc.GetLatestVersionAsync();
@@ -359,7 +359,8 @@ namespace MusicalMoments
                     Process.Start(new ProcessStartInfo("https://github.com/TheD0ubleC/MusicalMoments/releases/tag/" + latestVer) { UseShellExecute = true });
                 }
             }
-
+            if (noUpdateShowMessage)
+            { MessageBox.Show($"当前已是最新版本！", "提示"); }
         }
         static void StartApplication(string applicationPath, string arguments)
         {
@@ -436,7 +437,14 @@ namespace MusicalMoments
         {
             ListViewItem selectedItem = audioListView.SelectedItems[0];
             string filePath = selectedItem.Tag as string;
-            PlayAudioex(filePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), volume);
+            try
+            {
+                PlayAudioex(filePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), volume);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"播放音频时出错: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             playedCount = playedCount + 1;
         }
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -916,23 +924,6 @@ namespace MusicalMoments
                 UseShellExecute = true
             });
         }
-        private void languageComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (languageComboBox.SelectedItem.ToString())
-            {
-                case "简体中文":
-                    break;
-                case "English":
-                    MessageBox.Show("The current version does not support this language, but support for this language will be added in the future.", "Tips");
-                    //ApplyResourcesToControls(this.Controls, $"{runningDirectory}ResourceFiles\\Localization\\en\\en.resx", Assembly.GetExecutingAssembly());
-                    break;
-                case "日本語":
-                    MessageBox.Show("現在のバージョンではこの言語はサポートされていませんが、将来的にはこの言語のサポートが追加される予定です。", "チップ");
-                    //ApplyResourcesToControls(this.Controls, $"{runningDirectory}ResourceFiles\\Localization\\ja\\ja.resx", Assembly.GetExecutingAssembly());
-                    break;
-            }
-        }
-
 
         private void 停止播放ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1427,6 +1418,32 @@ namespace MusicalMoments
             InputComboSelect = comboBox_VBAudioEquipmentOutput.SelectedIndex;
             OutputComboSelect = comboBox_AudioEquipmentOutput.SelectedIndex;
             AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+        }
+
+        private void open_help_window_Click(object sender, EventArgs e)
+        {
+            Form help_window = new HelpWindow();
+            help_window.Show();
+        }
+
+        private void open_help_button2_Click(object sender, EventArgs e)
+        {
+            Form help_window = new HelpWindow();
+            help_window.Show();
+        }
+
+        private void check_update_Click(object sender, EventArgs e)
+        {
+            var ori_text = check_update.Text;
+            check_update.Text = "检查中...";
+            CheckNewVer(true);
+            check_update.Text = ori_text;
+        }
+
+        private void open_help_button1_Click(object sender, EventArgs e)
+        {
+            Form help_window = new HelpWindow();
+            help_window.Show();
         }
     }
 }

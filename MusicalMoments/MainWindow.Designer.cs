@@ -49,6 +49,8 @@
             AudioBindKey = new ColumnHeader();
             tabPage1 = new TabPage();
             tips_Group1 = new GroupBox();
+            open_help_window = new Button();
+            help_tip = new Label();
             to_audio_page = new Button();
             audio_page_tips = new Label();
             toC = new Button();
@@ -72,8 +74,7 @@
             volume_Label1 = new Label();
             VBVolumeTrackBar = new TrackBar();
             group_Misc = new GroupBox();
-            Languagelabel = new Label();
-            languageComboBox = new ComboBox();
+            open_help_button2 = new Button();
             switchStreamTips = new CheckBox();
             audioEquipmentPlay = new CheckBox();
             group_Key = new GroupBox();
@@ -104,6 +105,7 @@
             LogoImage = new PictureBox();
             info_Label3 = new Label();
             tabPage6 = new TabPage();
+            open_help_button1 = new Button();
             audioTips = new Button();
             conversion_Group4 = new GroupBox();
             conversion_Label5 = new Label();
@@ -165,6 +167,7 @@
             打开文件所在位置ToolStripMenuItem = new ToolStripMenuItem();
             绑定按键ToolStripMenuItem = new ToolStripMenuItem();
             upData = new OpenFileDialog();
+            check_update = new Button();
             tabPage2.SuspendLayout();
             tabPage1.SuspendLayout();
             tips_Group1.SuspendLayout();
@@ -329,6 +332,8 @@
             // 
             // tips_Group1
             // 
+            tips_Group1.Controls.Add(open_help_window);
+            tips_Group1.Controls.Add(help_tip);
             tips_Group1.Controls.Add(to_audio_page);
             tips_Group1.Controls.Add(audio_page_tips);
             tips_Group1.Controls.Add(toC);
@@ -350,6 +355,28 @@
             tips_Group1.Size = new Size(565, 334);
             tips_Group1.TabIndex = 11;
             tips_Group1.TabStop = false;
+            // 
+            // open_help_window
+            // 
+            open_help_window.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            open_help_window.Location = new Point(458, 284);
+            open_help_window.Name = "open_help_window";
+            open_help_window.Size = new Size(97, 25);
+            open_help_window.TabIndex = 20;
+            open_help_window.Text = "打开帮助";
+            open_help_window.UseVisualStyleBackColor = true;
+            open_help_window.Click += open_help_window_Click;
+            // 
+            // help_tip
+            // 
+            help_tip.BorderStyle = BorderStyle.FixedSingle;
+            help_tip.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            help_tip.ForeColor = Color.FromArgb(128, 128, 255);
+            help_tip.Location = new Point(6, 280);
+            help_tip.Name = "help_tip";
+            help_tip.Size = new Size(553, 34);
+            help_tip.TabIndex = 21;
+            help_tip.Text = "安装VB后系统声音消失？其他问题？→→→\r\n\r\n";
             // 
             // to_audio_page
             // 
@@ -607,8 +634,8 @@
             // 
             // group_Misc
             // 
-            group_Misc.Controls.Add(Languagelabel);
-            group_Misc.Controls.Add(languageComboBox);
+            group_Misc.Controls.Add(check_update);
+            group_Misc.Controls.Add(open_help_button2);
             group_Misc.Controls.Add(switchStreamTips);
             group_Misc.Controls.Add(audioEquipmentPlay);
             group_Misc.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
@@ -621,28 +648,16 @@
             group_Misc.TabStop = false;
             group_Misc.Text = "其他设置";
             // 
-            // Languagelabel
+            // open_help_button2
             // 
-            Languagelabel.AutoSize = true;
-            Languagelabel.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
-            Languagelabel.Location = new Point(312, 19);
-            Languagelabel.Name = "Languagelabel";
-            Languagelabel.Size = new Size(40, 18);
-            Languagelabel.TabIndex = 12;
-            Languagelabel.Text = "语言:";
-            // 
-            // languageComboBox
-            // 
-            languageComboBox.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            languageComboBox.ForeColor = Color.FromArgb(90, 90, 90);
-            languageComboBox.FormattingEnabled = true;
-            languageComboBox.Items.AddRange(new object[] { "简体中文", "English", "日本語" });
-            languageComboBox.Location = new Point(363, 15);
-            languageComboBox.Name = "languageComboBox";
-            languageComboBox.Size = new Size(184, 25);
-            languageComboBox.TabIndex = 2;
-            languageComboBox.Text = "简体中文";
-            languageComboBox.SelectedIndexChanged += languageComboBox_SelectedIndexChanged;
+            open_help_button2.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            open_help_button2.Location = new Point(312, 18);
+            open_help_button2.Name = "open_help_button2";
+            open_help_button2.Size = new Size(112, 22);
+            open_help_button2.TabIndex = 22;
+            open_help_button2.Text = "打开帮助";
+            open_help_button2.UseVisualStyleBackColor = true;
+            open_help_button2.Click += open_help_button2_Click;
             // 
             // switchStreamTips
             // 
@@ -1009,6 +1024,7 @@
             // 
             tabPage6.AllowDrop = true;
             tabPage6.BackColor = SystemColors.Control;
+            tabPage6.Controls.Add(open_help_button1);
             tabPage6.Controls.Add(audioTips);
             tabPage6.Controls.Add(conversion_Group4);
             tabPage6.Controls.Add(conversion_Group3);
@@ -1022,6 +1038,17 @@
             tabPage6.Text = "转换";
             tabPage6.DragDrop += tabPage6_DragDrop;
             tabPage6.DragEnter += tabPage6_DragEnter;
+            // 
+            // open_help_button1
+            // 
+            open_help_button1.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
+            open_help_button1.Location = new Point(164, 312);
+            open_help_button1.Name = "open_help_button1";
+            open_help_button1.Size = new Size(159, 32);
+            open_help_button1.TabIndex = 21;
+            open_help_button1.Text = "打开帮助";
+            open_help_button1.UseVisualStyleBackColor = true;
+            open_help_button1.Click += open_help_button1_Click;
             // 
             // audioTips
             // 
@@ -1637,6 +1664,17 @@
             绑定按键ToolStripMenuItem.Text = "绑定按键";
             绑定按键ToolStripMenuItem.Click += 绑定按键ToolStripMenuItem_Click;
             // 
+            // check_update
+            // 
+            check_update.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            check_update.Location = new Point(430, 18);
+            check_update.Name = "check_update";
+            check_update.Size = new Size(112, 22);
+            check_update.TabIndex = 23;
+            check_update.Text = "检查更新";
+            check_update.UseVisualStyleBackColor = true;
+            check_update.Click += check_update_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -1823,5 +1861,10 @@
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader5;
         private Button to_mmdownloader;
+        private Button open_help_window;
+        private Label help_tip;
+        private Button open_help_button1;
+        private Button open_help_button2;
+        private Button check_update;
     }
 }
