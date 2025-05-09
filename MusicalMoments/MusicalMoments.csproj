@@ -85,6 +85,9 @@
     <None Update="ResourceFiles\切换为麦克风.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="taurusxin.LibNcmDump.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Updater.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
