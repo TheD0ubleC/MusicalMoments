@@ -8,6 +8,9 @@
     public string PlayAudioKey { get; set; }
     public bool AudioEquipmentPlay { get; set; }
     public bool SwitchStreamTips { get; set; }
+    public string SameAudioPressBehavior { get; set; }
+    public string DifferentAudioInterruptBehavior { get; set; }
+    public bool? RestoreDefaultsAfterInstall { get; set; }
     public float VBVolume { get; set; }
     public float Volume { get; set; }
     public float TipsVolume { get; set; }

@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <MMVersion>1.5.0</MMVersion>
+    <MMReleaseChannel>release</MMReleaseChannel>
+    <MMArchitecture>x64</MMArchitecture>
+    <MMVersionTag>v1.5.0-release-x64</MMVersionTag>
+    <Version>1.5.0</Version>
+    <AssemblyVersion>1.5.0</AssemblyVersion>
+    <FileVersion>1.5.0</FileVersion>
+    <InformationalVersion>v1.5.0-release-x64</InformationalVersion>
+  </PropertyGroup>
+</Project>

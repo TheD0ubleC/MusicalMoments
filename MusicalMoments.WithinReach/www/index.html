@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html lang="zh-CN" class="h-full bg-slate-100">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>WithinReach 远程控制</title>
+  <link rel="stylesheet" href="./tailwind.local.css">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="min-h-full bg-gradient-to-b from-slate-100 to-slate-200 text-slate-800 antialiased dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+  <main class="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 lg:px-6">
+    <header class="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg backdrop-blur dark:border-slate-700 dark:bg-slate-900/80 sm:p-5">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 class="text-xl font-bold tracking-tight sm:text-2xl">WithinReach 远程音频控制</h1>
+          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">手机、平板、电脑可直接控制 MM。点击行为、播放状态、音频列表实时同步。</p>
+        </div>
+        <button id="themeButton" type="button" class="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">切换夜间模式</button>
+      </div>
+    </header>
+
+    <section class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-live="polite">
+      <article id="connectCard" class="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-lg dark:border-slate-700 dark:bg-slate-900/80">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">连接</h2>
+        <p id="connectPill" class="mt-2 text-sm font-medium">连接状态：检测中</p>
+      </article>
+      <article class="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-lg dark:border-slate-700 dark:bg-slate-900/80">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">点击行为</h2>
+        <p id="modePill" class="mt-2 text-sm font-medium">模式：读取中</p>
+      </article>
+      <article class="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-lg dark:border-slate-700 dark:bg-slate-900/80">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">播放</h2>
+        <p id="playPill" class="mt-2 text-sm font-medium">播放状态：读取中</p>
+      </article>
+      <article class="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-lg dark:border-slate-700 dark:bg-slate-900/80">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">播放逻辑</h2>
+        <p id="behaviorPill" class="mt-2 text-sm font-medium">同音频逻辑：读取中</p>
+      </article>
+    </section>
+
+    <section class="sticky-controls sticky top-0 z-40 mt-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur dark:border-slate-700 dark:bg-slate-900/95 sm:p-4">
+      <div class="flex flex-col gap-3 xl:flex-row xl:items-end">
+        <label class="block flex-1" for="searchInput">
+          <span class="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">搜索音频</span>
+          <input id="searchInput" type="search" placeholder="输入名称 / 曲目 / 类型 / 按键" class="block h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40">
+        </label>
+
+        <label class="block xl:w-60" for="modeSelect">
+          <span class="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Web 点击行为</span>
+          <select id="modeSelect" class="block h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40">
+            <option value="set_selected">按下后设为播放项</option>
+            <option value="direct_play">按下后直接播放</option>
+          </select>
+        </label>
+
+        <div class="flex gap-2">
+          <button id="reloadButton" type="button" class="inline-flex h-11 min-w-24 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">刷新列表</button>
+          <button id="stopButton" type="button" class="inline-flex h-11 min-w-24 items-center justify-center rounded-lg border border-rose-300 bg-rose-50 px-4 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-rose-700 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/40">停止播放</button>
+        </div>
+      </div>
+
+      <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <p id="pagerInfo" class="text-sm text-slate-600 dark:text-slate-300">第 1 / 1 页 · 每页 50 条</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="prevPageButton" type="button" class="inline-flex h-9 items-center justify-center rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">上一页</button>
+          <div id="pageButtons" class="flex flex-wrap items-center gap-1"></div>
+          <button id="nextPageButton" type="button" class="inline-flex h-9 items-center justify-center rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">下一页</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="audioGrid" class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3"></section>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>

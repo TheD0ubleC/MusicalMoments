@@ -1,0 +1,73 @@
+﻿html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+.sticky-controls {
+  top: 0;
+}
+
+#connectCard[data-state="error"] {
+  border-color: rgb(253 186 116 / 0.8);
+  background-color: rgb(255 237 213 / 0.86);
+}
+
+.dark #connectCard[data-state="error"] {
+  border-color: rgb(153 27 27 / 0.9);
+  background-color: rgb(69 10 10 / 0.45);
+}
+
+.audio-card {
+  transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.audio-card:hover {
+  transform: translateY(-1px);
+}
+
+.audio-card.is-selected {
+  border-color: rgb(59 130 246 / 0.9);
+  box-shadow: 0 0 0 1px rgb(147 197 253 / 0.65) inset;
+}
+
+.dark .audio-card.is-selected {
+  border-color: rgb(96 165 250 / 0.9);
+  box-shadow: 0 0 0 1px rgb(30 64 175 / 0.55) inset;
+}
+
+.audio-card.is-active {
+  border-color: rgb(16 185 129 / 0.85);
+  box-shadow: 0 0 0 1px rgb(110 231 183 / 0.6) inset;
+}
+
+.dark .audio-card.is-active {
+  border-color: rgb(52 211 153 / 0.9);
+  box-shadow: 0 0 0 1px rgb(6 78 59 / 0.72) inset;
+}
+
+.audio-card.is-busy {
+  opacity: 0.72;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+@media (max-width: 640px) {
+  .sticky-controls {
+    top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

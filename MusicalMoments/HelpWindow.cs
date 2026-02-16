@@ -18,6 +18,13 @@ namespace MusicalMoments
         public HelpWindow()
         {
             InitializeComponent();
+            FormBorderStyle = FormBorderStyle.Sizable;
+            MinimumSize = Size;
+
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            r_help.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
             this.Load += HelpWindow_Load;
         }
         private void button1_Click(object sender, EventArgs e)
@@ -63,20 +70,21 @@ namespace MusicalMoments
                         if (control != null)
                         {
                             this.Controls.Add(control);
-                            dynamicControls.Add(control); // 📌 记录动态添加的控件
+                            dynamicControls.Add(control);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
+                ex.ToString();
                 MessageBox.Show($"加载组件时出错: {ex.Message}");
             }
         }
 
         private Control CreateControlFromJson(Component component)
         {
-            // 1. 根据 Type 创建控件实例
+
             Control control = component.Type switch
             {
                 "Button" => new Button(),
@@ -118,7 +126,8 @@ namespace MusicalMoments
             // 4. 如果存在 ClickScript 且是 Button，绑定事件
             if (!string.IsNullOrEmpty(clickScript) && control is Button btn)
             {
-                btn.Click += (s, e) => ExecutePowerShell(clickScript);
+                btn.Click += (s, e) => MiniDsl.Execute(clickScript);
+
             }
 
             return control;

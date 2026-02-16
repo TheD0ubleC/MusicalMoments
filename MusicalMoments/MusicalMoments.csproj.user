@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_LastSelectedProfileId>K:\Project\C#\MusicalMoments\MusicalMoments\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+    <_LastSelectedProfileId>K:\Project\C#\MusicalMoments\MusicalMoments\Properties\PublishProfiles\win-x64-dotnet10.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="BindKeyWindow.cs">
@@ -10,7 +10,28 @@
     <Compile Update="HelpWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MainWindow.ContextMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.Feedback.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.Navigation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.PlaybackLogic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.Plugin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.VbGuide.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

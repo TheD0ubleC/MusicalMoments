@@ -57,3 +57,7 @@ logs/
 # Docker 相关
 docker-compose.override.yml
 .env
+
+_artifacts/
+_build_tmp/
+launchSettings.json

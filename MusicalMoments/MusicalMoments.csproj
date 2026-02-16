@@ -1,18 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.22000.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net10.0-windows10.0.22000.0</TargetFramework>
+    <Nullable>disable</Nullable>
     <UseWindowsForms>True</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>image\MMLOGO.ico</ApplicationIcon>
     <Product>MusicalMoments</Product>
-    <AssemblyVersion>1.4.1</AssemblyVersion>
-    <FileVersion>1.4.1</FileVersion>
     <StartupObject>MusicalMoments.Program</StartupObject>
     <UseWPF>False</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
+    <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
   </PropertyGroup>
@@ -25,13 +25,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>portable</DebugType>
   </PropertyGroup>
+
   <ItemGroup>
     <Content Include="image\MMLOGO.ico" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="MainWindow.*.resx" />
+    <None Include="MainWindow.*.resx" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="FlacLibSharp" Version="3.2.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
-    <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Lame" Version="1.1.6" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
@@ -39,6 +45,11 @@
     <PackageReference Include="NVorbis" Version="0.10.5" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MusicalMoments.Updater\MusicalMoments.Updater.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -51,45 +62,107 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Update="file.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>file.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
-    <None Update="Plugin\MMPluginSDKExample\MMPluginSDKExample.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Plugin\按键帮助\按键帮助.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Plugin\按键帮助\按键帮助.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Update="ResourceFiles\切换为音频.wav">
+    <None Update="ResourceFiles\switch_to_audio.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ResourceFiles\切换为麦克风.wav">
+    <None Update="ResourceFiles\switch_to_microphone.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="taurusxin.LibNcmDump.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Updater.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
+
+  <Target Name="CopyUpdaterExecutable" AfterTargets="Build">
+    <ItemGroup>
+      <UpdaterExecutableCandidates Include="$(MSBuildThisFileDirectory)..\MusicalMoments.Updater\bin\$(Platform)\$(Configuration)\net10.0\MusicalMoments.Updater.exe" />
+      <UpdaterExecutableCandidates Include="$(MSBuildThisFileDirectory)..\MusicalMoments.Updater\bin\$(Configuration)\net10.0\MusicalMoments.Updater.exe" />
+    </ItemGroup>
+    <Copy SourceFiles="@(UpdaterExecutableCandidates)"
+          DestinationFolder="$(OutDir)"
+          SkipUnchangedFiles="true"
+          Condition="Exists('%(UpdaterExecutableCandidates.Identity)')" />
+  </Target>
+
+  <Target Name="CopyBuiltPlugins" AfterTargets="Build">
+    <PropertyGroup>
+      <KeyHelpPublishDir>$(MSBuildThisFileDirectory)..\MusicalMoments.KeyHelp\obj\$(Configuration)\net10.0-windows10.0.22000.0\plugin-publish\MusicalMoments.KeyHelp\</KeyHelpPublishDir>
+      <PluginExamplePublishDir>$(MSBuildThisFileDirectory)..\MusicalMoments.PluginExample\obj\$(Configuration)\net10.0-windows10.0.22000.0\plugin-publish\MusicalMoments.PluginExample\</PluginExamplePublishDir>
+      <WithinReachPublishDir>$(MSBuildThisFileDirectory)..\MusicalMoments.WithinReach\obj\$(Configuration)\net10.0-windows10.0.22000.0\plugin-publish\MusicalMoments.WithinReach\</WithinReachPublishDir>
+    </PropertyGroup>
+
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\MusicalMoments.KeyHelp\MusicalMoments.KeyHelp.csproj"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=false;PublishSingleFile=true;PublishTrimmed=false;PublishDir=$(KeyHelpPublishDir);DebugType=None;DebugSymbols=false" />
+
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\MusicalMoments.PluginExample\MusicalMoments.PluginExample.csproj"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=false;PublishSingleFile=true;PublishTrimmed=false;PublishDir=$(PluginExamplePublishDir);DebugType=None;DebugSymbols=false" />
+
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\MusicalMoments.WithinReach\MusicalMoments.WithinReach.csproj"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=false;PublishSingleFile=true;PublishTrimmed=false;PublishDir=$(WithinReachPublishDir);DebugType=None;DebugSymbols=false" />
+
+    <MakeDir Directories="$(OutDir)Plugin\MusicalMoments.KeyHelp" />
+    <MakeDir Directories="$(OutDir)Plugin\MusicalMoments.PluginExample" />
+    <RemoveDir Directories="$(OutDir)Plugin\MusicalMoments.WithinReach" />
+    <MakeDir Directories="$(OutDir)Plugin\MusicalMoments.WithinReach" />
+    <MakeDir Directories="$(OutDir)Plugin\MusicalMoments.WithinReach\www" />
+
+    <ItemGroup>
+      <OldKeyHelpFiles Include="$(OutDir)Plugin\MusicalMoments.KeyHelp\*" />
+      <OldPluginExampleFiles Include="$(OutDir)Plugin\MusicalMoments.PluginExample\*" />
+    </ItemGroup>
+    <Delete Files="@(OldKeyHelpFiles)" />
+    <Delete Files="@(OldPluginExampleFiles)" />
+
+    <ItemGroup>
+      <KeyHelpPublishedFiles Include="$(KeyHelpPublishDir)MusicalMoments.KeyHelp.exe" />
+      <KeyHelpPublishedFiles Include="$(MSBuildThisFileDirectory)..\MusicalMoments.KeyHelp\MusicalMoments.KeyHelp.json" />
+      <PluginExamplePublishedFiles Include="$(PluginExamplePublishDir)MusicalMoments.PluginExample.exe" />
+      <PluginExamplePublishedFiles Include="$(MSBuildThisFileDirectory)..\MusicalMoments.PluginExample\MusicalMoments.PluginExample.json" />
+      <WithinReachPublishedFiles Include="$(WithinReachPublishDir)MusicalMoments.WithinReach.exe" />
+      <WithinReachPublishedFiles Include="$(MSBuildThisFileDirectory)..\MusicalMoments.WithinReach\MusicalMoments.WithinReach.json" />
+      <WithinReachPublishedWebFiles Include="$(WithinReachPublishDir)www\**\*" />
+      <WithinReachSourceWebFiles Include="$(MSBuildThisFileDirectory)..\MusicalMoments.WithinReach\www\**\*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(KeyHelpPublishedFiles)"
+          DestinationFolder="$(OutDir)Plugin\MusicalMoments.KeyHelp"
+          SkipUnchangedFiles="true"
+          Condition="Exists('%(KeyHelpPublishedFiles.Identity)')" />
+
+    <Copy SourceFiles="@(PluginExamplePublishedFiles)"
+          DestinationFolder="$(OutDir)Plugin\MusicalMoments.PluginExample"
+          SkipUnchangedFiles="true"
+          Condition="Exists('%(PluginExamplePublishedFiles.Identity)')" />
+
+    <Copy SourceFiles="@(WithinReachPublishedFiles)"
+          DestinationFolder="$(OutDir)Plugin\MusicalMoments.WithinReach"
+          SkipUnchangedFiles="true"
+          Condition="Exists('%(WithinReachPublishedFiles.Identity)')" />
+
+    <Copy SourceFiles="@(WithinReachPublishedWebFiles)"
+          DestinationFiles="@(WithinReachPublishedWebFiles->'$(OutDir)Plugin\\MusicalMoments.WithinReach\\www\\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true"
+          Condition="Exists('%(WithinReachPublishedWebFiles.Identity)')" />
+
+    <Copy SourceFiles="@(WithinReachSourceWebFiles)"
+          DestinationFiles="@(WithinReachSourceWebFiles->'$(OutDir)Plugin\\MusicalMoments.WithinReach\\www\\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true"
+          Condition="Exists('%(WithinReachSourceWebFiles.Identity)')" />
+  </Target>
 </Project>

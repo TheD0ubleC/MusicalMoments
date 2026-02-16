@@ -1,0 +1,5 @@
+﻿{
+  "PluginDescription": "WithinReach：通过 Web 页面远程控制 MM 音频播放。",
+  "PluginVersion": "2.0.0",
+  "Protocol": "ws"
+}

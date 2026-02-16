@@ -1,0 +1,5 @@
+﻿{
+  "PluginDescription": "按键辅助：在 MM 播放期间自动按住你设定的游戏按键。",
+  "PluginVersion": "2.0.0",
+  "Protocol": "ws"
+}

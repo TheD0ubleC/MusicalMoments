@@ -36,9 +36,14 @@
             ListViewItem listViewItem17 = new ListViewItem("插件", 7);
             ListViewItem listViewItem18 = new ListViewItem("反馈", 8);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            sideLists = new CustomUI.BufferedListView();
+            sideLists = new MusicalMoments.CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
             tabPage2 = new TabPage();
+            audioNextPageButton = new Button();
+            audioPrevPageButton = new Button();
+            audioPageStatusLabel = new Label();
+            audioSearchTextBox = new TextBox();
+            audioSearchLabel = new Label();
             mToAudioData1 = new Button();
             SelectedAudioLabel = new Label();
             reLoadAudioListsView = new Button();
@@ -64,8 +69,14 @@
             toVB = new Button();
             tips_Label2 = new Label();
             tips_Label1 = new Label();
-            mainTabControl = new CustomUI.CoverTabControl();
+            restoreDefaultsAfterInstallCheckBox = new CheckBox();
+            mainTabControl = new MusicalMoments.CustomUI.CoverTabControl();
             tabPage3 = new TabPage();
+            playbackBehaviorGroup = new GroupBox();
+            differentAudioBehaviorComboBox = new ComboBox();
+            differentAudioBehaviorLabel = new Label();
+            sameAudioBehaviorComboBox = new ComboBox();
+            sameAudioBehaviorLabel = new Label();
             volume_Group = new GroupBox();
             volume_Label3 = new Label();
             TipsVolumeTrackBar = new TrackBar();
@@ -74,6 +85,7 @@
             volume_Label1 = new Label();
             VBVolumeTrackBar = new TrackBar();
             group_Misc = new GroupBox();
+            check_update = new Button();
             open_help_button2 = new Button();
             switchStreamTips = new CheckBox();
             audioEquipmentPlay = new CheckBox();
@@ -83,6 +95,7 @@
             label_Key1 = new Label();
             ToggleStream = new TextBox();
             group_AudioEquipment = new GroupBox();
+            autoSelectDevicesButton = new Button();
             comboBox_AudioEquipmentOutput = new ComboBox();
             label_AudioEquipment4 = new Label();
             label_AudioEquipment1 = new Label();
@@ -106,7 +119,6 @@
             info_Label3 = new Label();
             tabPage6 = new TabPage();
             open_help_button1 = new Button();
-            audioTips = new Button();
             conversion_Group4 = new GroupBox();
             conversion_Label5 = new Label();
             conversion_Label4 = new Label();
@@ -159,20 +171,20 @@
             mainGroupBox = new GroupBox();
             groupBox1 = new GroupBox();
             mainContextMenuStrip = new ContextMenuStrip(components);
-            播放ToolStripMenuItem = new ToolStripMenuItem();
-            停止播放ToolStripMenuItem = new ToolStripMenuItem();
-            删除ToolStripMenuItem = new ToolStripMenuItem();
-            重命名ToolStripMenuItem = new ToolStripMenuItem();
-            设为播放项ToolStripMenuItem = new ToolStripMenuItem();
-            打开文件所在位置ToolStripMenuItem = new ToolStripMenuItem();
-            绑定按键ToolStripMenuItem = new ToolStripMenuItem();
+            playSelectedMenuItem = new ToolStripMenuItem();
+            stopPlaybackMenuItem = new ToolStripMenuItem();
+            deleteSelectedMenuItem = new ToolStripMenuItem();
+            renameSelectedMenuItem = new ToolStripMenuItem();
+            setAsPlaybackItemMenuItem = new ToolStripMenuItem();
+            openFileLocationMenuItem = new ToolStripMenuItem();
+            bindKeyMenuItem = new ToolStripMenuItem();
             upData = new OpenFileDialog();
-            check_update = new Button();
             tabPage2.SuspendLayout();
             tabPage1.SuspendLayout();
             tips_Group1.SuspendLayout();
             mainTabControl.SuspendLayout();
             tabPage3.SuspendLayout();
+            playbackBehaviorGroup.SuspendLayout();
             volume_Group.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)TipsVolumeTrackBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)VolumeTrackBar).BeginInit();
@@ -204,20 +216,27 @@
             sideLists.BackColor = SystemColors.Control;
             sideLists.BorderStyle = BorderStyle.None;
             sideLists.Cursor = Cursors.Hand;
-            sideLists.Font = new Font("Microsoft JhengHei UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+            sideLists.Font = new Font("Microsoft JhengHei UI", 13F);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
             sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
             sideLists.LargeImageList = sideListsImage;
+            sideLists.HideSelection = false;
+            sideLists.HotTracking = false;
+            sideLists.HoverSelection = false;
             sideLists.Location = new Point(3, 16);
+            sideLists.MultiSelect = false;
             sideLists.Name = "sideLists";
             sideLists.OwnerDraw = true;
             sideLists.Scrollable = false;
-            sideLists.Size = new Size(78, 363);
+            sideLists.Size = new Size(86, 363);
             sideLists.SmallImageList = sideListsImage;
             sideLists.TabIndex = 0;
+            sideLists.TabStop = false;
+            sideLists.TileSize = new Size(84, 40);
             sideLists.UseCompatibleStateImageBehavior = false;
-            sideLists.View = View.List;
+            sideLists.View = View.Tile;
             sideLists.DrawItem += sideLists_DrawItem;
+            sideLists.MouseDown += sideLists_MouseDown;
             sideLists.SelectedIndexChanged += sideLists_SelectedIndexChanged;
             // 
             // sideListsImage
@@ -225,19 +244,24 @@
             sideListsImage.ColorDepth = ColorDepth.Depth32Bit;
             sideListsImage.ImageStream = (ImageListStreamer)resources.GetObject("sideListsImage.ImageStream");
             sideListsImage.TransparentColor = Color.Transparent;
-            sideListsImage.Images.SetKeyName(0, "主页.png");
-            sideListsImage.Images.SetKeyName(1, "音频.png");
-            sideListsImage.Images.SetKeyName(2, "设置.png");
-            sideListsImage.Images.SetKeyName(3, "赞助.png");
-            sideListsImage.Images.SetKeyName(4, "关于.png");
-            sideListsImage.Images.SetKeyName(5, "转换.png");
-            sideListsImage.Images.SetKeyName(6, "发现.png");
-            sideListsImage.Images.SetKeyName(7, "插件.png");
-            sideListsImage.Images.SetKeyName(8, "反馈.png");
+            sideListsImage.Images.SetKeyName(0, "main_page.png");
+            sideListsImage.Images.SetKeyName(1, "audio.png");
+            sideListsImage.Images.SetKeyName(2, "settings.png");
+            sideListsImage.Images.SetKeyName(3, "donate.png");
+            sideListsImage.Images.SetKeyName(4, "about.png");
+            sideListsImage.Images.SetKeyName(5, "convert.png");
+            sideListsImage.Images.SetKeyName(6, "discover.png");
+            sideListsImage.Images.SetKeyName(7, "plugin.png");
+            sideListsImage.Images.SetKeyName(8, "feedback.png");
             // 
             // tabPage2
             // 
             tabPage2.BackColor = SystemColors.Control;
+            tabPage2.Controls.Add(audioNextPageButton);
+            tabPage2.Controls.Add(audioPrevPageButton);
+            tabPage2.Controls.Add(audioPageStatusLabel);
+            tabPage2.Controls.Add(audioSearchTextBox);
+            tabPage2.Controls.Add(audioSearchLabel);
             tabPage2.Controls.Add(mToAudioData1);
             tabPage2.Controls.Add(SelectedAudioLabel);
             tabPage2.Controls.Add(reLoadAudioListsView);
@@ -245,14 +269,71 @@
             tabPage2.Location = new Point(0, 22);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(565, 341);
+            tabPage2.Size = new Size(671, 434);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "音频";
             // 
+            // audioNextPageButton
+            // 
+            audioNextPageButton.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            audioNextPageButton.Location = new Point(339, 301);
+            audioNextPageButton.Name = "audioNextPageButton";
+            audioNextPageButton.Size = new Size(78, 32);
+            audioNextPageButton.TabIndex = 8;
+            audioNextPageButton.Text = "下一页";
+            audioNextPageButton.UseVisualStyleBackColor = true;
+            audioNextPageButton.Click += audioNextPageButton_Click;
+            // 
+            // audioPrevPageButton
+            // 
+            audioPrevPageButton.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            audioPrevPageButton.Location = new Point(255, 301);
+            audioPrevPageButton.Name = "audioPrevPageButton";
+            audioPrevPageButton.Size = new Size(78, 32);
+            audioPrevPageButton.TabIndex = 7;
+            audioPrevPageButton.Text = "上一页";
+            audioPrevPageButton.UseVisualStyleBackColor = true;
+            audioPrevPageButton.Click += audioPrevPageButton_Click;
+            // 
+            // audioPageStatusLabel
+            // 
+            audioPageStatusLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            audioPageStatusLabel.Location = new Point(112, 303);
+            audioPageStatusLabel.Name = "audioPageStatusLabel";
+            audioPageStatusLabel.Size = new Size(137, 24);
+            audioPageStatusLabel.TabIndex = 6;
+            audioPageStatusLabel.Text = "第 1 / 1 页，共 0 条";
+            audioPageStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // audioSearchTextBox
+            // 
+            audioSearchTextBox.BorderStyle = BorderStyle.FixedSingle;
+            audioSearchTextBox.Font = new Font("Microsoft JhengHei UI", 9.75F);
+            audioSearchTextBox.ForeColor = Color.FromArgb(90, 90, 90);
+            audioSearchTextBox.Location = new Point(61, 6);
+            audioSearchTextBox.Name = "audioSearchTextBox";
+            audioSearchTextBox.PlaceholderText = "按名称 / 曲目 / 类型 / 按键搜索";
+            audioSearchTextBox.RightToLeft = RightToLeft.No;
+            audioSearchTextBox.Size = new Size(604, 24);
+            audioSearchTextBox.TabIndex = 5;
+            audioSearchTextBox.TextChanged += audioSearchTextBox_TextChanged;
+            // 
+            // audioSearchLabel
+            // 
+            audioSearchLabel.AutoSize = true;
+            audioSearchLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
+            audioSearchLabel.ForeColor = Color.FromArgb(90, 90, 90);
+            audioSearchLabel.Location = new Point(6, 9);
+            audioSearchLabel.Name = "audioSearchLabel";
+            audioSearchLabel.RightToLeft = RightToLeft.No;
+            audioSearchLabel.Size = new Size(47, 17);
+            audioSearchLabel.TabIndex = 4;
+            audioSearchLabel.Text = "搜索：";
+            // 
             // mToAudioData1
             // 
-            mToAudioData1.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            mToAudioData1.Location = new Point(399, 303);
+            mToAudioData1.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
+            mToAudioData1.Location = new Point(505, 301);
             mToAudioData1.Name = "mToAudioData1";
             mToAudioData1.Size = new Size(160, 32);
             mToAudioData1.TabIndex = 3;
@@ -263,7 +344,7 @@
             // SelectedAudioLabel
             // 
             SelectedAudioLabel.AutoSize = true;
-            SelectedAudioLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            SelectedAudioLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
             SelectedAudioLabel.Location = new Point(6, 303);
             SelectedAudioLabel.Name = "SelectedAudioLabel";
             SelectedAudioLabel.RightToLeft = RightToLeft.No;
@@ -273,8 +354,8 @@
             // 
             // reLoadAudioListsView
             // 
-            reLoadAudioListsView.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            reLoadAudioListsView.Location = new Point(317, 303);
+            reLoadAudioListsView.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
+            reLoadAudioListsView.Location = new Point(423, 301);
             reLoadAudioListsView.Name = "reLoadAudioListsView";
             reLoadAudioListsView.Size = new Size(75, 32);
             reLoadAudioListsView.TabIndex = 1;
@@ -286,12 +367,13 @@
             // 
             audioListView.AllowDrop = true;
             audioListView.Columns.AddRange(new ColumnHeader[] { AudioName, AudioTrack, AudioType, AudioBindKey });
-            audioListView.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            audioListView.Font = new Font("Microsoft JhengHei UI", 9.75F);
             audioListView.ForeColor = SystemColors.WindowFrame;
-            audioListView.Location = new Point(6, 6);
+            audioListView.FullRowSelect = true;
+            audioListView.Location = new Point(6, 36);
             audioListView.Name = "audioListView";
             audioListView.RightToLeft = RightToLeft.No;
-            audioListView.Size = new Size(553, 291);
+            audioListView.Size = new Size(659, 261);
             audioListView.TabIndex = 0;
             audioListView.UseCompatibleStateImageBehavior = false;
             audioListView.View = View.Details;
@@ -326,7 +408,7 @@
             tabPage1.Location = new Point(0, 22);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(565, 341);
+            tabPage1.Size = new Size(671, 434);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "主页";
             // 
@@ -347,171 +429,186 @@
             tips_Group1.Controls.Add(toVB);
             tips_Group1.Controls.Add(tips_Label2);
             tips_Group1.Controls.Add(tips_Label1);
-            tips_Group1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Group1.Controls.Add(restoreDefaultsAfterInstallCheckBox);
+            tips_Group1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             tips_Group1.ForeColor = Color.FromArgb(90, 90, 90);
             tips_Group1.Location = new Point(0, -10);
             tips_Group1.Name = "tips_Group1";
             tips_Group1.RightToLeft = RightToLeft.No;
-            tips_Group1.Size = new Size(565, 334);
+            tips_Group1.Size = new Size(665, 444);
             tips_Group1.TabIndex = 11;
             tips_Group1.TabStop = false;
             // 
             // open_help_window
             // 
-            open_help_window.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            open_help_window.Location = new Point(458, 284);
+            open_help_window.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            open_help_window.Location = new Point(562, 281);
             open_help_window.Name = "open_help_window";
-            open_help_window.Size = new Size(97, 25);
+            open_help_window.Size = new Size(97, 27);
             open_help_window.TabIndex = 20;
-            open_help_window.Text = "打开帮助";
+            open_help_window.Text = "图文教程";
             open_help_window.UseVisualStyleBackColor = true;
             open_help_window.Click += open_help_window_Click;
             // 
             // help_tip
             // 
             help_tip.BorderStyle = BorderStyle.FixedSingle;
-            help_tip.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            help_tip.ForeColor = Color.FromArgb(128, 128, 255);
+            help_tip.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
+            help_tip.ForeColor = Color.FromArgb(90, 90, 90);
             help_tip.Location = new Point(6, 280);
             help_tip.Name = "help_tip";
-            help_tip.Size = new Size(553, 34);
+            help_tip.Size = new Size(550, 34);
             help_tip.TabIndex = 21;
-            help_tip.Text = "安装VB后系统声音消失？其他问题？→→→\r\n\r\n";
+            help_tip.Text = "状态：等待操作";
             // 
             // to_audio_page
             // 
-            to_audio_page.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            to_audio_page.Location = new Point(458, 246);
+            to_audio_page.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            to_audio_page.Location = new Point(562, 129);
             to_audio_page.Name = "to_audio_page";
-            to_audio_page.Size = new Size(97, 25);
+            to_audio_page.Size = new Size(97, 27);
             to_audio_page.TabIndex = 18;
-            to_audio_page.Text = "前往尝试";
+            to_audio_page.Text = "一键修复";
             to_audio_page.UseVisualStyleBackColor = true;
+            to_audio_page.Click += to_audio_page_Click;
             // 
             // audio_page_tips
             // 
             audio_page_tips.BorderStyle = BorderStyle.FixedSingle;
-            audio_page_tips.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            audio_page_tips.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
             audio_page_tips.Location = new Point(6, 242);
             audio_page_tips.Name = "audio_page_tips";
-            audio_page_tips.Size = new Size(553, 34);
+            audio_page_tips.Size = new Size(550, 34);
             audio_page_tips.TabIndex = 19;
-            audio_page_tips.Text = "在音频页对音频右键可绑定按键或执行其他功能";
+            audio_page_tips.Text = "附加工具：可快速打开系统声音设置与图文教程";
             // 
             // toC
             // 
-            toC.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            toC.Location = new Point(458, 170);
+            toC.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            toC.Location = new Point(562, 243);
             toC.Name = "toC";
-            toC.Size = new Size(97, 25);
+            toC.Size = new Size(97, 27);
             toC.TabIndex = 17;
-            toC.Text = "前往转换";
+            toC.Text = "声音设置";
             toC.UseVisualStyleBackColor = true;
             toC.Click += toC_Click;
             // 
             // tips_Label5
             // 
             tips_Label5.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label5.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label5.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
             tips_Label5.Location = new Point(6, 166);
             tips_Label5.Name = "tips_Label5";
-            tips_Label5.Size = new Size(553, 34);
-            tips_Label5.TabIndex = 16;
-            tips_Label5.Text = "4.出现电音请先转换音频为指定格式";
+            tips_Label5.Size = new Size(550, 34);
+            tips_Label5.TabIndex = 10;
+            tips_Label5.Text = "步骤4：前往【设置】点击【自动识别设备】并确认设备";
             // 
             // mToAudioData
             // 
-            mToAudioData.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            mToAudioData.Location = new Point(458, 132);
+            mToAudioData.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            mToAudioData.Location = new Point(562, 205);
             mToAudioData.Name = "mToAudioData";
-            mToAudioData.Size = new Size(97, 25);
+            mToAudioData.Size = new Size(97, 27);
             mToAudioData.TabIndex = 15;
-            mToAudioData.Text = "点我打开";
+            mToAudioData.Text = "卸载VB";
             mToAudioData.UseVisualStyleBackColor = true;
             mToAudioData.Click += mToAudioData_Click;
             // 
             // retestVB
             // 
-            retestVB.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            retestVB.Location = new Point(458, 208);
+            retestVB.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            retestVB.Location = new Point(562, 91);
             retestVB.Name = "retestVB";
-            retestVB.Size = new Size(97, 25);
+            retestVB.Size = new Size(97, 27);
             retestVB.TabIndex = 0;
-            retestVB.Text = "重新检测";
+            retestVB.Text = "检查状态";
             retestVB.UseVisualStyleBackColor = true;
             retestVB.Click += retestVB_Click;
             // 
             // label_VBStatus
             // 
             label_VBStatus.BorderStyle = BorderStyle.FixedSingle;
-            label_VBStatus.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label_VBStatus.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
             label_VBStatus.Location = new Point(6, 204);
             label_VBStatus.Name = "label_VBStatus";
-            label_VBStatus.Size = new Size(553, 34);
+            label_VBStatus.Size = new Size(550, 34);
             label_VBStatus.TabIndex = 1;
-            label_VBStatus.Text = "VB声卡状态";
+            label_VBStatus.Text = "VB状态：未检测";
             // 
             // toSettings
             // 
-            toSettings.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            toSettings.Location = new Point(458, 94);
+            toSettings.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            toSettings.Location = new Point(562, 164);
             toSettings.Name = "toSettings";
-            toSettings.Size = new Size(97, 25);
-            toSettings.TabIndex = 14;
-            toSettings.Text = "前往绑定";
+            toSettings.Size = new Size(97, 27);
+            toSettings.TabIndex = 0;
+            toSettings.Text = "前往设置";
             toSettings.UseVisualStyleBackColor = true;
             toSettings.Click += toSettings_Click;
             // 
             // tips_Label4
             // 
             tips_Label4.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label4.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label4.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
             tips_Label4.Location = new Point(6, 128);
             tips_Label4.Name = "tips_Label4";
-            tips_Label4.Size = new Size(553, 34);
+            tips_Label4.Size = new Size(550, 34);
             tips_Label4.TabIndex = 13;
-            tips_Label4.Text = "3.音频放置位置位于根目录的[AudioData]";
+            tips_Label4.Text = "步骤3：如提示格式异常，请点右侧【一键修复】";
             // 
             // tips_Label3
             // 
             tips_Label3.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label3.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label3.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
             tips_Label3.Location = new Point(6, 90);
             tips_Label3.Name = "tips_Label3";
-            tips_Label3.Size = new Size(553, 34);
+            tips_Label3.Size = new Size(550, 34);
             tips_Label3.TabIndex = 12;
-            tips_Label3.Text = "2.安装后需在设置中绑定对应设备";
+            tips_Label3.Text = "步骤2：安装完成后点右侧【检查状态】确认 VB 正常";
             // 
             // toVB
             // 
-            toVB.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            toVB.Location = new Point(458, 55);
+            toVB.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            toVB.Location = new Point(562, 52);
             toVB.Name = "toVB";
-            toVB.Size = new Size(97, 25);
+            toVB.Size = new Size(97, 27);
             toVB.TabIndex = 11;
-            toVB.Text = "点我下载";
+            toVB.Text = "安装VB";
             toVB.UseVisualStyleBackColor = true;
             toVB.Click += toVB_Click;
             // 
             // tips_Label2
             // 
             tips_Label2.BorderStyle = BorderStyle.FixedSingle;
-            tips_Label2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Bold);
             tips_Label2.Location = new Point(6, 51);
             tips_Label2.Name = "tips_Label2";
-            tips_Label2.Size = new Size(553, 34);
+            tips_Label2.Size = new Size(550, 34);
             tips_Label2.TabIndex = 10;
-            tips_Label2.Text = "1.首次使用前需安装VB声卡";
+            tips_Label2.Text = "步骤1：点击右侧【安装VB】（会自动下载并静默安装）";
             // 
             // tips_Label1
             // 
-            tips_Label1.Font = new Font("Microsoft JhengHei UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
+            tips_Label1.Font = new Font("Microsoft JhengHei UI", 20.25F, FontStyle.Bold);
             tips_Label1.Location = new Point(6, 13);
             tips_Label1.Name = "tips_Label1";
             tips_Label1.Size = new Size(553, 34);
             tips_Label1.TabIndex = 9;
-            tips_Label1.Text = "首次使用须知";
-            tips_Label1.TextAlign = ContentAlignment.TopCenter;
+            tips_Label1.Text = "新手引导（按步骤操作）";
+            tips_Label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // restoreDefaultsAfterInstallCheckBox
+            // 
+            restoreDefaultsAfterInstallCheckBox.AutoSize = true;
+            restoreDefaultsAfterInstallCheckBox.Checked = true;
+            restoreDefaultsAfterInstallCheckBox.CheckState = CheckState.Checked;
+            restoreDefaultsAfterInstallCheckBox.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            restoreDefaultsAfterInstallCheckBox.Location = new Point(6, 316);
+            restoreDefaultsAfterInstallCheckBox.Name = "restoreDefaultsAfterInstallCheckBox";
+            restoreDefaultsAfterInstallCheckBox.Size = new Size(313, 21);
+            restoreDefaultsAfterInstallCheckBox.TabIndex = 22;
+            restoreDefaultsAfterInstallCheckBox.Text = "安装后自动恢复系统默认扬声器与麦克风（推荐）";
+            restoreDefaultsAfterInstallCheckBox.UseVisualStyleBackColor = true;
             // 
             // mainTabControl
             // 
@@ -524,19 +621,22 @@
             mainTabControl.Controls.Add(tabPage7);
             mainTabControl.Controls.Add(tabPage9);
             mainTabControl.Controls.Add(tabPage10);
-            mainTabControl.Font = new Font("Microsoft JhengHei UI", 10.25F, FontStyle.Regular, GraphicsUnit.Point);
+            mainTabControl.Font = new Font("Microsoft JhengHei UI", 10.25F);
             mainTabControl.ItemSize = new Size(62, 22);
             mainTabControl.Location = new Point(6, 22);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
-            mainTabControl.Size = new Size(565, 363);
+            mainTabControl.Size = new Size(671, 456);
             mainTabControl.SizeMode = TabSizeMode.Fixed;
             mainTabControl.TabIndex = 1;
             mainTabControl.TabStop = false;
+            mainTabControl.SelectedIndexChanged += mainTabControl_SelectedIndexChanged;
             // 
             // tabPage3
             // 
+            tabPage3.AutoScroll = true;
             tabPage3.BackColor = SystemColors.Control;
+            tabPage3.Controls.Add(playbackBehaviorGroup);
             tabPage3.Controls.Add(volume_Group);
             tabPage3.Controls.Add(group_Misc);
             tabPage3.Controls.Add(group_Key);
@@ -548,6 +648,66 @@
             tabPage3.TabIndex = 2;
             tabPage3.Text = "设置";
             // 
+            // playbackBehaviorGroup
+            // 
+            playbackBehaviorGroup.Controls.Add(differentAudioBehaviorComboBox);
+            playbackBehaviorGroup.Controls.Add(differentAudioBehaviorLabel);
+            playbackBehaviorGroup.Controls.Add(sameAudioBehaviorComboBox);
+            playbackBehaviorGroup.Controls.Add(sameAudioBehaviorLabel);
+            playbackBehaviorGroup.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
+            playbackBehaviorGroup.ForeColor = Color.FromArgb(90, 90, 90);
+            playbackBehaviorGroup.Location = new Point(6, 227);
+            playbackBehaviorGroup.Name = "playbackBehaviorGroup";
+            playbackBehaviorGroup.RightToLeft = RightToLeft.No;
+            playbackBehaviorGroup.Size = new Size(553, 70);
+            playbackBehaviorGroup.TabIndex = 13;
+            playbackBehaviorGroup.TabStop = false;
+            playbackBehaviorGroup.Text = "播放逻辑";
+            // 
+            // differentAudioBehaviorComboBox
+            // 
+            differentAudioBehaviorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            differentAudioBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            differentAudioBehaviorComboBox.FormattingEnabled = true;
+            differentAudioBehaviorComboBox.Items.AddRange(new object[] { "仅停止当前播放", "停止并播放新的音频" });
+            differentAudioBehaviorComboBox.Location = new Point(438, 26);
+            differentAudioBehaviorComboBox.Name = "differentAudioBehaviorComboBox";
+            differentAudioBehaviorComboBox.Size = new Size(105, 23);
+            differentAudioBehaviorComboBox.TabIndex = 3;
+            differentAudioBehaviorComboBox.SelectedIndexChanged += DifferentAudioBehaviorComboBox_SelectedIndexChanged;
+            // 
+            // differentAudioBehaviorLabel
+            // 
+            differentAudioBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
+            differentAudioBehaviorLabel.Location = new Point(320, 27);
+            differentAudioBehaviorLabel.Name = "differentAudioBehaviorLabel";
+            differentAudioBehaviorLabel.Size = new Size(110, 24);
+            differentAudioBehaviorLabel.TabIndex = 2;
+            differentAudioBehaviorLabel.Text = "不同音频按下时：";
+            differentAudioBehaviorLabel.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // sameAudioBehaviorComboBox
+            // 
+            sameAudioBehaviorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            sameAudioBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            sameAudioBehaviorComboBox.FormattingEnabled = true;
+            sameAudioBehaviorComboBox.Items.AddRange(new object[] { "从头重新播放", "停止当前播放" });
+            sameAudioBehaviorComboBox.Location = new Point(148, 26);
+            sameAudioBehaviorComboBox.Name = "sameAudioBehaviorComboBox";
+            sameAudioBehaviorComboBox.Size = new Size(160, 23);
+            sameAudioBehaviorComboBox.TabIndex = 1;
+            sameAudioBehaviorComboBox.SelectedIndexChanged += SameAudioBehaviorComboBox_SelectedIndexChanged;
+            // 
+            // sameAudioBehaviorLabel
+            // 
+            sameAudioBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
+            sameAudioBehaviorLabel.Location = new Point(10, 27);
+            sameAudioBehaviorLabel.Name = "sameAudioBehaviorLabel";
+            sameAudioBehaviorLabel.Size = new Size(130, 24);
+            sameAudioBehaviorLabel.TabIndex = 0;
+            sameAudioBehaviorLabel.Text = "同一音频再次按下：";
+            sameAudioBehaviorLabel.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // volume_Group
             // 
             volume_Group.Controls.Add(volume_Label3);
@@ -556,9 +716,9 @@
             volume_Group.Controls.Add(VolumeTrackBar);
             volume_Group.Controls.Add(volume_Label1);
             volume_Group.Controls.Add(VBVolumeTrackBar);
-            volume_Group.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            volume_Group.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             volume_Group.ForeColor = Color.FromArgb(90, 90, 90);
-            volume_Group.Location = new Point(6, 227);
+            volume_Group.Location = new Point(6, 303);
             volume_Group.Name = "volume_Group";
             volume_Group.RightToLeft = RightToLeft.No;
             volume_Group.Size = new Size(553, 71);
@@ -568,7 +728,7 @@
             // 
             // volume_Label3
             // 
-            volume_Label3.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            volume_Label3.Font = new Font("Microsoft JhengHei UI", 10.5F);
             volume_Label3.Location = new Point(363, 20);
             volume_Label3.Name = "volume_Label3";
             volume_Label3.Size = new Size(61, 45);
@@ -590,7 +750,7 @@
             // 
             // volume_Label2
             // 
-            volume_Label2.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            volume_Label2.Font = new Font("Microsoft JhengHei UI", 10.5F);
             volume_Label2.Location = new Point(186, 20);
             volume_Label2.Name = "volume_Label2";
             volume_Label2.Size = new Size(61, 45);
@@ -612,7 +772,7 @@
             // 
             // volume_Label1
             // 
-            volume_Label1.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            volume_Label1.Font = new Font("Microsoft JhengHei UI", 10.5F);
             volume_Label1.Location = new Point(4, 20);
             volume_Label1.Name = "volume_Label1";
             volume_Label1.Size = new Size(63, 45);
@@ -638,9 +798,9 @@
             group_Misc.Controls.Add(open_help_button2);
             group_Misc.Controls.Add(switchStreamTips);
             group_Misc.Controls.Add(audioEquipmentPlay);
-            group_Misc.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            group_Misc.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             group_Misc.ForeColor = Color.FromArgb(90, 90, 90);
-            group_Misc.Location = new Point(6, 304);
+            group_Misc.Location = new Point(6, 380);
             group_Misc.Name = "group_Misc";
             group_Misc.RightToLeft = RightToLeft.No;
             group_Misc.Size = new Size(553, 46);
@@ -648,15 +808,27 @@
             group_Misc.TabStop = false;
             group_Misc.Text = "其他设置";
             // 
+            // check_update
+            // 
+            check_update.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold);
+            check_update.Location = new Point(430, 18);
+            check_update.Name = "check_update";
+            check_update.Size = new Size(112, 22);
+            check_update.TabIndex = 23;
+            check_update.Text = "检查更新";
+            check_update.UseVisualStyleBackColor = true;
+            check_update.Click += check_update_Click;
+            // 
             // open_help_button2
             // 
-            open_help_button2.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            open_help_button2.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold);
             open_help_button2.Location = new Point(312, 18);
             open_help_button2.Name = "open_help_button2";
             open_help_button2.Size = new Size(112, 22);
             open_help_button2.TabIndex = 22;
-            open_help_button2.Text = "打开帮助";
+            open_help_button2.Text = "播放逻辑设置";
             open_help_button2.UseVisualStyleBackColor = true;
+            open_help_button2.Visible = false;
             open_help_button2.Click += open_help_button2_Click;
             // 
             // switchStreamTips
@@ -664,7 +836,7 @@
             switchStreamTips.AutoSize = true;
             switchStreamTips.Checked = true;
             switchStreamTips.CheckState = CheckState.Checked;
-            switchStreamTips.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            switchStreamTips.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             switchStreamTips.Location = new Point(167, 18);
             switchStreamTips.Name = "switchStreamTips";
             switchStreamTips.Size = new Size(139, 22);
@@ -677,7 +849,7 @@
             audioEquipmentPlay.AutoSize = true;
             audioEquipmentPlay.Checked = true;
             audioEquipmentPlay.CheckState = CheckState.Checked;
-            audioEquipmentPlay.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            audioEquipmentPlay.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             audioEquipmentPlay.Location = new Point(8, 18);
             audioEquipmentPlay.Name = "audioEquipmentPlay";
             audioEquipmentPlay.Size = new Size(153, 22);
@@ -692,7 +864,7 @@
             group_Key.Controls.Add(PlayAudio);
             group_Key.Controls.Add(label_Key1);
             group_Key.Controls.Add(ToggleStream);
-            group_Key.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            group_Key.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             group_Key.ForeColor = Color.FromArgb(90, 90, 90);
             group_Key.Location = new Point(6, 163);
             group_Key.Name = "group_Key";
@@ -705,7 +877,7 @@
             // label_Key2
             // 
             label_Key2.AutoSize = true;
-            label_Key2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_Key2.Font = new Font("Microsoft JhengHei UI", 14.25F);
             label_Key2.Location = new Point(267, 23);
             label_Key2.Name = "label_Key2";
             label_Key2.Size = new Size(124, 24);
@@ -715,7 +887,7 @@
             // PlayAudio
             // 
             PlayAudio.BorderStyle = BorderStyle.FixedSingle;
-            PlayAudio.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            PlayAudio.Font = new Font("Microsoft JhengHei UI", 10.5F);
             PlayAudio.ForeColor = Color.FromArgb(90, 90, 90);
             PlayAudio.ImeMode = ImeMode.Disable;
             PlayAudio.Location = new Point(405, 22);
@@ -727,11 +899,12 @@
             PlayAudio.TextAlign = HorizontalAlignment.Center;
             PlayAudio.KeyDown += PlayAudio_KeyDown;
             PlayAudio.KeyPress += PlayAudio_KeyPress;
+            PlayAudio.MouseDown += PlayAudio_MouseDown;
             // 
             // label_Key1
             // 
             label_Key1.AutoSize = true;
-            label_Key1.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_Key1.Font = new Font("Microsoft JhengHei UI", 14.25F);
             label_Key1.Location = new Point(8, 24);
             label_Key1.Name = "label_Key1";
             label_Key1.Size = new Size(105, 24);
@@ -741,7 +914,7 @@
             // ToggleStream
             // 
             ToggleStream.BorderStyle = BorderStyle.FixedSingle;
-            ToggleStream.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            ToggleStream.Font = new Font("Microsoft JhengHei UI", 10.5F);
             ToggleStream.ForeColor = Color.FromArgb(90, 90, 90);
             ToggleStream.ImeMode = ImeMode.Disable;
             ToggleStream.Location = new Point(126, 23);
@@ -753,9 +926,11 @@
             ToggleStream.TextAlign = HorizontalAlignment.Center;
             ToggleStream.KeyDown += ToggleStream_KeyDown;
             ToggleStream.KeyPress += ToggleStream_KeyPress;
+            ToggleStream.MouseDown += ToggleStream_MouseDown;
             // 
             // group_AudioEquipment
             // 
+            group_AudioEquipment.Controls.Add(autoSelectDevicesButton);
             group_AudioEquipment.Controls.Add(comboBox_AudioEquipmentOutput);
             group_AudioEquipment.Controls.Add(label_AudioEquipment4);
             group_AudioEquipment.Controls.Add(label_AudioEquipment1);
@@ -764,7 +939,7 @@
             group_AudioEquipment.Controls.Add(comboBox_VBAudioEquipmentOutput);
             group_AudioEquipment.Controls.Add(label_AudioEquipment3);
             group_AudioEquipment.Controls.Add(comboBox_VBAudioEquipmentInput);
-            group_AudioEquipment.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            group_AudioEquipment.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             group_AudioEquipment.ForeColor = Color.FromArgb(90, 90, 90);
             group_AudioEquipment.Location = new Point(6, 6);
             group_AudioEquipment.Name = "group_AudioEquipment";
@@ -774,10 +949,21 @@
             group_AudioEquipment.TabStop = false;
             group_AudioEquipment.Text = "音频设备";
             // 
+            // autoSelectDevicesButton
+            // 
+            autoSelectDevicesButton.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Bold);
+            autoSelectDevicesButton.Location = new Point(432, 0);
+            autoSelectDevicesButton.Name = "autoSelectDevicesButton";
+            autoSelectDevicesButton.Size = new Size(115, 22);
+            autoSelectDevicesButton.TabIndex = 8;
+            autoSelectDevicesButton.Text = "自动识别设备";
+            autoSelectDevicesButton.UseVisualStyleBackColor = true;
+            autoSelectDevicesButton.Click += autoSelectDevicesButton_Click;
+            // 
             // comboBox_AudioEquipmentOutput
             // 
             comboBox_AudioEquipmentOutput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_AudioEquipmentOutput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_AudioEquipmentOutput.Font = new Font("Microsoft JhengHei UI", 9.75F);
             comboBox_AudioEquipmentOutput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_AudioEquipmentOutput.FormattingEnabled = true;
             comboBox_AudioEquipmentOutput.Location = new Point(126, 117);
@@ -789,7 +975,7 @@
             // label_AudioEquipment4
             // 
             label_AudioEquipment4.AutoSize = true;
-            label_AudioEquipment4.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_AudioEquipment4.Font = new Font("Microsoft JhengHei UI", 14.25F);
             label_AudioEquipment4.Location = new Point(8, 117);
             label_AudioEquipment4.Name = "label_AudioEquipment4";
             label_AudioEquipment4.Size = new Size(105, 24);
@@ -799,7 +985,7 @@
             // label_AudioEquipment1
             // 
             label_AudioEquipment1.AutoSize = true;
-            label_AudioEquipment1.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_AudioEquipment1.Font = new Font("Microsoft JhengHei UI", 14.25F);
             label_AudioEquipment1.Location = new Point(8, 24);
             label_AudioEquipment1.Name = "label_AudioEquipment1";
             label_AudioEquipment1.Size = new Size(111, 24);
@@ -809,7 +995,7 @@
             // comboBox_AudioEquipmentInput
             // 
             comboBox_AudioEquipmentInput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_AudioEquipmentInput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_AudioEquipmentInput.Font = new Font("Microsoft JhengHei UI", 9.75F);
             comboBox_AudioEquipmentInput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_AudioEquipmentInput.FormattingEnabled = true;
             comboBox_AudioEquipmentInput.Location = new Point(126, 86);
@@ -821,7 +1007,7 @@
             // label_AudioEquipment2
             // 
             label_AudioEquipment2.AutoSize = true;
-            label_AudioEquipment2.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_AudioEquipment2.Font = new Font("Microsoft JhengHei UI", 14.25F);
             label_AudioEquipment2.Location = new Point(6, 55);
             label_AudioEquipment2.Name = "label_AudioEquipment2";
             label_AudioEquipment2.Size = new Size(111, 24);
@@ -831,7 +1017,7 @@
             // comboBox_VBAudioEquipmentOutput
             // 
             comboBox_VBAudioEquipmentOutput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_VBAudioEquipmentOutput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_VBAudioEquipmentOutput.Font = new Font("Microsoft JhengHei UI", 9.75F);
             comboBox_VBAudioEquipmentOutput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_VBAudioEquipmentOutput.FormattingEnabled = true;
             comboBox_VBAudioEquipmentOutput.Location = new Point(126, 55);
@@ -843,7 +1029,7 @@
             // label_AudioEquipment3
             // 
             label_AudioEquipment3.AutoSize = true;
-            label_AudioEquipment3.Font = new Font("Microsoft JhengHei UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_AudioEquipment3.Font = new Font("Microsoft JhengHei UI", 14.25F);
             label_AudioEquipment3.Location = new Point(8, 86);
             label_AudioEquipment3.Name = "label_AudioEquipment3";
             label_AudioEquipment3.Size = new Size(105, 24);
@@ -853,7 +1039,7 @@
             // comboBox_VBAudioEquipmentInput
             // 
             comboBox_VBAudioEquipmentInput.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox_VBAudioEquipmentInput.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox_VBAudioEquipmentInput.Font = new Font("Microsoft JhengHei UI", 9.75F);
             comboBox_VBAudioEquipmentInput.ForeColor = Color.FromArgb(90, 90, 90);
             comboBox_VBAudioEquipmentInput.FormattingEnabled = true;
             comboBox_VBAudioEquipmentInput.Location = new Point(126, 24);
@@ -878,7 +1064,7 @@
             // 
             // aifadian
             // 
-            aifadian.Font = new Font("Microsoft JhengHei UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
+            aifadian.Font = new Font("Microsoft JhengHei UI", 15F, FontStyle.Bold);
             aifadian.Location = new Point(6, 282);
             aifadian.Name = "aifadian";
             aifadian.Size = new Size(99, 32);
@@ -889,7 +1075,7 @@
             // 
             // imageAliPay
             // 
-            imageAliPay.Image = Properties.Resources.支付宝;
+            imageAliPay.Image = Properties.Resources.Alipay;
             imageAliPay.Location = new Point(289, 6);
             imageAliPay.Name = "imageAliPay";
             imageAliPay.Size = new Size(270, 270);
@@ -899,7 +1085,7 @@
             // 
             // imageWeChat
             // 
-            imageWeChat.Image = Properties.Resources.微信;
+            imageWeChat.Image = Properties.Resources.WeChat;
             imageWeChat.Location = new Point(6, 6);
             imageWeChat.Name = "imageWeChat";
             imageWeChat.Size = new Size(270, 270);
@@ -910,12 +1096,14 @@
             // thankTip
             // 
             thankTip.AutoSize = true;
-            thankTip.Font = new Font("Microsoft JhengHei UI", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            thankTip.Font = new Font("Microsoft JhengHei UI", 24F, FontStyle.Bold);
             thankTip.Location = new Point(179, 305);
             thankTip.Name = "thankTip";
             thankTip.Size = new Size(210, 41);
             thankTip.TabIndex = 5;
-            thankTip.Text = "感谢您的支持";
+            thankTip.Text = "感谢您的支持，打赏请写下您的名字和留言\n未来将有感谢名单页面！";
+            thankTip.RightToLeft = RightToLeft.No;
+            thankTip.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tabPage5
             // 
@@ -936,12 +1124,12 @@
             // 
             info_Group.Controls.Add(info_ListBox);
             info_Group.Controls.Add(info_Label5);
-            info_Group.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Group.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
             info_Group.ForeColor = Color.FromArgb(90, 90, 90);
             info_Group.Location = new Point(5, 172);
             info_Group.Name = "info_Group";
             info_Group.RightToLeft = RightToLeft.No;
-            info_Group.Size = new Size(557, 190);
+            info_Group.Size = new Size(557, 170);
             info_Group.TabIndex = 4;
             info_Group.TabStop = false;
             info_Group.Text = "引用许可证";
@@ -950,11 +1138,10 @@
             // 
             info_ListBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             info_ListBox.BackColor = SystemColors.Control;
-            info_ListBox.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            info_ListBox.Font = new Font("Microsoft JhengHei UI", 8.25F);
             info_ListBox.ForeColor = Color.FromArgb(90, 90, 90);
             info_ListBox.FormattingEnabled = true;
-            info_ListBox.ItemHeight = 14;
-            info_ListBox.Items.AddRange(new object[] { "NAudio", "Newtonsoft.Json", "System.Management", "taglib-sharp-netstandard2.0", "MouseKeyHook", "MediaToolkit", "HtmlAgilityPack" });
+            info_ListBox.Items.AddRange(new object[] { "NAudio", "Newtonsoft.Json", "System.Management", "taglib-sharp-netstandard2.0", "Win32Hooks", "MediaToolkit", "HtmlAgilityPack" });
             info_ListBox.Location = new Point(389, 16);
             info_ListBox.Name = "info_ListBox";
             info_ListBox.RightToLeft = RightToLeft.No;
@@ -965,12 +1152,12 @@
             // info_Label5
             // 
             info_Label5.BorderStyle = BorderStyle.FixedSingle;
-            info_Label5.Font = new Font("Microsoft JhengHei UI Light", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            info_Label5.Font = new Font("Microsoft JhengHei UI Light", 12F);
             info_Label5.ForeColor = Color.FromArgb(90, 90, 90);
             info_Label5.Location = new Point(6, 16);
             info_Label5.Name = "info_Label5";
             info_Label5.RightToLeft = RightToLeft.No;
-            info_Label5.Size = new Size(377, 157);
+            info_Label5.Size = new Size(377, 150);
             info_Label5.TabIndex = 3;
             info_Label5.Text = "MM使用了NAudio音频处理库。\r\nNAudio遵循Microsoft Public License (Ms-PL)。\r\n版权所有 (c) [NAudio] \r\n完整的许可证文本可在以下链接找到:\r\nhttps://opensource.org/licenses/MS-PL\r\n特此向NAudio及其贡献者表示感谢。";
             info_Label5.TextAlign = ContentAlignment.MiddleCenter;
@@ -978,17 +1165,17 @@
             // info_Label2
             // 
             info_Label2.AutoSize = true;
-            info_Label2.Font = new Font("Microsoft JhengHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            info_Label2.Font = new Font("Microsoft JhengHei UI", 15.75F, FontStyle.Bold);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
             info_Label2.Size = new Size(336, 26);
             info_Label2.TabIndex = 2;
-            info_Label2.Text = "版本号:1.4.0-Release+20250129";
+            info_Label2.Text = "版本号:加载中...";
             // 
             // info_Label1
             // 
             info_Label1.AutoSize = true;
-            info_Label1.Font = new Font("Microsoft JhengHei UI", 20F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            info_Label1.Font = new Font("Microsoft JhengHei UI", 20F, FontStyle.Bold | FontStyle.Italic);
             info_Label1.ForeColor = Color.FromArgb(128, 128, 255);
             info_Label1.Location = new Point(167, 6);
             info_Label1.Name = "info_Label1";
@@ -1012,20 +1199,19 @@
             // info_Label3
             // 
             info_Label3.AutoSize = true;
-            info_Label3.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            info_Label3.Font = new Font("Microsoft JhengHei UI", 10.5F);
             info_Label3.Location = new Point(172, 72);
             info_Label3.Name = "info_Label3";
             info_Label3.RightToLeft = RightToLeft.No;
             info_Label3.Size = new Size(323, 162);
             info_Label3.TabIndex = 5;
-            info_Label3.Text = "- 主版本号（Major Version）：1\r\n- 次版本号（Minor Version）：4\r\n- 修订号（Patch Version）：0\r\n- 预发布版本号（Pre-release Version）：Release\r\n- 构建号（Build Number）：20250129\r\n\r\n\r\n\r\n\r\n";
+            info_Label3.Text = "版本详情加载中...";
             // 
             // tabPage6
             // 
             tabPage6.AllowDrop = true;
             tabPage6.BackColor = SystemColors.Control;
             tabPage6.Controls.Add(open_help_button1);
-            tabPage6.Controls.Add(audioTips);
             tabPage6.Controls.Add(conversion_Group4);
             tabPage6.Controls.Add(conversion_Group3);
             tabPage6.Controls.Add(conversion_Group2);
@@ -1041,24 +1227,14 @@
             // 
             // open_help_button1
             // 
-            open_help_button1.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            open_help_button1.Location = new Point(164, 312);
+            open_help_button1.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Bold);
+            open_help_button1.Location = new Point(4, 310);
             open_help_button1.Name = "open_help_button1";
             open_help_button1.Size = new Size(159, 32);
             open_help_button1.TabIndex = 21;
             open_help_button1.Text = "打开帮助";
             open_help_button1.UseVisualStyleBackColor = true;
             open_help_button1.Click += open_help_button1_Click;
-            // 
-            // audioTips
-            // 
-            audioTips.Location = new Point(6, 312);
-            audioTips.Name = "audioTips";
-            audioTips.Size = new Size(152, 32);
-            audioTips.TabIndex = 6;
-            audioTips.Text = "关于电音";
-            audioTips.UseVisualStyleBackColor = true;
-            audioTips.Click += audioTips_Click;
             // 
             // conversion_Group4
             // 
@@ -1075,7 +1251,7 @@
             // 
             // conversion_Label5
             // 
-            conversion_Label5.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            conversion_Label5.Font = new Font("Microsoft JhengHei UI", 12F);
             conversion_Label5.Location = new Point(6, 62);
             conversion_Label5.Name = "conversion_Label5";
             conversion_Label5.Size = new Size(531, 31);
@@ -1084,7 +1260,7 @@
             // 
             // conversion_Label4
             // 
-            conversion_Label4.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            conversion_Label4.Font = new Font("Microsoft JhengHei UI", 12F);
             conversion_Label4.Location = new Point(6, 31);
             conversion_Label4.Name = "conversion_Label4";
             conversion_Label4.Size = new Size(531, 31);
@@ -1129,7 +1305,7 @@
             // 
             // convert_Button
             // 
-            convert_Button.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            convert_Button.Font = new Font("Microsoft JhengHei UI", 9.75F);
             convert_Button.Location = new Point(472, 26);
             convert_Button.Name = "convert_Button";
             convert_Button.Size = new Size(75, 28);
@@ -1150,7 +1326,7 @@
             // name_TextBox
             // 
             name_TextBox.BorderStyle = BorderStyle.FixedSingle;
-            name_TextBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            name_TextBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold);
             name_TextBox.ForeColor = Color.FromArgb(90, 90, 90);
             name_TextBox.Location = new Point(51, 26);
             name_TextBox.Name = "name_TextBox";
@@ -1168,7 +1344,7 @@
             // 
             // comboBoxOutputFormat
             // 
-            comboBoxOutputFormat.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            comboBoxOutputFormat.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold);
             comboBoxOutputFormat.ForeColor = Color.FromArgb(90, 90, 90);
             comboBoxOutputFormat.FormattingEnabled = true;
             comboBoxOutputFormat.Items.AddRange(new object[] { "mp3", "wav" });
@@ -1193,7 +1369,7 @@
             // dataPath_TextBox
             // 
             dataPath_TextBox.BorderStyle = BorderStyle.FixedSingle;
-            dataPath_TextBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            dataPath_TextBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold);
             dataPath_TextBox.ForeColor = Color.FromArgb(90, 90, 90);
             dataPath_TextBox.Location = new Point(6, 24);
             dataPath_TextBox.Name = "dataPath_TextBox";
@@ -1202,7 +1378,7 @@
             // 
             // upData_button
             // 
-            upData_button.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            upData_button.Font = new Font("Microsoft JhengHei UI", 9.75F);
             upData_button.Location = new Point(472, 24);
             upData_button.Name = "upData_button";
             upData_button.Size = new Size(75, 28);
@@ -1230,7 +1406,7 @@
             // 
             // to_mmdownloader
             // 
-            to_mmdownloader.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            to_mmdownloader.Font = new Font("Microsoft JhengHei UI", 10.5F);
             to_mmdownloader.Location = new Point(436, 71);
             to_mmdownloader.Name = "to_mmdownloader";
             to_mmdownloader.Size = new Size(123, 110);
@@ -1242,9 +1418,9 @@
             // 
             AudioListView_fd.AllowDrop = true;
             AudioListView_fd.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader5 });
-            AudioListView_fd.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            AudioListView_fd.Font = new Font("Microsoft JhengHei UI", 9.75F);
             AudioListView_fd.ForeColor = SystemColors.WindowFrame;
-            AudioListView_fd.HideSelection = true;
+            AudioListView_fd.FullRowSelect = true;
             AudioListView_fd.Location = new Point(6, 37);
             AudioListView_fd.Name = "AudioListView_fd";
             AudioListView_fd.RightToLeft = RightToLeft.No;
@@ -1271,7 +1447,7 @@
             // numberLabel
             // 
             numberLabel.AutoSize = true;
-            numberLabel.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            numberLabel.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Bold);
             numberLabel.Location = new Point(436, 184);
             numberLabel.Name = "numberLabel";
             numberLabel.RightToLeft = RightToLeft.No;
@@ -1281,7 +1457,7 @@
             // 
             // DownloadSelected
             // 
-            DownloadSelected.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            DownloadSelected.Font = new Font("Microsoft JhengHei UI", 10.5F);
             DownloadSelected.Location = new Point(436, 37);
             DownloadSelected.Name = "DownloadSelected";
             DownloadSelected.Size = new Size(123, 28);
@@ -1293,7 +1469,7 @@
             // SearchBarTextBox
             // 
             SearchBarTextBox.BorderStyle = BorderStyle.FixedSingle;
-            SearchBarTextBox.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold, GraphicsUnit.Point);
+            SearchBarTextBox.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             SearchBarTextBox.ForeColor = Color.FromArgb(90, 90, 90);
             SearchBarTextBox.Location = new Point(6, 6);
             SearchBarTextBox.Name = "SearchBarTextBox";
@@ -1308,10 +1484,9 @@
             // 
             // DownloadLinkListBox
             // 
-            DownloadLinkListBox.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            DownloadLinkListBox.Font = new Font("Microsoft JhengHei UI", 8.25F);
             DownloadLinkListBox.ForeColor = Color.FromArgb(90, 90, 90);
             DownloadLinkListBox.FormattingEnabled = true;
-            DownloadLinkListBox.ItemHeight = 14;
             DownloadLinkListBox.Location = new Point(436, 247);
             DownloadLinkListBox.Name = "DownloadLinkListBox";
             DownloadLinkListBox.RightToLeft = RightToLeft.No;
@@ -1322,7 +1497,7 @@
             // 
             // LoadList
             // 
-            LoadList.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            LoadList.Font = new Font("Microsoft JhengHei UI", 10.5F);
             LoadList.Location = new Point(436, 6);
             LoadList.Name = "LoadList";
             LoadList.Size = new Size(123, 28);
@@ -1372,7 +1547,7 @@
             // PluginServerAddress
             // 
             PluginServerAddress.AutoSize = true;
-            PluginServerAddress.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            PluginServerAddress.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Bold);
             PluginServerAddress.Location = new Point(6, 298);
             PluginServerAddress.Name = "PluginServerAddress";
             PluginServerAddress.Size = new Size(0, 20);
@@ -1413,8 +1588,9 @@
             pluginListView.AllowDrop = true;
             pluginListView.Columns.AddRange(new ColumnHeader[] { PluginName, PluginAuthor, PluginVer });
             pluginListView.Enabled = false;
-            pluginListView.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            pluginListView.Font = new Font("Microsoft JhengHei UI", 10.5F);
             pluginListView.ForeColor = SystemColors.WindowFrame;
+            pluginListView.FullRowSelect = true;
             pluginListView.Location = new Point(6, 6);
             pluginListView.MultiSelect = false;
             pluginListView.Name = "pluginListView";
@@ -1474,7 +1650,7 @@
             // FeedbackContent
             // 
             FeedbackContent.BorderStyle = BorderStyle.FixedSingle;
-            FeedbackContent.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackContent.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             FeedbackContent.ForeColor = Color.FromArgb(90, 90, 90);
             FeedbackContent.Location = new Point(59, 41);
             FeedbackContent.Multiline = true;
@@ -1540,7 +1716,7 @@
             // Contact
             // 
             Contact.BorderStyle = BorderStyle.FixedSingle;
-            Contact.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            Contact.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             Contact.ForeColor = Color.FromArgb(90, 90, 90);
             Contact.Location = new Point(59, 233);
             Contact.Name = "Contact";
@@ -1550,7 +1726,7 @@
             // 
             // FeedbackTips3
             // 
-            FeedbackTips3.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            FeedbackTips3.Font = new Font("Microsoft JhengHei UI", 12F);
             FeedbackTips3.Location = new Point(9, 228);
             FeedbackTips3.Name = "FeedbackTips3";
             FeedbackTips3.RightToLeft = RightToLeft.No;
@@ -1570,7 +1746,7 @@
             // FeedbackTitle
             // 
             FeedbackTitle.BorderStyle = BorderStyle.FixedSingle;
-            FeedbackTitle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            FeedbackTitle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             FeedbackTitle.ForeColor = Color.FromArgb(90, 90, 90);
             FeedbackTitle.Location = new Point(59, 7);
             FeedbackTitle.Name = "FeedbackTitle";
@@ -1590,12 +1766,12 @@
             // mainGroupBox
             // 
             mainGroupBox.Controls.Add(mainTabControl);
-            mainGroupBox.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            mainGroupBox.Font = new Font("Microsoft JhengHei UI", 12F);
             mainGroupBox.ForeColor = Color.FromArgb(90, 90, 90);
             mainGroupBox.Location = new Point(105, 4);
             mainGroupBox.Name = "mainGroupBox";
             mainGroupBox.RightToLeft = RightToLeft.Yes;
-            mainGroupBox.Size = new Size(577, 391);
+            mainGroupBox.Size = new Size(683, 484);
             mainGroupBox.TabIndex = 2;
             mainGroupBox.TabStop = false;
             mainGroupBox.Text = "主页";
@@ -1605,86 +1781,76 @@
             groupBox1.Controls.Add(sideLists);
             groupBox1.Location = new Point(12, 6);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(87, 389);
+            groupBox1.Size = new Size(95, 389);
             groupBox1.TabIndex = 3;
             groupBox1.TabStop = false;
             // 
             // mainContextMenuStrip
             // 
-            mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { 播放ToolStripMenuItem, 停止播放ToolStripMenuItem, 删除ToolStripMenuItem, 重命名ToolStripMenuItem, 设为播放项ToolStripMenuItem, 打开文件所在位置ToolStripMenuItem, 绑定按键ToolStripMenuItem });
+            mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { playSelectedMenuItem, stopPlaybackMenuItem, deleteSelectedMenuItem, renameSelectedMenuItem, setAsPlaybackItemMenuItem, openFileLocationMenuItem, bindKeyMenuItem });
             mainContextMenuStrip.Name = "mainContextMenuStrip";
             mainContextMenuStrip.Size = new Size(173, 158);
             // 
-            // 播放ToolStripMenuItem
+            // playSelectedMenuItem
             // 
-            播放ToolStripMenuItem.Name = "播放ToolStripMenuItem";
-            播放ToolStripMenuItem.Size = new Size(172, 22);
-            播放ToolStripMenuItem.Text = "播放选择项";
-            播放ToolStripMenuItem.Click += 播放ToolStripMenuItem_Click;
+            playSelectedMenuItem.Name = "playSelectedMenuItem";
+            playSelectedMenuItem.Size = new Size(172, 22);
+            playSelectedMenuItem.Text = "播放选择项";
+            playSelectedMenuItem.Click += PlaySelectedMenuItem_Click;
             // 
-            // 停止播放ToolStripMenuItem
+            // stopPlaybackMenuItem
             // 
-            停止播放ToolStripMenuItem.Name = "停止播放ToolStripMenuItem";
-            停止播放ToolStripMenuItem.Size = new Size(172, 22);
-            停止播放ToolStripMenuItem.Text = "停止播放";
-            停止播放ToolStripMenuItem.Click += 停止播放ToolStripMenuItem_Click;
+            stopPlaybackMenuItem.Name = "stopPlaybackMenuItem";
+            stopPlaybackMenuItem.Size = new Size(172, 22);
+            stopPlaybackMenuItem.Text = "停止播放";
+            stopPlaybackMenuItem.Click += StopPlaybackMenuItem_Click;
             // 
-            // 删除ToolStripMenuItem
+            // deleteSelectedMenuItem
             // 
-            删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            删除ToolStripMenuItem.Size = new Size(172, 22);
-            删除ToolStripMenuItem.Text = "删除选择项";
-            删除ToolStripMenuItem.Click += 删除ToolStripMenuItem_Click;
+            deleteSelectedMenuItem.Name = "deleteSelectedMenuItem";
+            deleteSelectedMenuItem.Size = new Size(172, 22);
+            deleteSelectedMenuItem.Text = "删除选择项";
+            deleteSelectedMenuItem.Click += DeleteSelectedMenuItem_Click;
             // 
-            // 重命名ToolStripMenuItem
+            // renameSelectedMenuItem
             // 
-            重命名ToolStripMenuItem.Name = "重命名ToolStripMenuItem";
-            重命名ToolStripMenuItem.Size = new Size(172, 22);
-            重命名ToolStripMenuItem.Text = "重命名选择项";
-            重命名ToolStripMenuItem.Click += 重命名ToolStripMenuItem_Click;
+            renameSelectedMenuItem.Name = "renameSelectedMenuItem";
+            renameSelectedMenuItem.Size = new Size(172, 22);
+            renameSelectedMenuItem.Text = "重命名选择项";
+            renameSelectedMenuItem.Click += RenameSelectedMenuItem_Click;
             // 
-            // 设为播放项ToolStripMenuItem
+            // setAsPlaybackItemMenuItem
             // 
-            设为播放项ToolStripMenuItem.Name = "设为播放项ToolStripMenuItem";
-            设为播放项ToolStripMenuItem.Size = new Size(172, 22);
-            设为播放项ToolStripMenuItem.Text = "设为播放项";
-            设为播放项ToolStripMenuItem.Click += 设为播放项ToolStripMenuItem_Click;
+            setAsPlaybackItemMenuItem.Name = "setAsPlaybackItemMenuItem";
+            setAsPlaybackItemMenuItem.Size = new Size(172, 22);
+            setAsPlaybackItemMenuItem.Text = "设为播放项";
+            setAsPlaybackItemMenuItem.Click += SetAsPlaybackItemMenuItem_Click;
             // 
-            // 打开文件所在位置ToolStripMenuItem
+            // openFileLocationMenuItem
             // 
-            打开文件所在位置ToolStripMenuItem.Name = "打开文件所在位置ToolStripMenuItem";
-            打开文件所在位置ToolStripMenuItem.Size = new Size(172, 22);
-            打开文件所在位置ToolStripMenuItem.Text = "打开文件所在位置";
-            打开文件所在位置ToolStripMenuItem.Click += 打开文件所在位置ToolStripMenuItem_Click;
+            openFileLocationMenuItem.Name = "openFileLocationMenuItem";
+            openFileLocationMenuItem.Size = new Size(172, 22);
+            openFileLocationMenuItem.Text = "打开文件所在位置";
+            openFileLocationMenuItem.Click += OpenFileLocationMenuItem_Click;
             // 
-            // 绑定按键ToolStripMenuItem
+            // bindKeyMenuItem
             // 
-            绑定按键ToolStripMenuItem.Name = "绑定按键ToolStripMenuItem";
-            绑定按键ToolStripMenuItem.Size = new Size(172, 22);
-            绑定按键ToolStripMenuItem.Text = "绑定按键";
-            绑定按键ToolStripMenuItem.Click += 绑定按键ToolStripMenuItem_Click;
-            // 
-            // check_update
-            // 
-            check_update.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            check_update.Location = new Point(430, 18);
-            check_update.Name = "check_update";
-            check_update.Size = new Size(112, 22);
-            check_update.TabIndex = 23;
-            check_update.Text = "检查更新";
-            check_update.UseVisualStyleBackColor = true;
-            check_update.Click += check_update_Click;
+            bindKeyMenuItem.Name = "bindKeyMenuItem";
+            bindKeyMenuItem.Size = new Size(172, 22);
+            bindKeyMenuItem.Text = "绑定按键";
+            bindKeyMenuItem.Click += BindKeyMenuItem_Click;
             // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 407);
+            ClientSize = new Size(800, 500);
             Controls.Add(groupBox1);
             Controls.Add(mainGroupBox);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(800, 500);
             Name = "MainWindow";
             FormClosing += MainWindow_FormClosing;
             Load += MainWindow_Load;
@@ -1692,8 +1858,10 @@
             tabPage2.PerformLayout();
             tabPage1.ResumeLayout(false);
             tips_Group1.ResumeLayout(false);
+            tips_Group1.PerformLayout();
             mainTabControl.ResumeLayout(false);
             tabPage3.ResumeLayout(false);
+            playbackBehaviorGroup.ResumeLayout(false);
             volume_Group.ResumeLayout(false);
             volume_Group.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)TipsVolumeTrackBar).EndInit();
@@ -1740,6 +1908,11 @@
         private GroupBox mainGroupBox;
         private Button retestVB;
         private TabPage tabPage3;
+        private GroupBox playbackBehaviorGroup;
+        private Label sameAudioBehaviorLabel;
+        private ComboBox sameAudioBehaviorComboBox;
+        private Label differentAudioBehaviorLabel;
+        private ComboBox differentAudioBehaviorComboBox;
         private TabPage tabPage4;
         private TabPage tabPage5;
         private GroupBox groupBox1;
@@ -1757,10 +1930,15 @@
         private ColumnHeader AudioTrack;
         private ColumnHeader AudioType;
         private Button reLoadAudioListsView;
+        private Label audioSearchLabel;
+        private TextBox audioSearchTextBox;
+        private Label audioPageStatusLabel;
+        private Button audioPrevPageButton;
+        private Button audioNextPageButton;
         private ContextMenuStrip mainContextMenuStrip;
-        private ToolStripMenuItem 播放ToolStripMenuItem;
-        private ToolStripMenuItem 删除ToolStripMenuItem;
-        private ToolStripMenuItem 重命名ToolStripMenuItem;
+        private ToolStripMenuItem playSelectedMenuItem;
+        private ToolStripMenuItem deleteSelectedMenuItem;
+        private ToolStripMenuItem renameSelectedMenuItem;
         private TextBox ToggleStream;
         private GroupBox group_Key;
         private Label label_Key2;
@@ -1774,7 +1952,7 @@
         private Label info_Label2;
         private ListBox info_ListBox;
         private Label info_Label3;
-        private ToolStripMenuItem 设为播放项ToolStripMenuItem;
+        private ToolStripMenuItem setAsPlaybackItemMenuItem;
         private Label SelectedAudioLabel;
         private Button aifadian;
         private GroupBox tips_Group1;
@@ -1785,10 +1963,8 @@
         private Button toSettings;
         private Label tips_Label4;
         private Label tips_Label3;
-        private ToolStripMenuItem 打开文件所在位置ToolStripMenuItem;
+        private ToolStripMenuItem openFileLocationMenuItem;
         private CheckBox switchStreamTips;
-        private Label Languagelabel;
-        private ComboBox languageComboBox;
         private GroupBox volume_Group;
         private TrackBar VBVolumeTrackBar;
         private Label volume_Label2;
@@ -1810,7 +1986,7 @@
         private GroupBox conversion_Group3;
         private Label conversion_Label3;
         private Button mToAudioData1;
-        private ToolStripMenuItem 停止播放ToolStripMenuItem;
+        private ToolStripMenuItem stopPlaybackMenuItem;
         private TabPage tabPage7;
         private Button LoadList;
         private ListBox DownloadLinkListBox;
@@ -1833,9 +2009,8 @@
         private Label conversion_Label5;
         private Button toC;
         private Label tips_Label5;
-        private Button audioTips;
         private ColumnHeader AudioBindKey;
-        private ToolStripMenuItem 绑定按键ToolStripMenuItem;
+        private ToolStripMenuItem bindKeyMenuItem;
         private TabPage tabPage10;
         private Button FeedbackTipsButton;
         private TextBox FeedbackContent;
@@ -1866,5 +2041,846 @@
         private Button open_help_button1;
         private Button open_help_button2;
         private Button check_update;
+        private CheckBox restoreDefaultsAfterInstallCheckBox;
+        private Button autoSelectDevicesButton;
     }
 }
+
+
+
+namespace MusicalMoments
+{
+    public partial class MainWindow
+    {
+        private static readonly Size LegacyMinimumWindowSize = new Size(800, 500);
+        private static readonly Size ExpandedDefaultWindowSize = new Size(940, 560);
+
+        private void InitializeResponsiveLayout()
+        {
+            FormBorderStyle = FormBorderStyle.Sizable;
+            MaximizeBox = true;
+            MinimumSize = LegacyMinimumWindowSize;
+            if (Size.Width <= LegacyMinimumWindowSize.Width + 8 && Size.Height <= LegacyMinimumWindowSize.Height + 30)
+            {
+                Size = ExpandedDefaultWindowSize;
+            }
+
+            ConfigureMainContainerLayout();
+            ConfigureHomeTabLayout();
+            ConfigureAudioTabLayout();
+            ConfigureSettingsTabLayout();
+            ConfigureDonateTabLayout();
+            ConfigureAboutTabLayout();
+            ConfigureConversionTabLayout();
+            ConfigureDiscoverTabLayout();
+            ConfigurePluginTabLayout();
+            ConfigureFeedbackTabLayout();
+
+            BindResponsiveEvents();
+            ApplyResponsiveLayoutNow();
+        }
+
+        private void ConfigureMainContainerLayout()
+        {
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            sideLists.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            mainGroupBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            mainTabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        }
+
+        private void ConfigureHomeTabLayout()
+        {
+            tips_Group1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            tips_Label1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tips_Label2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tips_Label3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tips_Label4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tips_Label5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            label_VBStatus.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            audio_page_tips.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            help_tip.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            toVB.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            toSettings.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            mToAudioData.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            toC.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            retestVB.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            to_audio_page.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            open_help_window.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        }
+
+        private void ConfigureAudioTabLayout()
+        {
+            audioListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            SelectedAudioLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            reLoadAudioListsView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            mToAudioData1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        }
+
+        private void ConfigureSettingsTabLayout()
+        {
+            group_AudioEquipment.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            group_Key.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            if (playbackBehaviorGroup != null)
+            {
+                playbackBehaviorGroup.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            }
+            volume_Group.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            group_Misc.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            comboBox_VBAudioEquipmentInput.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            comboBox_VBAudioEquipmentOutput.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            comboBox_AudioEquipmentInput.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            comboBox_AudioEquipmentOutput.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            label_Key1.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            ToggleStream.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            label_Key2.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            PlayAudio.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+            audioEquipmentPlay.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            switchStreamTips.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            open_help_button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            check_update.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+
+            volume_Label1.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            VBVolumeTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            volume_Label2.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            VolumeTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            volume_Label3.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            TipsVolumeTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+        }
+
+        private void ConfigureDonateTabLayout()
+        {
+            imageWeChat.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            imageAliPay.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            thankTip.Anchor = AnchorStyles.Top;
+            aifadian.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+        }
+
+        private void ConfigureAboutTabLayout()
+        {
+            LogoImage.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            info_Label1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            info_Label2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            info_Label3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            info_Group.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            info_Label5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            info_ListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+        }
+
+        private void ConfigureConversionTabLayout()
+        {
+            conversion_Group1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            conversion_Group2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            conversion_Group3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            conversion_Group4.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            dataPath_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            upData_button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+
+            name_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            conversion_Label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            comboBoxOutputFormat.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            convert_Button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+
+            open_help_button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+        }
+
+        private void ConfigureDiscoverTabLayout()
+        {
+            SearchBarTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            AudioListView_fd.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            LoadList.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            DownloadSelected.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            to_mmdownloader.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            numberLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            DownloadLinkListBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        }
+
+        private void ConfigurePluginTabLayout()
+        {
+            pluginListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            PluginStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            PluginServerAddress.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            reLoadPluginListsView.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            LoadPlugin.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            TogglePluginServer.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            mToPluginData.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        }
+
+        private void ConfigureFeedbackTabLayout()
+        {
+            FeedbackTips1.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            FeedbackTips2.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            FeedbackTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            FeedbackContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            FeedbackTips3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            Contact.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            FeedbackUrgent.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            FeedbackAverage.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            FeedbackDisaster.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            FeedbackTips4.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            FeedbackTipsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            FeedbackButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        }
+
+        private void BindResponsiveEvents()
+        {
+            Resize += (_, _) => UpdateMainContainerLayout();
+            tips_Group1.Resize += (_, _) => UpdateGuideLayout();
+            audioListView.Resize += (_, _) => UpdateAudioListViewColumns();
+            group_Key.Resize += (_, _) => UpdateKeyBindingLayout();
+            group_AudioEquipment.Resize += (_, _) => UpdateAudioEquipmentActionLayout();
+            volume_Group.Resize += (_, _) => UpdateVolumeGroupLayout();
+            group_Misc.Resize += (_, _) => UpdateMiscGroupLayout();
+            conversion_Group1.Resize += (_, _) => UpdateConversionImportLayout();
+            conversion_Group2.Resize += (_, _) => UpdateConversionFormatLayout();
+            AudioListView_fd.Resize += (_, _) => UpdateDiscoverListViewColumns();
+            pluginListView.Resize += (_, _) => UpdatePluginListViewColumns();
+            sideLists.Resize += (_, _) => UpdateSideNavigationLayout();
+            tabPage4.Resize += (_, _) => UpdateDonateTabLayout();
+            tabPage3.Resize += (_, _) => ReflowSettingsPanels();
+        }
+
+        private void ApplyResponsiveLayoutNow()
+        {
+            UpdateMainContainerLayout();
+            UpdateGuideLayout();
+            UpdateAudioListViewColumns();
+            UpdateKeyBindingLayout();
+            UpdateAudioEquipmentActionLayout();
+            UpdateVolumeGroupLayout();
+            UpdateMiscGroupLayout();
+            UpdateConversionImportLayout();
+            UpdateConversionFormatLayout();
+            UpdateDiscoverListViewColumns();
+            UpdatePluginListViewColumns();
+            UpdateSideNavigationLayout();
+            UpdateDonateTabLayout();
+            ReflowSettingsPanels();
+        }
+
+        private void UpdateMainContainerLayout()
+        {
+            int totalWidth = ClientSize.Width;
+            int totalHeight = ClientSize.Height;
+            if (totalWidth <= 0 || totalHeight <= 0)
+            {
+                return;
+            }
+
+            int sideMargin = 12;
+            int topMargin = 6;
+            int bottomMargin = 12;
+            int sideBarWidth = 95;
+            int gap = 6;
+
+            groupBox1.Location = new Point(sideMargin, topMargin);
+            groupBox1.Size = new Size(sideBarWidth, Math.Max(300, totalHeight - topMargin - bottomMargin));
+
+            mainGroupBox.Location = new Point(groupBox1.Right + gap, 4);
+            mainGroupBox.Size = new Size(Math.Max(420, totalWidth - mainGroupBox.Left - sideMargin), Math.Max(300, totalHeight - 16));
+            UpdateSideNavigationLayout();
+        }
+
+        private void UpdateSideNavigationLayout()
+        {
+            if (sideLists == null || sideLists.IsDisposed || sideLists.Items.Count == 0)
+            {
+                return;
+            }
+
+            int itemCount = sideLists.Items.Count;
+            int availableHeight = Math.Max(1, sideLists.ClientSize.Height);
+            int preferredRowHeight = availableHeight / itemCount;
+            int rowHeight = Math.Clamp(preferredRowHeight, 36, 48);
+            int rowWidth = Math.Max(48, sideLists.ClientSize.Width - 2);
+
+            if (sideLists.TileSize.Width != rowWidth || sideLists.TileSize.Height != rowHeight)
+            {
+                sideLists.TileSize = new Size(rowWidth, rowHeight);
+            }
+        }
+
+        private void UpdateGuideLayout()
+        {
+            int rightPadding = 10;
+            int leftPadding = 6;
+            int buttonWidth = 122;
+            int rightButtonLeft = Math.Max(300, tips_Group1.ClientSize.Width - buttonWidth - rightPadding);
+            int textWidth = Math.Max(200, rightButtonLeft - leftPadding - 6);
+
+            tips_Label1.Width = textWidth;
+            tips_Label2.Width = textWidth;
+            tips_Label3.Width = textWidth;
+            tips_Label4.Width = textWidth;
+            tips_Label5.Width = textWidth;
+            label_VBStatus.Width = textWidth;
+            audio_page_tips.Width = textWidth;
+            help_tip.Width = textWidth;
+
+            toVB.Left = rightButtonLeft;
+            toSettings.Left = rightButtonLeft;
+            mToAudioData.Left = rightButtonLeft;
+            toC.Left = rightButtonLeft;
+            retestVB.Left = rightButtonLeft;
+            to_audio_page.Left = rightButtonLeft;
+            open_help_window.Left = rightButtonLeft;
+
+            if (restoreDefaultsAfterInstallCheckBox != null)
+            {
+                restoreDefaultsAfterInstallCheckBox.Left = Math.Max(250, rightButtonLeft - restoreDefaultsAfterInstallCheckBox.Width - 8);
+            }
+
+            // Keep action buttons above guide labels so clicks are never blocked.
+            toVB.BringToFront();
+            toSettings.BringToFront();
+            mToAudioData.BringToFront();
+            toC.BringToFront();
+            retestVB.BringToFront();
+            to_audio_page.BringToFront();
+            open_help_window.BringToFront();
+        }
+
+        private static int GetAvailableListWidth(ListView listView)
+        {
+            return Math.Max(220, listView.ClientSize.Width - 4);
+        }
+
+        private void UpdateAudioListViewColumns()
+        {
+            if (audioListView.Columns.Count != 4)
+            {
+                return;
+            }
+
+            int width = GetAvailableListWidth(audioListView);
+            int nameWidth = (int)(width * 0.45);
+            int trackWidth = (int)(width * 0.22);
+            int typeWidth = (int)(width * 0.14);
+            int keyWidth = Math.Max(80, width - nameWidth - trackWidth - typeWidth);
+
+            AudioName.Width = nameWidth;
+            AudioTrack.Width = trackWidth;
+            AudioType.Width = typeWidth;
+            AudioBindKey.Width = keyWidth;
+        }
+
+        private void UpdateKeyBindingLayout()
+        {
+            int leftMargin = 8;
+            int gap = 8;
+
+            ToggleStream.Left = 126;
+            int rightSectionLeft = ToggleStream.Right + 20;
+            label_Key2.Left = rightSectionLeft;
+            PlayAudio.Left = label_Key2.Right + gap;
+
+            int rightBoundary = group_Key.ClientSize.Width - 12;
+            if (PlayAudio.Right > rightBoundary)
+            {
+                PlayAudio.Width = Math.Max(90, rightBoundary - PlayAudio.Left);
+            }
+
+            if (ToggleStream.Right >= label_Key2.Left - gap)
+            {
+                label_Key2.Left = ToggleStream.Right + gap;
+                PlayAudio.Left = label_Key2.Right + gap;
+            }
+
+            label_Key1.Left = leftMargin;
+        }
+
+        private void UpdateAudioEquipmentActionLayout()
+        {
+            if (autoSelectDevicesButton == null)
+            {
+                return;
+            }
+
+            autoSelectDevicesButton.Left = Math.Max(8, group_AudioEquipment.ClientSize.Width - autoSelectDevicesButton.Width - 8);
+            autoSelectDevicesButton.Top = 1;
+        }
+
+        private void UpdateVolumeGroupLayout()
+        {
+            int contentWidth = volume_Group.ClientSize.Width - 12;
+            if (contentWidth <= 0)
+            {
+                return;
+            }
+
+            const int sectionGap = 8;
+            const int labelWidth = 70;
+            int sectionWidth = Math.Max(140, (contentWidth - sectionGap * 2) / 3);
+
+            int x1 = 6;
+            int x2 = x1 + sectionWidth + sectionGap;
+            int x3 = x2 + sectionWidth + sectionGap;
+
+            LayoutVolumeSection(volume_Label1, VBVolumeTrackBar, x1, sectionWidth, labelWidth);
+            LayoutVolumeSection(volume_Label2, VolumeTrackBar, x2, sectionWidth, labelWidth);
+            LayoutVolumeSection(volume_Label3, TipsVolumeTrackBar, x3, sectionWidth, labelWidth);
+        }
+
+        private static void LayoutVolumeSection(Label label, TrackBar trackBar, int sectionLeft, int sectionWidth, int labelWidth)
+        {
+            label.Left = sectionLeft;
+            label.Width = labelWidth;
+
+            trackBar.Left = label.Right + 4;
+            trackBar.Width = Math.Max(72, sectionWidth - labelWidth - 4);
+        }
+
+        private void UpdateMiscGroupLayout()
+        {
+            int rightPadding = 8;
+            int gap = 6;
+
+            check_update.Left = group_Misc.ClientSize.Width - check_update.Width - rightPadding;
+            open_help_button2.Left = check_update.Left - open_help_button2.Width - gap;
+        }
+
+        private void UpdateConversionImportLayout()
+        {
+            int rightPadding = 6;
+            int gap = 6;
+            upData_button.Left = conversion_Group1.ClientSize.Width - upData_button.Width - rightPadding;
+            dataPath_TextBox.Width = Math.Max(140, upData_button.Left - dataPath_TextBox.Left - gap);
+        }
+
+        private void UpdateConversionFormatLayout()
+        {
+            int rightPadding = 6;
+            int gap = 6;
+
+            convert_Button.Left = conversion_Group2.ClientSize.Width - convert_Button.Width - rightPadding;
+            comboBoxOutputFormat.Left = convert_Button.Left - comboBoxOutputFormat.Width - gap;
+            conversion_Label2.Left = comboBoxOutputFormat.Left - conversion_Label2.Width - gap;
+            name_TextBox.Width = Math.Max(120, conversion_Label2.Left - name_TextBox.Left - gap);
+        }
+
+        private void UpdateDiscoverListViewColumns()
+        {
+            if (AudioListView_fd.Columns.Count != 3)
+            {
+                return;
+            }
+
+            int width = GetAvailableListWidth(AudioListView_fd);
+            int nameWidth = (int)(width * 0.62);
+            int countWidth = (int)(width * 0.18);
+            int authorWidth = Math.Max(80, width - nameWidth - countWidth);
+
+            columnHeader1.Width = nameWidth;
+            columnHeader2.Width = countWidth;
+            columnHeader5.Width = authorWidth;
+        }
+
+        private void UpdatePluginListViewColumns()
+        {
+            if (pluginListView.Columns.Count != 3)
+            {
+                return;
+            }
+
+            int width = GetAvailableListWidth(pluginListView);
+            int nameWidth = (int)(width * 0.32);
+            int descriptionWidth = (int)(width * 0.48);
+            int versionWidth = Math.Max(80, width - nameWidth - descriptionWidth);
+
+            PluginName.Width = nameWidth;
+            PluginAuthor.Width = descriptionWidth;
+            PluginVer.Width = versionWidth;
+        }
+
+        private void UpdateDonateTabLayout()
+        {
+            int margin = 6;
+            int gap = 12;
+            int availableWidth = tabPage4.ClientSize.Width - margin * 2;
+            int qrSize = Math.Min(270, Math.Max(140, (availableWidth - gap) / 2));
+            int totalWidth = qrSize * 2 + gap;
+            int startX = Math.Max(margin, (tabPage4.ClientSize.Width - totalWidth) / 2);
+
+            imageWeChat.Location = new Point(startX, 6);
+            imageWeChat.Size = new Size(qrSize, qrSize);
+            imageAliPay.Location = new Point(imageWeChat.Right + gap, 6);
+            imageAliPay.Size = new Size(qrSize, qrSize);
+
+            thankTip.Left = Math.Max(6, (tabPage4.ClientSize.Width - thankTip.Width) / 2);
+            thankTip.Top = imageWeChat.Bottom + 8;
+        }
+    }
+}
+
+
+
+namespace MusicalMoments
+{
+    public partial class MainWindow
+    {
+        private bool updatingPlaybackBehaviorUi;
+
+        private void SameAudioBehaviorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (updatingPlaybackBehaviorUi)
+            {
+                return;
+            }
+
+            sameAudioPressBehavior = sameAudioBehaviorComboBox.SelectedIndex == 1
+                ? SameAudioPressBehavior.StopPlayback
+                : SameAudioPressBehavior.RestartFromBeginning;
+        }
+
+        private void DifferentAudioBehaviorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (updatingPlaybackBehaviorUi)
+            {
+                return;
+            }
+
+            differentAudioInterruptBehavior = differentAudioBehaviorComboBox.SelectedIndex == 0
+                ? DifferentAudioInterruptBehavior.StopOnly
+                : DifferentAudioInterruptBehavior.StopAndPlayNew;
+        }
+
+        private void UpdatePlaybackBehaviorToolTip()
+        {
+            if (sameAudioBehaviorComboBox == null || differentAudioBehaviorComboBox == null)
+            {
+                return;
+            }
+
+            updatingPlaybackBehaviorUi = true;
+            try
+            {
+                sameAudioBehaviorComboBox.SelectedIndex = sameAudioPressBehavior == SameAudioPressBehavior.StopPlayback ? 1 : 0;
+                differentAudioBehaviorComboBox.SelectedIndex = differentAudioInterruptBehavior == DifferentAudioInterruptBehavior.StopOnly ? 0 : 1;
+            }
+            finally
+            {
+                updatingPlaybackBehaviorUi = false;
+            }
+        }
+
+        private void ReflowSettingsPanels()
+        {
+            if (tabPage3 == null
+                || group_AudioEquipment == null
+                || group_Key == null
+                || playbackBehaviorGroup == null
+                || volume_Group == null
+                || group_Misc == null)
+            {
+                return;
+            }
+
+            const int margin = 6;
+            const int gap = 6;
+
+            int contentWidth = Math.Max(260, tabPage3.ClientSize.Width - margin * 2);
+
+            group_AudioEquipment.Left = margin;
+            group_AudioEquipment.Top = margin;
+            group_AudioEquipment.Width = contentWidth;
+
+            group_Key.Left = margin;
+            group_Key.Top = group_AudioEquipment.Bottom + gap;
+            group_Key.Width = contentWidth;
+
+            playbackBehaviorGroup.Left = margin;
+            playbackBehaviorGroup.Top = group_Key.Bottom + gap;
+            playbackBehaviorGroup.Width = contentWidth;
+
+            volume_Group.Left = margin;
+            volume_Group.Top = playbackBehaviorGroup.Bottom + gap;
+            volume_Group.Width = contentWidth;
+
+            group_Misc.Left = margin;
+            group_Misc.Top = volume_Group.Bottom + gap;
+            group_Misc.Width = contentWidth;
+
+            int minHeight = group_Misc.Bottom + margin;
+            tabPage3.AutoScrollMinSize = new Size(0, minHeight);
+
+            LayoutPlaybackBehaviorControls();
+            UpdateVolumeGroupLayout();
+            UpdateMiscGroupLayout();
+            UpdateAudioEquipmentActionLayout();
+        }
+
+        private void LayoutPlaybackBehaviorControls()
+        {
+            if (playbackBehaviorGroup == null
+                || sameAudioBehaviorLabel == null
+                || sameAudioBehaviorComboBox == null
+                || differentAudioBehaviorLabel == null
+                || differentAudioBehaviorComboBox == null)
+            {
+                return;
+            }
+
+            const int left = 10;
+            const int top = 27;
+            const int gap = 8;
+
+            int totalWidth = Math.Max(280, playbackBehaviorGroup.ClientSize.Width - left * 2);
+            int halfWidth = totalWidth / 2;
+            int comboMinWidth = 120;
+
+            int sameLabelWidth = 130;
+            int sameComboWidth = Math.Max(comboMinWidth, halfWidth - sameLabelWidth - gap);
+            int sameSectionWidth = sameLabelWidth + gap + sameComboWidth;
+
+            sameAudioBehaviorLabel.SetBounds(left, top, sameLabelWidth, 24);
+            sameAudioBehaviorComboBox.SetBounds(sameAudioBehaviorLabel.Right + gap, top - 1, sameComboWidth, 26);
+
+            int secondLeft = left + sameSectionWidth + 12;
+            int secondAvailable = totalWidth - sameSectionWidth - 12;
+            int diffLabelWidth = 110;
+            int diffComboWidth = Math.Max(comboMinWidth, secondAvailable - diffLabelWidth - gap);
+            if (secondLeft + diffLabelWidth + gap + diffComboWidth > playbackBehaviorGroup.ClientSize.Width - left)
+            {
+                diffComboWidth = Math.Max(comboMinWidth, playbackBehaviorGroup.ClientSize.Width - secondLeft - diffLabelWidth - gap - left);
+            }
+
+            differentAudioBehaviorLabel.SetBounds(secondLeft, top, diffLabelWidth, 24);
+            differentAudioBehaviorComboBox.SetBounds(differentAudioBehaviorLabel.Right + gap, top - 1, diffComboWidth, 26);
+        }
+    }
+}
+
+
+
+namespace MusicalMoments
+{
+    public partial class MainWindow
+    {
+        private const int AudioPageSize = 30;
+
+        private readonly List<AudioInfo> allAudioLibraryItems = new List<AudioInfo>();
+        private readonly List<AudioInfo> filteredAudioLibraryItems = new List<AudioInfo>();
+        private int currentAudioPage = 1;
+
+        private void InitializeAudioPageUx()
+        {
+            tabPage2.Resize += (_, _) => UpdateAudioPageLayout();
+            UpdateAudioPageLayout();
+        }
+
+        private void audioSearchTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ApplyAudioFilterAndPaging(resetToFirstPage: true);
+        }
+
+        private void audioPrevPageButton_Click(object sender, EventArgs e)
+        {
+            if (currentAudioPage > 1)
+            {
+                currentAudioPage -= 1;
+                RenderCurrentAudioPage();
+            }
+        }
+
+        private void audioNextPageButton_Click(object sender, EventArgs e)
+        {
+            int totalPages = GetAudioTotalPages();
+            if (currentAudioPage < totalPages)
+            {
+                currentAudioPage += 1;
+                RenderCurrentAudioPage();
+            }
+        }
+
+        private void UpdateAudioPageLayout()
+        {
+            if (tabPage2 == null || tabPage2.IsDisposed)
+            {
+                return;
+            }
+
+            const int margin = 6;
+            const int gap = 6;
+            const int bottomButtonHeight = 32;
+            const int searchHeight = 27;
+            const int pagerWidth = 78;
+
+            int contentWidth = tabPage2.ClientSize.Width;
+            int contentHeight = tabPage2.ClientSize.Height;
+            if (contentWidth <= 0 || contentHeight <= 0)
+            {
+                return;
+            }
+
+            audioSearchLabel.Left = margin;
+            audioSearchLabel.Top = margin + 4;
+
+            audioSearchTextBox.Left = audioSearchLabel.Right + gap;
+            audioSearchTextBox.Top = margin;
+            audioSearchTextBox.Width = Math.Max(180, contentWidth - audioSearchTextBox.Left - margin);
+            audioSearchTextBox.Height = searchHeight;
+
+            int bottomY = contentHeight - margin - bottomButtonHeight;
+
+            mToAudioData1.Top = bottomY;
+            mToAudioData1.Left = contentWidth - margin - mToAudioData1.Width;
+
+            reLoadAudioListsView.Top = bottomY;
+            reLoadAudioListsView.Left = mToAudioData1.Left - gap - reLoadAudioListsView.Width;
+
+            audioNextPageButton.Top = bottomY;
+            audioNextPageButton.Width = pagerWidth;
+            audioNextPageButton.Height = bottomButtonHeight;
+            audioNextPageButton.Left = reLoadAudioListsView.Left - gap - audioNextPageButton.Width;
+
+            audioPrevPageButton.Top = bottomY;
+            audioPrevPageButton.Width = pagerWidth;
+            audioPrevPageButton.Height = bottomButtonHeight;
+            audioPrevPageButton.Left = audioNextPageButton.Left - gap - audioPrevPageButton.Width;
+
+            audioPageStatusLabel.Left = margin;
+            audioPageStatusLabel.Top = bottomY + 2;
+            audioPageStatusLabel.Width = Math.Max(180, audioPrevPageButton.Left - margin - gap);
+            audioPageStatusLabel.Height = bottomButtonHeight - 4;
+            audioPageStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            SelectedAudioLabel.Left = margin;
+            SelectedAudioLabel.Top = bottomY - 20;
+            SelectedAudioLabel.Width = Math.Max(180, contentWidth - margin * 2);
+
+            audioListView.Left = margin;
+            audioListView.Top = audioSearchTextBox.Bottom + gap;
+            audioListView.Width = Math.Max(220, contentWidth - margin * 2);
+            audioListView.Height = Math.Max(80, SelectedAudioLabel.Top - gap - audioListView.Top);
+
+            UpdateAudioListViewColumns();
+        }
+
+        private async Task ReloadAudioLibraryAsync()
+        {
+            string audioDirectory = Path.Combine(runningDirectory, "AudioData");
+            Directory.CreateDirectory(audioDirectory);
+
+            List<AudioInfo> loaded = await Task.Run(() => AudioLibraryService.LoadAudioInfos(audioDirectory));
+            allAudioLibraryItems.Clear();
+            allAudioLibraryItems.AddRange(loaded);
+
+            audioInfo.Clear();
+            audioInfo.AddRange(loaded.Select(item => new AudioInfo
+            {
+                Name = item.Name,
+                Track = item.Track,
+                FileType = item.FileType,
+                FilePath = item.FilePath,
+                Key = item.Key
+            }));
+
+            ApplyAudioFilterAndPaging(resetToFirstPage: false);
+        }
+
+        private void ApplyAudioFilterAndPaging(bool resetToFirstPage)
+        {
+            if (audioSearchTextBox == null)
+            {
+                return;
+            }
+
+            string keyword = (audioSearchTextBox.Text ?? string.Empty).Trim();
+            filteredAudioLibraryItems.Clear();
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                filteredAudioLibraryItems.AddRange(allAudioLibraryItems);
+            }
+            else
+            {
+                filteredAudioLibraryItems.AddRange(allAudioLibraryItems.Where(item =>
+                    ContainsIgnoreCase(item.Name, keyword)
+                    || ContainsIgnoreCase(item.Track, keyword)
+                    || ContainsIgnoreCase(item.FileType, keyword)
+                    || ContainsIgnoreCase(item.Key.ToString(), keyword)
+                    || ContainsIgnoreCase(Path.GetFileName(item.FilePath), keyword)));
+            }
+
+            if (resetToFirstPage)
+            {
+                currentAudioPage = 1;
+            }
+
+            int totalPages = GetAudioTotalPages();
+            currentAudioPage = Math.Clamp(currentAudioPage, 1, totalPages);
+            RenderCurrentAudioPage();
+        }
+
+        private void RenderCurrentAudioPage()
+        {
+            if (audioListView == null)
+            {
+                return;
+            }
+
+            int totalPages = GetAudioTotalPages();
+            int skip = (currentAudioPage - 1) * AudioPageSize;
+            List<AudioInfo> pageItems = filteredAudioLibraryItems
+                .Skip(skip)
+                .Take(AudioPageSize)
+                .ToList();
+
+            audioListView.BeginUpdate();
+            audioListView.Items.Clear();
+            foreach (AudioInfo item in pageItems)
+            {
+                string keyText = item.Key == Keys.None ? "未绑定" : item.Key.ToString();
+                ListViewItem row = new ListViewItem(new[] { item.Name, item.Track, item.FileType, keyText })
+                {
+                    Tag = item.FilePath
+                };
+                audioListView.Items.Add(row);
+            }
+
+            audioListView.EndUpdate();
+
+            audioPageStatusLabel.Text = $"第 {currentAudioPage} / {totalPages} 页，共 {filteredAudioLibraryItems.Count} 条";
+            audioPrevPageButton.Enabled = currentAudioPage > 1;
+            audioNextPageButton.Enabled = currentAudioPage < totalPages;
+
+            if (!string.IsNullOrWhiteSpace(selectedAudioPath) && File.Exists(selectedAudioPath))
+            {
+                SelectedAudioLabel.Text = $"已选择:{Path.GetFileNameWithoutExtension(selectedAudioPath)}";
+            }
+            else
+            {
+                SelectedAudioLabel.Text = "已选择:";
+            }
+        }
+
+        private int GetAudioTotalPages()
+        {
+            int count = filteredAudioLibraryItems.Count;
+            return Math.Max(1, (int)Math.Ceiling(count / (double)AudioPageSize));
+        }
+
+        private static bool ContainsIgnoreCase(string source, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(keyword))
+            {
+                return false;
+            }
+
+            return source.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+    }
+}
+
+
