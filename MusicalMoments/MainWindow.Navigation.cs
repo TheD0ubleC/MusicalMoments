@@ -14,7 +14,7 @@ namespace MusicalMoments
         
                 private void open_help_window_Click(object sender, EventArgs e)
                 {
-                    const string tutorialUrl = "https://example.com/mm-guide";
+                    const string tutorialUrl = "https://www.scmd.cc/tutorial";
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = tutorialUrl,

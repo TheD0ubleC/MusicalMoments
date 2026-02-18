@@ -56,9 +56,14 @@ namespace MusicalMoments
         {
             InitializeComponent();
             CurrentInstance = this;
+            InitializeCloseBehaviorUx();
+            InitializeTrayFeatures();
             InitializeResponsiveLayout();
             InitializeAudioPageUx();
+            InitializeOptimizationPageUx();
             SyncSideNavigationSelection(force: true);
+            switchStreamTips.CheckedChanged += (_, _) => UpdateSwitchStreamTipsCache();
+            UpdateSwitchStreamTipsCache();
             Subscribe();
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         }
@@ -72,6 +77,7 @@ namespace MusicalMoments
             globalInputHook = new GlobalInputHook();
             globalInputHook.HotkeyPressed += GlobalHotkeyPressed;
             globalInputHook.Start();
+            StartHotkeyDispatcher();
         }
 
         public void Unsubscribe()
@@ -84,66 +90,17 @@ namespace MusicalMoments
             globalInputHook.HotkeyPressed -= GlobalHotkeyPressed;
             globalInputHook.Dispose();
             globalInputHook = null;
+            StopHotkeyDispatcher();
         }
 
         private void GlobalHotkeyPressed(object sender, GlobalHotkeyEventArgs e)
         {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action(() => HandleGlobalHotkey(e.Key)));
-                return;
-            }
-
-            HandleGlobalHotkey(e.Key);
+            EnqueueGlobalHotkey(e.Key);
         }
 
-        private void HandleGlobalHotkey(Keys keyCode)
+        internal void TogglePlaybackMode(bool playSwitchTip)
         {
-            if (keyCode == Keys.Escape)
-            {
-                return;
-            }
-
-            if (keyCode == playAudioKey)
-            {
-                RequestPlayAudio(selectedAudioPath, countAsPlayed: true);
-                return;
-            }
-
-            if (keyCode == toggleStreamKey)
-            {
-                if (switchStreamTips.Checked)
-                {
-                    playAudio = !playAudio;
-                    string audioFilePath = playAudio
-                        ? Path.Combine(runningDirectory, @"ResourceFiles\switch_to_audio.wav")
-                        : Path.Combine(runningDirectory, @"ResourceFiles\switch_to_microphone.wav");
-                    PlayAudioex(audioFilePath, Misc.GetOutputDeviceID(comboBox_AudioEquipmentOutput.SelectedItem.ToString()), tipsvolume);
-                    if (!playAudio)
-                    {
-                        Misc.StopCurrentPlayback();
-                        MarkPlaybackStopped();
-                        Misc.StartMicrophoneToSpeaker(Misc.GetInputDeviceID(comboBox_AudioEquipmentInput.SelectedItem.ToString()), Misc.GetOutputDeviceID(comboBox_VBAudioEquipmentOutput.SelectedItem.ToString()));
-                    }
-                    else
-                    {
-                        Misc.StopMicrophoneToSpeaker();
-                    }
-                }
-                changedCount += 1;
-                return;
-            }
-
-            foreach (AudioInfo audio in audioInfo)
-            {
-                if (keyCode != audio.Key || !playAudio || !File.Exists(audio.FilePath))
-                {
-                    continue;
-                }
-
-                RequestPlayAudio(audio.FilePath, countAsPlayed: true);
-                break;
-            }
+            TogglePlaybackModeCore(playSwitchTip);
         }
         private void sideLists_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
@@ -233,6 +190,7 @@ namespace MusicalMoments
 
 
             LoadUserData();
+            StartClientUsageReporter();
             UpdateAboutVersionInfo();
             SyncSideNavigationSelection(force: true);
             if (CheckDuplicateKeys()) { MessageBox.Show($"已检测到相同按键 请勿作死将两个或多个音频绑定在同个按键上 该操作可能会导致MM崩溃 此提示会在Bind Key时与软件启动时检测并发出", "温馨提示"); }
@@ -468,11 +426,11 @@ namespace MusicalMoments
             {
                 RefreshAudioDeviceCombosPreserveSelection();
             }
-            else if (selectedIndex == 7)
+            else if (selectedIndex == 8)
             {
                 RefreshPluginListUi();
             }
-            else if (selectedIndex == 6)
+            else if (selectedIndex == 7)
             {
                 AudioListView_fd.Items.Clear();
             }

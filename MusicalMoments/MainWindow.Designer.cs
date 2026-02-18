@@ -26,15 +26,16 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem10 = new ListViewItem("主页", 0);
-            ListViewItem listViewItem11 = new ListViewItem("音频", 1);
-            ListViewItem listViewItem12 = new ListViewItem("设置", 2);
-            ListViewItem listViewItem13 = new ListViewItem("赞助", 3);
-            ListViewItem listViewItem14 = new ListViewItem("关于", 4);
-            ListViewItem listViewItem15 = new ListViewItem("转换", 5);
-            ListViewItem listViewItem16 = new ListViewItem("发现", 6);
-            ListViewItem listViewItem17 = new ListViewItem("插件", 7);
-            ListViewItem listViewItem18 = new ListViewItem("反馈", 8);
+            ListViewItem listViewItem1 = new ListViewItem("主页", 0);
+            ListViewItem listViewItem2 = new ListViewItem("音频", 1);
+            ListViewItem listViewItem3 = new ListViewItem("设置", 2);
+            ListViewItem listViewItem4 = new ListViewItem("优化", 3);
+            ListViewItem listViewItem5 = new ListViewItem("赞助", 4);
+            ListViewItem listViewItem6 = new ListViewItem("关于", 5);
+            ListViewItem listViewItem7 = new ListViewItem("转换", 6);
+            ListViewItem listViewItem8 = new ListViewItem("发现", 7);
+            ListViewItem listViewItem9 = new ListViewItem("插件", 8);
+            ListViewItem listViewItem10 = new ListViewItem("反馈", 9);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             sideLists = new MusicalMoments.CustomUI.BufferedListView();
             sideListsImage = new ImageList(components);
@@ -87,6 +88,8 @@
             group_Misc = new GroupBox();
             check_update = new Button();
             open_help_button2 = new Button();
+            closeBehaviorComboBox = new ComboBox();
+            closeBehaviorLabel = new Label();
             switchStreamTips = new CheckBox();
             audioEquipmentPlay = new CheckBox();
             group_Key = new GroupBox();
@@ -104,6 +107,30 @@
             comboBox_VBAudioEquipmentOutput = new ComboBox();
             label_AudioEquipment3 = new Label();
             comboBox_VBAudioEquipmentInput = new ComboBox();
+            tabPage8 = new TabPage();
+            optimizationPreloadGroup = new GroupBox();
+            optimizationMemoryLabel = new Label();
+            optimizationPreloadApplyButton = new Button();
+            optimizationPreloadCountTextBox = new TextBox();
+            optimizationPreloadTrackBar = new TrackBar();
+            optimizationPreloadCountLabel = new Label();
+            optimizationPreloadModeComboBox = new ComboBox();
+            optimizationPreloadModeLabel = new Label();
+            optimizationRealtimeCheckBox = new CheckBox();
+            optimizationPerformanceGroup = new GroupBox();
+            optimizationCurrentLabel = new Label();
+            optimizationApplyButton = new Button();
+            optimizationBuffersCountNumeric = new NumericUpDown();
+            optimizationBuffersCountLabel = new Label();
+            optimizationBufferSecondsNumeric = new NumericUpDown();
+            optimizationBufferSecondsLabel = new Label();
+            optimizationLatencyNumeric = new NumericUpDown();
+            optimizationLatencyLabel = new Label();
+            optimizationSimpleValueLabel = new Label();
+            optimizationSimpleTrackBar = new TrackBar();
+            optimizationSimpleLabel = new Label();
+            optimizationModeComboBox = new ComboBox();
+            optimizationModeLabel = new Label();
             tabPage4 = new TabPage();
             aifadian = new Button();
             imageAliPay = new PictureBox();
@@ -192,6 +219,14 @@
             group_Misc.SuspendLayout();
             group_Key.SuspendLayout();
             group_AudioEquipment.SuspendLayout();
+            tabPage8.SuspendLayout();
+            optimizationPreloadGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)optimizationPreloadTrackBar).BeginInit();
+            optimizationPerformanceGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)optimizationBuffersCountNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)optimizationBufferSecondsNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)optimizationLatencyNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)optimizationSimpleTrackBar).BeginInit();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)imageAliPay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)imageWeChat).BeginInit();
@@ -218,11 +253,8 @@
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("Microsoft JhengHei UI", 13F);
             sideLists.ForeColor = Color.FromArgb(90, 90, 90);
-            sideLists.Items.AddRange(new ListViewItem[] { listViewItem10, listViewItem11, listViewItem12, listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18 });
+            sideLists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6, listViewItem7, listViewItem8, listViewItem9, listViewItem10 });
             sideLists.LargeImageList = sideListsImage;
-            sideLists.HideSelection = false;
-            sideLists.HotTracking = false;
-            sideLists.HoverSelection = false;
             sideLists.Location = new Point(3, 16);
             sideLists.MultiSelect = false;
             sideLists.Name = "sideLists";
@@ -236,8 +268,8 @@
             sideLists.UseCompatibleStateImageBehavior = false;
             sideLists.View = View.Tile;
             sideLists.DrawItem += sideLists_DrawItem;
-            sideLists.MouseDown += sideLists_MouseDown;
             sideLists.SelectedIndexChanged += sideLists_SelectedIndexChanged;
+            sideLists.MouseDown += sideLists_MouseDown;
             // 
             // sideListsImage
             // 
@@ -247,12 +279,13 @@
             sideListsImage.Images.SetKeyName(0, "main_page.png");
             sideListsImage.Images.SetKeyName(1, "audio.png");
             sideListsImage.Images.SetKeyName(2, "settings.png");
-            sideListsImage.Images.SetKeyName(3, "donate.png");
-            sideListsImage.Images.SetKeyName(4, "about.png");
-            sideListsImage.Images.SetKeyName(5, "convert.png");
-            sideListsImage.Images.SetKeyName(6, "discover.png");
-            sideListsImage.Images.SetKeyName(7, "plugin.png");
-            sideListsImage.Images.SetKeyName(8, "feedback.png");
+            sideListsImage.Images.SetKeyName(3, "status.png");
+            sideListsImage.Images.SetKeyName(4, "donate.png");
+            sideListsImage.Images.SetKeyName(5, "about.png");
+            sideListsImage.Images.SetKeyName(6, "convert.png");
+            sideListsImage.Images.SetKeyName(7, "discover.png");
+            sideListsImage.Images.SetKeyName(8, "plugin.png");
+            sideListsImage.Images.SetKeyName(9, "feedback.png");
             // 
             // tabPage2
             // 
@@ -615,6 +648,7 @@
             mainTabControl.Controls.Add(tabPage1);
             mainTabControl.Controls.Add(tabPage2);
             mainTabControl.Controls.Add(tabPage3);
+            mainTabControl.Controls.Add(tabPage8);
             mainTabControl.Controls.Add(tabPage4);
             mainTabControl.Controls.Add(tabPage5);
             mainTabControl.Controls.Add(tabPage6);
@@ -644,7 +678,7 @@
             tabPage3.Location = new Point(0, 22);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(565, 341);
+            tabPage3.Size = new Size(671, 434);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "设置";
             // 
@@ -659,7 +693,7 @@
             playbackBehaviorGroup.Location = new Point(6, 227);
             playbackBehaviorGroup.Name = "playbackBehaviorGroup";
             playbackBehaviorGroup.RightToLeft = RightToLeft.No;
-            playbackBehaviorGroup.Size = new Size(553, 70);
+            playbackBehaviorGroup.Size = new Size(653, 55);
             playbackBehaviorGroup.TabIndex = 13;
             playbackBehaviorGroup.TabStop = false;
             playbackBehaviorGroup.Text = "播放逻辑";
@@ -667,45 +701,45 @@
             // differentAudioBehaviorComboBox
             // 
             differentAudioBehaviorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            differentAudioBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            differentAudioBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 10F);
             differentAudioBehaviorComboBox.FormattingEnabled = true;
             differentAudioBehaviorComboBox.Items.AddRange(new object[] { "仅停止当前播放", "停止并播放新的音频" });
-            differentAudioBehaviorComboBox.Location = new Point(438, 26);
+            differentAudioBehaviorComboBox.Location = new Point(447, 20);
             differentAudioBehaviorComboBox.Name = "differentAudioBehaviorComboBox";
-            differentAudioBehaviorComboBox.Size = new Size(105, 23);
+            differentAudioBehaviorComboBox.Size = new Size(160, 25);
             differentAudioBehaviorComboBox.TabIndex = 3;
             differentAudioBehaviorComboBox.SelectedIndexChanged += DifferentAudioBehaviorComboBox_SelectedIndexChanged;
             // 
             // differentAudioBehaviorLabel
             // 
-            differentAudioBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
-            differentAudioBehaviorLabel.Location = new Point(320, 27);
+            differentAudioBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 12F);
+            differentAudioBehaviorLabel.Location = new Point(319, 21);
             differentAudioBehaviorLabel.Name = "differentAudioBehaviorLabel";
-            differentAudioBehaviorLabel.Size = new Size(110, 24);
+            differentAudioBehaviorLabel.Size = new Size(122, 24);
             differentAudioBehaviorLabel.TabIndex = 2;
-            differentAudioBehaviorLabel.Text = "不同音频按下时：";
+            differentAudioBehaviorLabel.Text = "不同音频按下时";
             differentAudioBehaviorLabel.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // sameAudioBehaviorComboBox
             // 
             sameAudioBehaviorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            sameAudioBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            sameAudioBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 10F);
             sameAudioBehaviorComboBox.FormattingEnabled = true;
             sameAudioBehaviorComboBox.Items.AddRange(new object[] { "从头重新播放", "停止当前播放" });
-            sameAudioBehaviorComboBox.Location = new Point(148, 26);
+            sameAudioBehaviorComboBox.Location = new Point(153, 20);
             sameAudioBehaviorComboBox.Name = "sameAudioBehaviorComboBox";
-            sameAudioBehaviorComboBox.Size = new Size(160, 23);
+            sameAudioBehaviorComboBox.Size = new Size(160, 25);
             sameAudioBehaviorComboBox.TabIndex = 1;
             sameAudioBehaviorComboBox.SelectedIndexChanged += SameAudioBehaviorComboBox_SelectedIndexChanged;
             // 
             // sameAudioBehaviorLabel
             // 
-            sameAudioBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 9.75F, FontStyle.Bold);
-            sameAudioBehaviorLabel.Location = new Point(10, 27);
+            sameAudioBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 12F);
+            sameAudioBehaviorLabel.Location = new Point(8, 21);
             sameAudioBehaviorLabel.Name = "sameAudioBehaviorLabel";
-            sameAudioBehaviorLabel.Size = new Size(130, 24);
+            sameAudioBehaviorLabel.Size = new Size(139, 24);
             sameAudioBehaviorLabel.TabIndex = 0;
-            sameAudioBehaviorLabel.Text = "同一音频再次按下：";
+            sameAudioBehaviorLabel.Text = "同一音频再次按下";
             sameAudioBehaviorLabel.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // volume_Group
@@ -718,10 +752,10 @@
             volume_Group.Controls.Add(VBVolumeTrackBar);
             volume_Group.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
             volume_Group.ForeColor = Color.FromArgb(90, 90, 90);
-            volume_Group.Location = new Point(6, 303);
+            volume_Group.Location = new Point(6, 288);
             volume_Group.Name = "volume_Group";
             volume_Group.RightToLeft = RightToLeft.No;
-            volume_Group.Size = new Size(553, 71);
+            volume_Group.Size = new Size(653, 71);
             volume_Group.TabIndex = 12;
             volume_Group.TabStop = false;
             volume_Group.Text = "音量";
@@ -796,6 +830,8 @@
             // 
             group_Misc.Controls.Add(check_update);
             group_Misc.Controls.Add(open_help_button2);
+            group_Misc.Controls.Add(closeBehaviorComboBox);
+            group_Misc.Controls.Add(closeBehaviorLabel);
             group_Misc.Controls.Add(switchStreamTips);
             group_Misc.Controls.Add(audioEquipmentPlay);
             group_Misc.Font = new Font("Microsoft JhengHei UI", 10.5F, FontStyle.Bold);
@@ -803,7 +839,7 @@
             group_Misc.Location = new Point(6, 380);
             group_Misc.Name = "group_Misc";
             group_Misc.RightToLeft = RightToLeft.No;
-            group_Misc.Size = new Size(553, 46);
+            group_Misc.Size = new Size(653, 78);
             group_Misc.TabIndex = 11;
             group_Misc.TabStop = false;
             group_Misc.Text = "其他设置";
@@ -830,6 +866,28 @@
             open_help_button2.UseVisualStyleBackColor = true;
             open_help_button2.Visible = false;
             open_help_button2.Click += open_help_button2_Click;
+            // 
+            // closeBehaviorComboBox
+            // 
+            closeBehaviorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            closeBehaviorComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            closeBehaviorComboBox.FormattingEnabled = true;
+            closeBehaviorComboBox.Location = new Point(110, 47);
+            closeBehaviorComboBox.Name = "closeBehaviorComboBox";
+            closeBehaviorComboBox.RightToLeft = RightToLeft.No;
+            closeBehaviorComboBox.Size = new Size(223, 23);
+            closeBehaviorComboBox.TabIndex = 24;
+            // 
+            // closeBehaviorLabel
+            // 
+            closeBehaviorLabel.AutoSize = true;
+            closeBehaviorLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            closeBehaviorLabel.Location = new Point(10, 49);
+            closeBehaviorLabel.Name = "closeBehaviorLabel";
+            closeBehaviorLabel.RightToLeft = RightToLeft.No;
+            closeBehaviorLabel.Size = new Size(99, 17);
+            closeBehaviorLabel.TabIndex = 25;
+            closeBehaviorLabel.Text = "关闭按钮行为：";
             // 
             // switchStreamTips
             // 
@@ -869,7 +927,7 @@
             group_Key.Location = new Point(6, 163);
             group_Key.Name = "group_Key";
             group_Key.RightToLeft = RightToLeft.No;
-            group_Key.Size = new Size(553, 58);
+            group_Key.Size = new Size(653, 58);
             group_Key.TabIndex = 10;
             group_Key.TabStop = false;
             group_Key.Text = "按键";
@@ -944,7 +1002,7 @@
             group_AudioEquipment.Location = new Point(6, 6);
             group_AudioEquipment.Name = "group_AudioEquipment";
             group_AudioEquipment.RightToLeft = RightToLeft.No;
-            group_AudioEquipment.Size = new Size(553, 151);
+            group_AudioEquipment.Size = new Size(659, 151);
             group_AudioEquipment.TabIndex = 6;
             group_AudioEquipment.TabStop = false;
             group_AudioEquipment.Text = "音频设备";
@@ -952,7 +1010,7 @@
             // autoSelectDevicesButton
             // 
             autoSelectDevicesButton.Font = new Font("Microsoft JhengHei UI", 8.25F, FontStyle.Bold);
-            autoSelectDevicesButton.Location = new Point(432, 0);
+            autoSelectDevicesButton.Location = new Point(538, 0);
             autoSelectDevicesButton.Name = "autoSelectDevicesButton";
             autoSelectDevicesButton.Size = new Size(115, 22);
             autoSelectDevicesButton.TabIndex = 8;
@@ -968,7 +1026,7 @@
             comboBox_AudioEquipmentOutput.FormattingEnabled = true;
             comboBox_AudioEquipmentOutput.Location = new Point(126, 117);
             comboBox_AudioEquipmentOutput.Name = "comboBox_AudioEquipmentOutput";
-            comboBox_AudioEquipmentOutput.Size = new Size(421, 25);
+            comboBox_AudioEquipmentOutput.Size = new Size(527, 25);
             comboBox_AudioEquipmentOutput.TabIndex = 7;
             comboBox_AudioEquipmentOutput.SelectedIndexChanged += comboBox_AudioEquipmentOutput_SelectedIndexChanged;
             // 
@@ -1000,7 +1058,7 @@
             comboBox_AudioEquipmentInput.FormattingEnabled = true;
             comboBox_AudioEquipmentInput.Location = new Point(126, 86);
             comboBox_AudioEquipmentInput.Name = "comboBox_AudioEquipmentInput";
-            comboBox_AudioEquipmentInput.Size = new Size(421, 25);
+            comboBox_AudioEquipmentInput.Size = new Size(527, 25);
             comboBox_AudioEquipmentInput.TabIndex = 5;
             comboBox_AudioEquipmentInput.SelectedIndexChanged += comboBox_AudioEquipmentInput_SelectedIndexChanged;
             // 
@@ -1022,7 +1080,7 @@
             comboBox_VBAudioEquipmentOutput.FormattingEnabled = true;
             comboBox_VBAudioEquipmentOutput.Location = new Point(126, 55);
             comboBox_VBAudioEquipmentOutput.Name = "comboBox_VBAudioEquipmentOutput";
-            comboBox_VBAudioEquipmentOutput.Size = new Size(421, 25);
+            comboBox_VBAudioEquipmentOutput.Size = new Size(527, 25);
             comboBox_VBAudioEquipmentOutput.TabIndex = 4;
             comboBox_VBAudioEquipmentOutput.SelectedIndexChanged += comboBox_VBAudioEquipmentOutput_SelectedIndexChanged;
             // 
@@ -1044,9 +1102,289 @@
             comboBox_VBAudioEquipmentInput.FormattingEnabled = true;
             comboBox_VBAudioEquipmentInput.Location = new Point(126, 24);
             comboBox_VBAudioEquipmentInput.Name = "comboBox_VBAudioEquipmentInput";
-            comboBox_VBAudioEquipmentInput.Size = new Size(421, 25);
+            comboBox_VBAudioEquipmentInput.Size = new Size(527, 25);
             comboBox_VBAudioEquipmentInput.TabIndex = 3;
             comboBox_VBAudioEquipmentInput.SelectedIndexChanged += comboBox_VBAudioEquipmentInput_SelectedIndexChanged;
+            // 
+            // tabPage8
+            // 
+            tabPage8.BackColor = SystemColors.Control;
+            tabPage8.Controls.Add(optimizationPreloadGroup);
+            tabPage8.Controls.Add(optimizationPerformanceGroup);
+            tabPage8.Location = new Point(0, 22);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Padding = new Padding(3);
+            tabPage8.Size = new Size(671, 434);
+            tabPage8.TabIndex = 3;
+            tabPage8.Text = "优化";
+            // 
+            // optimizationPreloadGroup
+            // 
+            optimizationPreloadGroup.Controls.Add(optimizationMemoryLabel);
+            optimizationPreloadGroup.Controls.Add(optimizationPreloadApplyButton);
+            optimizationPreloadGroup.Controls.Add(optimizationPreloadCountTextBox);
+            optimizationPreloadGroup.Controls.Add(optimizationPreloadTrackBar);
+            optimizationPreloadGroup.Controls.Add(optimizationPreloadCountLabel);
+            optimizationPreloadGroup.Controls.Add(optimizationPreloadModeComboBox);
+            optimizationPreloadGroup.Controls.Add(optimizationPreloadModeLabel);
+            optimizationPreloadGroup.Controls.Add(optimizationRealtimeCheckBox);
+            optimizationPreloadGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+            optimizationPreloadGroup.ForeColor = Color.FromArgb(90, 90, 90);
+            optimizationPreloadGroup.Location = new Point(6, 194);
+            optimizationPreloadGroup.Name = "optimizationPreloadGroup";
+            optimizationPreloadGroup.Size = new Size(553, 141);
+            optimizationPreloadGroup.TabIndex = 1;
+            optimizationPreloadGroup.TabStop = false;
+            optimizationPreloadGroup.Text = "音频预加载";
+            // 
+            // optimizationMemoryLabel
+            // 
+            optimizationMemoryLabel.BorderStyle = BorderStyle.FixedSingle;
+            optimizationMemoryLabel.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold);
+            optimizationMemoryLabel.Location = new Point(10, 88);
+            optimizationMemoryLabel.Name = "optimizationMemoryLabel";
+            optimizationMemoryLabel.Size = new Size(534, 44);
+            optimizationMemoryLabel.TabIndex = 6;
+            optimizationMemoryLabel.Text = "MM 内存占用：0.00 MB | 预加载内存占用：0.00 MB | 总：0.00 MB | 系统剩余内存：0.00 MB";
+            optimizationMemoryLabel.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // optimizationPreloadApplyButton
+            // 
+            optimizationPreloadApplyButton.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationPreloadApplyButton.Location = new Point(494, 53);
+            optimizationPreloadApplyButton.Name = "optimizationPreloadApplyButton";
+            optimizationPreloadApplyButton.Size = new Size(50, 27);
+            optimizationPreloadApplyButton.TabIndex = 5;
+            optimizationPreloadApplyButton.Text = "刷新";
+            optimizationPreloadApplyButton.UseVisualStyleBackColor = true;
+            optimizationPreloadApplyButton.Click += optimizationPreloadApplyButton_Click;
+            // 
+            // optimizationPreloadCountTextBox
+            // 
+            optimizationPreloadCountTextBox.BorderStyle = BorderStyle.FixedSingle;
+            optimizationPreloadCountTextBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            optimizationPreloadCountTextBox.Location = new Point(448, 55);
+            optimizationPreloadCountTextBox.Name = "optimizationPreloadCountTextBox";
+            optimizationPreloadCountTextBox.Size = new Size(40, 23);
+            optimizationPreloadCountTextBox.TabIndex = 4;
+            optimizationPreloadCountTextBox.Text = "0";
+            optimizationPreloadCountTextBox.TextAlign = HorizontalAlignment.Center;
+            optimizationPreloadCountTextBox.TextChanged += optimizationPreloadCountTextBox_TextChanged;
+            // 
+            // optimizationPreloadTrackBar
+            // 
+            optimizationPreloadTrackBar.Location = new Point(108, 55);
+            optimizationPreloadTrackBar.Name = "optimizationPreloadTrackBar";
+            optimizationPreloadTrackBar.Size = new Size(336, 45);
+            optimizationPreloadTrackBar.TabIndex = 3;
+            optimizationPreloadTrackBar.Scroll += optimizationPreloadTrackBar_Scroll;
+            // 
+            // optimizationPreloadCountLabel
+            // 
+            optimizationPreloadCountLabel.AutoSize = true;
+            optimizationPreloadCountLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationPreloadCountLabel.Location = new Point(10, 58);
+            optimizationPreloadCountLabel.Name = "optimizationPreloadCountLabel";
+            optimizationPreloadCountLabel.Size = new Size(96, 17);
+            optimizationPreloadCountLabel.TabIndex = 2;
+            optimizationPreloadCountLabel.Text = "预加载数量(个)";
+            // 
+            // optimizationPreloadModeComboBox
+            // 
+            optimizationPreloadModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            optimizationPreloadModeComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            optimizationPreloadModeComboBox.FormattingEnabled = true;
+            optimizationPreloadModeComboBox.Location = new Point(84, 24);
+            optimizationPreloadModeComboBox.Name = "optimizationPreloadModeComboBox";
+            optimizationPreloadModeComboBox.Size = new Size(210, 23);
+            optimizationPreloadModeComboBox.TabIndex = 1;
+            optimizationPreloadModeComboBox.SelectedIndexChanged += optimizationPreloadModeComboBox_SelectedIndexChanged;
+            // 
+            // optimizationPreloadModeLabel
+            // 
+            optimizationPreloadModeLabel.AutoSize = true;
+            optimizationPreloadModeLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationPreloadModeLabel.Location = new Point(10, 28);
+            optimizationPreloadModeLabel.Name = "optimizationPreloadModeLabel";
+            optimizationPreloadModeLabel.Size = new Size(73, 17);
+            optimizationPreloadModeLabel.TabIndex = 0;
+            optimizationPreloadModeLabel.Text = "预加载模式";
+            // 
+            // optimizationRealtimeCheckBox
+            // 
+            optimizationRealtimeCheckBox.AutoSize = true;
+            optimizationRealtimeCheckBox.Checked = true;
+            optimizationRealtimeCheckBox.CheckState = CheckState.Checked;
+            optimizationRealtimeCheckBox.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationRealtimeCheckBox.Location = new Point(304, 26);
+            optimizationRealtimeCheckBox.Name = "optimizationRealtimeCheckBox";
+            optimizationRealtimeCheckBox.RightToLeft = RightToLeft.No;
+            optimizationRealtimeCheckBox.Size = new Size(110, 21);
+            optimizationRealtimeCheckBox.TabIndex = 7;
+            optimizationRealtimeCheckBox.Text = "实时更新(1秒)";
+            optimizationRealtimeCheckBox.UseVisualStyleBackColor = true;
+            optimizationRealtimeCheckBox.CheckedChanged += optimizationRealtimeCheckBox_CheckedChanged;
+            // 
+            // optimizationPerformanceGroup
+            // 
+            optimizationPerformanceGroup.Controls.Add(optimizationCurrentLabel);
+            optimizationPerformanceGroup.Controls.Add(optimizationApplyButton);
+            optimizationPerformanceGroup.Controls.Add(optimizationBuffersCountNumeric);
+            optimizationPerformanceGroup.Controls.Add(optimizationBuffersCountLabel);
+            optimizationPerformanceGroup.Controls.Add(optimizationBufferSecondsNumeric);
+            optimizationPerformanceGroup.Controls.Add(optimizationBufferSecondsLabel);
+            optimizationPerformanceGroup.Controls.Add(optimizationLatencyNumeric);
+            optimizationPerformanceGroup.Controls.Add(optimizationLatencyLabel);
+            optimizationPerformanceGroup.Controls.Add(optimizationSimpleValueLabel);
+            optimizationPerformanceGroup.Controls.Add(optimizationSimpleTrackBar);
+            optimizationPerformanceGroup.Controls.Add(optimizationSimpleLabel);
+            optimizationPerformanceGroup.Controls.Add(optimizationModeComboBox);
+            optimizationPerformanceGroup.Controls.Add(optimizationModeLabel);
+            optimizationPerformanceGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+            optimizationPerformanceGroup.ForeColor = Color.FromArgb(90, 90, 90);
+            optimizationPerformanceGroup.Location = new Point(6, 6);
+            optimizationPerformanceGroup.Name = "optimizationPerformanceGroup";
+            optimizationPerformanceGroup.Size = new Size(553, 182);
+            optimizationPerformanceGroup.TabIndex = 0;
+            optimizationPerformanceGroup.TabStop = false;
+            optimizationPerformanceGroup.Text = "播放缓冲优化";
+            // 
+            // optimizationCurrentLabel
+            // 
+            optimizationCurrentLabel.BorderStyle = BorderStyle.FixedSingle;
+            optimizationCurrentLabel.Font = new Font("Microsoft JhengHei UI", 9F, FontStyle.Bold);
+            optimizationCurrentLabel.Location = new Point(10, 133);
+            optimizationCurrentLabel.Name = "optimizationCurrentLabel";
+            optimizationCurrentLabel.Size = new Size(534, 40);
+            optimizationCurrentLabel.TabIndex = 12;
+            optimizationCurrentLabel.Text = "当前参数：加载中";
+            optimizationCurrentLabel.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // optimizationApplyButton
+            // 
+            optimizationApplyButton.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationApplyButton.Location = new Point(486, 98);
+            optimizationApplyButton.Name = "optimizationApplyButton";
+            optimizationApplyButton.Size = new Size(58, 27);
+            optimizationApplyButton.TabIndex = 11;
+            optimizationApplyButton.Text = "应用";
+            optimizationApplyButton.UseVisualStyleBackColor = true;
+            optimizationApplyButton.Click += optimizationApplyButton_Click;
+            // 
+            // optimizationBuffersCountNumeric
+            // 
+            optimizationBuffersCountNumeric.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            optimizationBuffersCountNumeric.Location = new Point(422, 100);
+            optimizationBuffersCountNumeric.Maximum = new decimal(new int[] { 16, 0, 0, 0 });
+            optimizationBuffersCountNumeric.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
+            optimizationBuffersCountNumeric.Name = "optimizationBuffersCountNumeric";
+            optimizationBuffersCountNumeric.Size = new Size(58, 23);
+            optimizationBuffersCountNumeric.TabIndex = 10;
+            optimizationBuffersCountNumeric.Value = new decimal(new int[] { 4, 0, 0, 0 });
+            // 
+            // optimizationBuffersCountLabel
+            // 
+            optimizationBuffersCountLabel.AutoSize = true;
+            optimizationBuffersCountLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationBuffersCountLabel.Location = new Point(341, 102);
+            optimizationBuffersCountLabel.Name = "optimizationBuffersCountLabel";
+            optimizationBuffersCountLabel.Size = new Size(73, 17);
+            optimizationBuffersCountLabel.TabIndex = 9;
+            optimizationBuffersCountLabel.Text = "缓冲块数量";
+            // 
+            // optimizationBufferSecondsNumeric
+            // 
+            optimizationBufferSecondsNumeric.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            optimizationBufferSecondsNumeric.Location = new Point(243, 100);
+            optimizationBufferSecondsNumeric.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
+            optimizationBufferSecondsNumeric.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
+            optimizationBufferSecondsNumeric.Name = "optimizationBufferSecondsNumeric";
+            optimizationBufferSecondsNumeric.Size = new Size(86, 23);
+            optimizationBufferSecondsNumeric.TabIndex = 8;
+            optimizationBufferSecondsNumeric.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // optimizationBufferSecondsLabel
+            // 
+            optimizationBufferSecondsLabel.AutoSize = true;
+            optimizationBufferSecondsLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationBufferSecondsLabel.Location = new Point(171, 102);
+            optimizationBufferSecondsLabel.Name = "optimizationBufferSecondsLabel";
+            optimizationBufferSecondsLabel.Size = new Size(66, 17);
+            optimizationBufferSecondsLabel.TabIndex = 7;
+            optimizationBufferSecondsLabel.Text = "缓冲秒数s";
+            // 
+            // optimizationLatencyNumeric
+            // 
+            optimizationLatencyNumeric.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            optimizationLatencyNumeric.Increment = new decimal(new int[] { 10, 0, 0, 0 });
+            optimizationLatencyNumeric.Location = new Point(77, 100);
+            optimizationLatencyNumeric.Maximum = new decimal(new int[] { 1200, 0, 0, 0 });
+            optimizationLatencyNumeric.Minimum = new decimal(new int[] { 60, 0, 0, 0 });
+            optimizationLatencyNumeric.Name = "optimizationLatencyNumeric";
+            optimizationLatencyNumeric.Size = new Size(86, 23);
+            optimizationLatencyNumeric.TabIndex = 6;
+            optimizationLatencyNumeric.Value = new decimal(new int[] { 220, 0, 0, 0 });
+            // 
+            // optimizationLatencyLabel
+            // 
+            optimizationLatencyLabel.AutoSize = true;
+            optimizationLatencyLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationLatencyLabel.Location = new Point(10, 102);
+            optimizationLatencyLabel.Name = "optimizationLatencyLabel";
+            optimizationLatencyLabel.Size = new Size(53, 17);
+            optimizationLatencyLabel.TabIndex = 5;
+            optimizationLatencyLabel.Text = "延迟Ms";
+            // 
+            // optimizationSimpleValueLabel
+            // 
+            optimizationSimpleValueLabel.AutoSize = true;
+            optimizationSimpleValueLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationSimpleValueLabel.Location = new Point(496, 61);
+            optimizationSimpleValueLabel.Name = "optimizationSimpleValueLabel";
+            optimizationSimpleValueLabel.Size = new Size(48, 17);
+            optimizationSimpleValueLabel.TabIndex = 4;
+            optimizationSimpleValueLabel.Text = "当前: 6";
+            // 
+            // optimizationSimpleTrackBar
+            // 
+            optimizationSimpleTrackBar.Location = new Point(100, 55);
+            optimizationSimpleTrackBar.Minimum = 1;
+            optimizationSimpleTrackBar.Name = "optimizationSimpleTrackBar";
+            optimizationSimpleTrackBar.Size = new Size(390, 45);
+            optimizationSimpleTrackBar.TabIndex = 3;
+            optimizationSimpleTrackBar.Value = 6;
+            optimizationSimpleTrackBar.Scroll += optimizationSimpleTrackBar_Scroll;
+            // 
+            // optimizationSimpleLabel
+            // 
+            optimizationSimpleLabel.AutoSize = true;
+            optimizationSimpleLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationSimpleLabel.Location = new Point(10, 60);
+            optimizationSimpleLabel.Name = "optimizationSimpleLabel";
+            optimizationSimpleLabel.Size = new Size(73, 17);
+            optimizationSimpleLabel.TabIndex = 2;
+            optimizationSimpleLabel.Text = "简单调节值";
+            // 
+            // optimizationModeComboBox
+            // 
+            optimizationModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            optimizationModeComboBox.Font = new Font("Microsoft JhengHei UI", 9.25F);
+            optimizationModeComboBox.FormattingEnabled = true;
+            optimizationModeComboBox.Location = new Point(84, 24);
+            optimizationModeComboBox.Name = "optimizationModeComboBox";
+            optimizationModeComboBox.Size = new Size(188, 23);
+            optimizationModeComboBox.TabIndex = 1;
+            optimizationModeComboBox.SelectedIndexChanged += optimizationModeComboBox_SelectedIndexChanged;
+            // 
+            // optimizationModeLabel
+            // 
+            optimizationModeLabel.AutoSize = true;
+            optimizationModeLabel.Font = new Font("Microsoft JhengHei UI", 9.25F, FontStyle.Bold);
+            optimizationModeLabel.Location = new Point(10, 28);
+            optimizationModeLabel.Name = "optimizationModeLabel";
+            optimizationModeLabel.Size = new Size(60, 17);
+            optimizationModeLabel.TabIndex = 0;
+            optimizationModeLabel.Text = "优化模式";
             // 
             // tabPage4
             // 
@@ -1058,8 +1396,8 @@
             tabPage4.Location = new Point(0, 22);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(565, 341);
-            tabPage4.TabIndex = 3;
+            tabPage4.Size = new Size(671, 434);
+            tabPage4.TabIndex = 4;
             tabPage4.Text = "赞助";
             // 
             // aifadian
@@ -1099,10 +1437,10 @@
             thankTip.Font = new Font("Microsoft JhengHei UI", 24F, FontStyle.Bold);
             thankTip.Location = new Point(179, 305);
             thankTip.Name = "thankTip";
-            thankTip.Size = new Size(210, 41);
+            thankTip.RightToLeft = RightToLeft.No;
+            thankTip.Size = new Size(626, 82);
             thankTip.TabIndex = 5;
             thankTip.Text = "感谢您的支持，打赏请写下您的名字和留言\n未来将有感谢名单页面！";
-            thankTip.RightToLeft = RightToLeft.No;
             thankTip.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tabPage5
@@ -1116,8 +1454,8 @@
             tabPage5.Location = new Point(0, 22);
             tabPage5.Name = "tabPage5";
             tabPage5.Padding = new Padding(3);
-            tabPage5.Size = new Size(565, 341);
-            tabPage5.TabIndex = 4;
+            tabPage5.Size = new Size(671, 434);
+            tabPage5.TabIndex = 5;
             tabPage5.Text = "关于";
             // 
             // info_Group
@@ -1168,7 +1506,7 @@
             info_Label2.Font = new Font("Microsoft JhengHei UI", 15.75F, FontStyle.Bold);
             info_Label2.Location = new Point(167, 40);
             info_Label2.Name = "info_Label2";
-            info_Label2.Size = new Size(336, 26);
+            info_Label2.Size = new Size(158, 26);
             info_Label2.TabIndex = 2;
             info_Label2.Text = "版本号:加载中...";
             // 
@@ -1203,7 +1541,7 @@
             info_Label3.Location = new Point(172, 72);
             info_Label3.Name = "info_Label3";
             info_Label3.RightToLeft = RightToLeft.No;
-            info_Label3.Size = new Size(323, 162);
+            info_Label3.Size = new Size(115, 18);
             info_Label3.TabIndex = 5;
             info_Label3.Text = "版本详情加载中...";
             // 
@@ -1219,8 +1557,8 @@
             tabPage6.Location = new Point(0, 22);
             tabPage6.Name = "tabPage6";
             tabPage6.Padding = new Padding(3);
-            tabPage6.Size = new Size(565, 341);
-            tabPage6.TabIndex = 5;
+            tabPage6.Size = new Size(671, 434);
+            tabPage6.TabIndex = 6;
             tabPage6.Text = "转换";
             tabPage6.DragDrop += tabPage6_DragDrop;
             tabPage6.DragEnter += tabPage6_DragEnter;
@@ -1400,8 +1738,8 @@
             tabPage7.Location = new Point(0, 22);
             tabPage7.Name = "tabPage7";
             tabPage7.Padding = new Padding(3);
-            tabPage7.Size = new Size(565, 341);
-            tabPage7.TabIndex = 6;
+            tabPage7.Size = new Size(671, 434);
+            tabPage7.TabIndex = 7;
             tabPage7.Text = "发现";
             // 
             // to_mmdownloader
@@ -1519,8 +1857,8 @@
             tabPage9.Location = new Point(0, 22);
             tabPage9.Name = "tabPage9";
             tabPage9.Padding = new Padding(3);
-            tabPage9.Size = new Size(565, 341);
-            tabPage9.TabIndex = 8;
+            tabPage9.Size = new Size(671, 434);
+            tabPage9.TabIndex = 9;
             tabPage9.Text = "插件";
             // 
             // LoadPlugin
@@ -1633,8 +1971,8 @@
             tabPage10.Location = new Point(0, 22);
             tabPage10.Name = "tabPage10";
             tabPage10.Padding = new Padding(3);
-            tabPage10.Size = new Size(565, 341);
-            tabPage10.TabIndex = 9;
+            tabPage10.Size = new Size(671, 434);
+            tabPage10.TabIndex = 10;
             tabPage10.Text = "反馈";
             // 
             // FeedbackTipsButton
@@ -1848,7 +2186,6 @@
             Controls.Add(groupBox1);
             Controls.Add(mainGroupBox);
             DoubleBuffered = true;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(800, 500);
             Name = "MainWindow";
@@ -1873,6 +2210,16 @@
             group_Key.PerformLayout();
             group_AudioEquipment.ResumeLayout(false);
             group_AudioEquipment.PerformLayout();
+            tabPage8.ResumeLayout(false);
+            optimizationPreloadGroup.ResumeLayout(false);
+            optimizationPreloadGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)optimizationPreloadTrackBar).EndInit();
+            optimizationPerformanceGroup.ResumeLayout(false);
+            optimizationPerformanceGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)optimizationBuffersCountNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)optimizationBufferSecondsNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)optimizationLatencyNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)optimizationSimpleTrackBar).EndInit();
             tabPage4.ResumeLayout(false);
             tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)imageAliPay).EndInit();
@@ -1965,6 +2312,8 @@
         private Label tips_Label3;
         private ToolStripMenuItem openFileLocationMenuItem;
         private CheckBox switchStreamTips;
+        private Label closeBehaviorLabel;
+        private ComboBox closeBehaviorComboBox;
         private GroupBox volume_Group;
         private TrackBar VBVolumeTrackBar;
         private Label volume_Label2;
@@ -2043,6 +2392,30 @@
         private Button check_update;
         private CheckBox restoreDefaultsAfterInstallCheckBox;
         private Button autoSelectDevicesButton;
+        private TabPage tabPage8;
+        private GroupBox optimizationPreloadGroup;
+        private Label optimizationMemoryLabel;
+        private Button optimizationPreloadApplyButton;
+        private TextBox optimizationPreloadCountTextBox;
+        private TrackBar optimizationPreloadTrackBar;
+        private Label optimizationPreloadCountLabel;
+        private ComboBox optimizationPreloadModeComboBox;
+        private Label optimizationPreloadModeLabel;
+        private CheckBox optimizationRealtimeCheckBox;
+        private GroupBox optimizationPerformanceGroup;
+        private Label optimizationCurrentLabel;
+        private Button optimizationApplyButton;
+        private NumericUpDown optimizationBuffersCountNumeric;
+        private Label optimizationBuffersCountLabel;
+        private NumericUpDown optimizationBufferSecondsNumeric;
+        private Label optimizationBufferSecondsLabel;
+        private NumericUpDown optimizationLatencyNumeric;
+        private Label optimizationLatencyLabel;
+        private Label optimizationSimpleValueLabel;
+        private TrackBar optimizationSimpleTrackBar;
+        private Label optimizationSimpleLabel;
+        private ComboBox optimizationModeComboBox;
+        private Label optimizationModeLabel;
     }
 }
 
@@ -2053,31 +2426,63 @@ namespace MusicalMoments
     public partial class MainWindow
     {
         private static readonly Size LegacyMinimumWindowSize = new Size(800, 500);
-        private static readonly Size ExpandedDefaultWindowSize = new Size(940, 560);
 
         private void InitializeResponsiveLayout()
         {
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox = true;
             MinimumSize = LegacyMinimumWindowSize;
-            if (Size.Width <= LegacyMinimumWindowSize.Width + 8 && Size.Height <= LegacyMinimumWindowSize.Height + 30)
-            {
-                Size = ExpandedDefaultWindowSize;
-            }
 
             ConfigureMainContainerLayout();
             ConfigureHomeTabLayout();
             ConfigureAudioTabLayout();
             ConfigureSettingsTabLayout();
+            ConfigureOptimizationTabLayout();
             ConfigureDonateTabLayout();
             ConfigureAboutTabLayout();
             ConfigureConversionTabLayout();
             ConfigureDiscoverTabLayout();
             ConfigurePluginTabLayout();
             ConfigureFeedbackTabLayout();
+            EnforceContentRightToLeftNo();
 
             BindResponsiveEvents();
             ApplyResponsiveLayoutNow();
+        }
+
+        private void EnforceContentRightToLeftNo()
+        {
+            if (mainTabControl == null)
+            {
+                return;
+            }
+
+            foreach (TabPage page in mainTabControl.TabPages)
+            {
+                if (page == null || page.IsDisposed)
+                {
+                    continue;
+                }
+
+                ApplyRightToLeftNoRecursive(page);
+            }
+        }
+
+        private static void ApplyRightToLeftNoRecursive(Control root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            foreach (Control child in root.Controls)
+            {
+                child.RightToLeft = RightToLeft.No;
+                if (child.HasChildren)
+                {
+                    ApplyRightToLeftNoRecursive(child);
+                }
+            }
         }
 
         private void ConfigureMainContainerLayout()
@@ -2142,6 +2547,8 @@ namespace MusicalMoments
 
             audioEquipmentPlay.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             switchStreamTips.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            closeBehaviorLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            closeBehaviorComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             open_help_button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             check_update.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 
@@ -2151,6 +2558,30 @@ namespace MusicalMoments
             VolumeTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             volume_Label3.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             TipsVolumeTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+        }
+
+        private void ConfigureOptimizationTabLayout()
+        {
+            if (tabPage8 == null)
+            {
+                return;
+            }
+
+            optimizationPerformanceGroup.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            optimizationPreloadGroup.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            optimizationModeComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            optimizationSimpleTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            optimizationSimpleValueLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            optimizationApplyButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            optimizationCurrentLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            optimizationPreloadModeComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            optimizationPreloadTrackBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            optimizationPreloadCountTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            optimizationPreloadApplyButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            optimizationMemoryLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            optimizationRealtimeCheckBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         }
 
         private void ConfigureDonateTabLayout()
@@ -2235,7 +2666,7 @@ namespace MusicalMoments
 
         private void BindResponsiveEvents()
         {
-            Resize += (_, _) => UpdateMainContainerLayout();
+            Resize += MainWindow_ResizeResponsive;
             tips_Group1.Resize += (_, _) => UpdateGuideLayout();
             audioListView.Resize += (_, _) => UpdateAudioListViewColumns();
             group_Key.Resize += (_, _) => UpdateKeyBindingLayout();
@@ -2248,13 +2679,48 @@ namespace MusicalMoments
             pluginListView.Resize += (_, _) => UpdatePluginListViewColumns();
             sideLists.Resize += (_, _) => UpdateSideNavigationLayout();
             tabPage4.Resize += (_, _) => UpdateDonateTabLayout();
+            tabPage5.Resize += (_, _) => UpdateAboutTabLayout();
+            tabPage6.Resize += (_, _) => UpdateConversionTabLayout();
+            tabPage7.Resize += (_, _) => UpdateDiscoverTabLayout();
+            tabPage8.Resize += (_, _) => UpdateOptimizationTabLayout();
+            tabPage9.Resize += (_, _) => UpdatePluginTabLayout();
+            tabPage10.Resize += (_, _) => UpdateFeedbackTabLayout();
             tabPage3.Resize += (_, _) => ReflowSettingsPanels();
+        }
+
+        private bool pendingLayoutAfterRestore;
+
+        private void MainWindow_ResizeResponsive(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                pendingLayoutAfterRestore = true;
+                return;
+            }
+
+            ApplyResponsiveLayoutNow();
+            if (pendingLayoutAfterRestore)
+            {
+                pendingLayoutAfterRestore = false;
+                SyncSideNavigationSelection(force: true);
+            }
         }
 
         private void ApplyResponsiveLayoutNow()
         {
+            if (WindowState == FormWindowState.Minimized || IsDisposed)
+            {
+                return;
+            }
+
             UpdateMainContainerLayout();
             UpdateGuideLayout();
+            UpdateOptimizationTabLayout();
+            UpdateAboutTabLayout();
+            UpdateConversionTabLayout();
+            UpdateDiscoverTabLayout();
+            UpdatePluginTabLayout();
+            UpdateFeedbackTabLayout();
             UpdateAudioListViewColumns();
             UpdateKeyBindingLayout();
             UpdateAudioEquipmentActionLayout();
@@ -2445,9 +2911,17 @@ namespace MusicalMoments
         {
             int rightPadding = 8;
             int gap = 6;
+            int leftPadding = 10;
 
             check_update.Left = group_Misc.ClientSize.Width - check_update.Width - rightPadding;
             open_help_button2.Left = check_update.Left - open_help_button2.Width - gap;
+
+            int comboTop = 45;
+            closeBehaviorLabel.Top = comboTop + 3;
+            closeBehaviorLabel.Left = leftPadding;
+            closeBehaviorComboBox.Top = comboTop;
+            closeBehaviorComboBox.Left = closeBehaviorLabel.Right + 2;
+            closeBehaviorComboBox.Width = Math.Max(140, check_update.Left - closeBehaviorComboBox.Left - gap);
         }
 
         private void UpdateConversionImportLayout()
@@ -2519,6 +2993,203 @@ namespace MusicalMoments
 
             thankTip.Left = Math.Max(6, (tabPage4.ClientSize.Width - thankTip.Width) / 2);
             thankTip.Top = imageWeChat.Bottom + 8;
+
+            int aifadianTop = Math.Max(6, tabPage4.ClientSize.Height - aifadian.Height - 8);
+            aifadian.Left = margin;
+            aifadian.Top = aifadianTop;
+        }
+
+        private void UpdateOptimizationTabLayout()
+        {
+            if (tabPage8 == null || tabPage8.IsDisposed)
+            {
+                return;
+            }
+
+            const int margin = 8;
+            const int gap = 8;
+            int width = Math.Max(280, tabPage8.ClientSize.Width - margin * 2);
+
+            optimizationPerformanceGroup.SetBounds(margin, 8, width, optimizationPerformanceGroup.Height);
+            optimizationPreloadGroup.SetBounds(margin, optimizationPerformanceGroup.Bottom + gap, width, optimizationPreloadGroup.Height);
+        }
+
+        private void UpdateAboutTabLayout()
+        {
+            if (tabPage5 == null || tabPage5.IsDisposed)
+            {
+                return;
+            }
+
+            int tabWidth = Math.Max(320, tabPage5.ClientSize.Width);
+            int tabHeight = Math.Max(240, tabPage5.ClientSize.Height);
+
+            info_Label1.Width = Math.Max(220, tabWidth - info_Label1.Left - 6);
+            info_Label2.Width = Math.Max(220, tabWidth - info_Label2.Left - 6);
+            info_Label3.Width = Math.Max(220, tabWidth - info_Label3.Left - 6);
+
+            info_Group.Left = 5;
+            info_Group.Top = 172;
+            info_Group.Width = Math.Max(220, tabWidth - 10);
+            info_Group.Height = Math.Max(140, tabHeight - info_Group.Top - 6);
+
+            info_ListBox.Top = 16;
+            info_ListBox.Width = 162;
+            info_ListBox.Left = Math.Max(220, info_Group.ClientSize.Width - info_ListBox.Width - 6);
+            info_ListBox.Height = Math.Max(120, info_Group.ClientSize.Height - 12);
+
+            info_Label5.Left = 6;
+            info_Label5.Top = 16;
+            info_Label5.Width = Math.Max(200, info_ListBox.Left - info_Label5.Left - 6);
+            info_Label5.Height = Math.Max(120, info_Group.ClientSize.Height - 20);
+        }
+
+        private void UpdateConversionTabLayout()
+        {
+            if (tabPage6 == null || tabPage6.IsDisposed)
+            {
+                return;
+            }
+
+            const int margin = 6;
+            const int gap = 6;
+            int width = Math.Max(260, tabPage6.ClientSize.Width - margin * 2);
+
+            conversion_Group1.SetBounds(margin, 6, width, conversion_Group1.Height);
+            conversion_Group2.SetBounds(margin, conversion_Group1.Bottom + gap, width, conversion_Group2.Height);
+            conversion_Group3.SetBounds(margin, conversion_Group2.Bottom + gap, width, conversion_Group3.Height);
+
+            open_help_button1.Left = margin;
+            open_help_button1.Top = Math.Max(margin, tabPage6.ClientSize.Height - open_help_button1.Height - margin);
+
+            int group4Top = conversion_Group3.Bottom + gap;
+            int group4Height = Math.Max(70, open_help_button1.Top - gap - group4Top);
+            conversion_Group4.SetBounds(margin, group4Top, width, group4Height);
+        }
+
+        private void UpdateDiscoverTabLayout()
+        {
+            if (tabPage7 == null || tabPage7.IsDisposed)
+            {
+                return;
+            }
+
+            const int margin = 6;
+            const int gap = 6;
+            const int rightPanelWidth = 123;
+
+            int rightPanelLeft = Math.Max(260, tabPage7.ClientSize.Width - rightPanelWidth - margin);
+            int listWidth = Math.Max(220, rightPanelLeft - margin - gap);
+
+            SearchBarTextBox.Left = margin;
+            SearchBarTextBox.Top = margin;
+            SearchBarTextBox.Width = listWidth - margin;
+
+            AudioListView_fd.Left = margin;
+            AudioListView_fd.Top = SearchBarTextBox.Bottom + gap;
+            AudioListView_fd.Width = SearchBarTextBox.Width;
+            AudioListView_fd.Height = Math.Max(120, tabPage7.ClientSize.Height - AudioListView_fd.Top - margin);
+
+            LoadList.Left = rightPanelLeft;
+            LoadList.Top = margin;
+            LoadList.Width = rightPanelWidth;
+
+            DownloadSelected.Left = rightPanelLeft;
+            DownloadSelected.Top = LoadList.Bottom + 3;
+            DownloadSelected.Width = rightPanelWidth;
+
+            to_mmdownloader.Left = rightPanelLeft;
+            to_mmdownloader.Top = DownloadSelected.Bottom + 6;
+            to_mmdownloader.Width = rightPanelWidth;
+
+            numberLabel.Left = rightPanelLeft;
+            numberLabel.Top = to_mmdownloader.Bottom + 3;
+
+            DownloadLinkListBox.Left = rightPanelLeft;
+            DownloadLinkListBox.Width = rightPanelWidth;
+            DownloadLinkListBox.Top = Math.Max(numberLabel.Bottom + 6, tabPage7.ClientSize.Height - DownloadLinkListBox.Height - margin);
+        }
+
+        private void UpdatePluginTabLayout()
+        {
+            if (tabPage9 == null || tabPage9.IsDisposed)
+            {
+                return;
+            }
+
+            const int margin = 6;
+            const int gap = 6;
+            const int rightButtonWidth = 193;
+            const int leftButtonWidth = 75;
+
+            int tabWidth = Math.Max(360, tabPage9.ClientSize.Width);
+            int tabHeight = Math.Max(240, tabPage9.ClientSize.Height);
+            int footerTop = Math.Max(220, tabHeight - 74);
+
+            pluginListView.Left = margin;
+            pluginListView.Top = margin;
+            pluginListView.Width = Math.Max(220, tabWidth - margin * 2);
+            pluginListView.Height = Math.Max(120, footerTop - pluginListView.Top - gap);
+
+            PluginStatus.Left = margin;
+            PluginStatus.Top = footerTop + 2;
+
+            PluginServerAddress.Left = margin;
+            PluginServerAddress.Top = PluginStatus.Bottom + 2;
+
+            int rightButtonLeft = tabWidth - margin - rightButtonWidth;
+            int leftButtonLeft = rightButtonLeft - gap - leftButtonWidth;
+
+            reLoadPluginListsView.Left = leftButtonLeft;
+            reLoadPluginListsView.Top = footerTop;
+            reLoadPluginListsView.Width = leftButtonWidth;
+
+            LoadPlugin.Left = leftButtonLeft;
+            LoadPlugin.Top = reLoadPluginListsView.Bottom + 6;
+            LoadPlugin.Width = leftButtonWidth;
+
+            TogglePluginServer.Left = rightButtonLeft;
+            TogglePluginServer.Top = footerTop;
+            TogglePluginServer.Width = rightButtonWidth;
+
+            mToPluginData.Left = rightButtonLeft;
+            mToPluginData.Top = TogglePluginServer.Bottom + 6;
+            mToPluginData.Width = rightButtonWidth;
+        }
+
+        private void UpdateFeedbackTabLayout()
+        {
+            if (tabPage10 == null || tabPage10.IsDisposed)
+            {
+                return;
+            }
+
+            const int margin = 12;
+            const int gap = 8;
+
+            int tabWidth = Math.Max(360, tabPage10.ClientSize.Width);
+            int tabHeight = Math.Max(260, tabPage10.ClientSize.Height);
+
+            FeedbackTitle.Width = Math.Max(220, tabWidth - FeedbackTitle.Left - margin);
+
+            FeedbackContent.Width = Math.Max(220, tabWidth - FeedbackContent.Left - margin);
+            int contentBottomLimit = tabHeight - 112;
+            FeedbackContent.Height = Math.Max(120, contentBottomLimit - FeedbackContent.Top);
+
+            Contact.Top = FeedbackContent.Bottom + gap;
+            Contact.Width = Math.Max(220, tabWidth - Contact.Left - margin);
+            FeedbackTips3.Top = Contact.Top + 4;
+
+            int actionTop = tabHeight - margin - FeedbackButton.Height;
+            FeedbackButton.Left = tabWidth - margin - FeedbackButton.Width;
+            FeedbackButton.Top = actionTop;
+            FeedbackTipsButton.Left = FeedbackButton.Left - gap - FeedbackTipsButton.Width;
+            FeedbackTipsButton.Top = actionTop;
+
+            FeedbackTips4.Top = actionTop + 6;
+            FeedbackUrgent.Top = actionTop + 4;
+            FeedbackAverage.Top = actionTop + 4;
+            FeedbackDisaster.Top = actionTop + 4;
         }
     }
 }
@@ -2530,6 +3201,12 @@ namespace MusicalMoments
     public partial class MainWindow
     {
         private bool updatingPlaybackBehaviorUi;
+        private bool playbackBehaviorBaseLayoutCaptured;
+        private int playbackBehaviorBaseWidth;
+        private Rectangle sameAudioBehaviorLabelBaseBounds;
+        private Rectangle sameAudioBehaviorComboBoxBaseBounds;
+        private Rectangle differentAudioBehaviorLabelBaseBounds;
+        private Rectangle differentAudioBehaviorComboBoxBaseBounds;
 
         private void SameAudioBehaviorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2631,32 +3308,59 @@ namespace MusicalMoments
                 return;
             }
 
-            const int left = 10;
-            const int top = 27;
-            const int gap = 8;
-
-            int totalWidth = Math.Max(280, playbackBehaviorGroup.ClientSize.Width - left * 2);
-            int halfWidth = totalWidth / 2;
-            int comboMinWidth = 120;
-
-            int sameLabelWidth = 130;
-            int sameComboWidth = Math.Max(comboMinWidth, halfWidth - sameLabelWidth - gap);
-            int sameSectionWidth = sameLabelWidth + gap + sameComboWidth;
-
-            sameAudioBehaviorLabel.SetBounds(left, top, sameLabelWidth, 24);
-            sameAudioBehaviorComboBox.SetBounds(sameAudioBehaviorLabel.Right + gap, top - 1, sameComboWidth, 26);
-
-            int secondLeft = left + sameSectionWidth + 12;
-            int secondAvailable = totalWidth - sameSectionWidth - 12;
-            int diffLabelWidth = 110;
-            int diffComboWidth = Math.Max(comboMinWidth, secondAvailable - diffLabelWidth - gap);
-            if (secondLeft + diffLabelWidth + gap + diffComboWidth > playbackBehaviorGroup.ClientSize.Width - left)
+            if (!playbackBehaviorBaseLayoutCaptured)
             {
-                diffComboWidth = Math.Max(comboMinWidth, playbackBehaviorGroup.ClientSize.Width - secondLeft - diffLabelWidth - gap - left);
+                playbackBehaviorBaseLayoutCaptured = true;
+                playbackBehaviorBaseWidth = Math.Max(1, playbackBehaviorGroup.ClientSize.Width);
+                sameAudioBehaviorLabelBaseBounds = sameAudioBehaviorLabel.Bounds;
+                sameAudioBehaviorComboBoxBaseBounds = sameAudioBehaviorComboBox.Bounds;
+                differentAudioBehaviorLabelBaseBounds = differentAudioBehaviorLabel.Bounds;
+                differentAudioBehaviorComboBoxBaseBounds = differentAudioBehaviorComboBox.Bounds;
             }
 
-            differentAudioBehaviorLabel.SetBounds(secondLeft, top, diffLabelWidth, 24);
-            differentAudioBehaviorComboBox.SetBounds(differentAudioBehaviorLabel.Right + gap, top - 1, diffComboWidth, 26);
+            int currentWidth = Math.Max(1, playbackBehaviorGroup.ClientSize.Width);
+            int deltaWidth = currentWidth - playbackBehaviorBaseWidth;
+            int sectionDelta = deltaWidth / 2;
+            int baseRightPadding = Math.Max(8, playbackBehaviorBaseWidth - differentAudioBehaviorComboBoxBaseBounds.Right);
+
+            sameAudioBehaviorLabel.Bounds = sameAudioBehaviorLabelBaseBounds;
+
+            int sameComboX = sameAudioBehaviorComboBoxBaseBounds.X;
+            int sameComboWidth = Math.Max(100, sameAudioBehaviorComboBoxBaseBounds.Width + sectionDelta);
+            sameAudioBehaviorComboBox.SetBounds(
+                sameComboX,
+                sameAudioBehaviorComboBoxBaseBounds.Y,
+                sameComboWidth,
+                sameAudioBehaviorComboBoxBaseBounds.Height);
+
+            int diffLabelX = differentAudioBehaviorLabelBaseBounds.X + sectionDelta;
+            differentAudioBehaviorLabel.SetBounds(
+                diffLabelX,
+                differentAudioBehaviorLabelBaseBounds.Y,
+                differentAudioBehaviorLabelBaseBounds.Width,
+                differentAudioBehaviorLabelBaseBounds.Height);
+
+            int diffComboX = differentAudioBehaviorComboBoxBaseBounds.X + sectionDelta;
+            int diffComboWidth = Math.Max(100, differentAudioBehaviorComboBoxBaseBounds.Width + sectionDelta);
+            int diffComboMaxWidth = Math.Max(100, currentWidth - diffComboX - baseRightPadding);
+            if (diffComboWidth > diffComboMaxWidth)
+            {
+                diffComboWidth = diffComboMaxWidth;
+            }
+
+            int minGap = 8;
+            int maxSameComboWidth = Math.Max(100, diffLabelX - sameComboX - minGap);
+            if (sameComboWidth > maxSameComboWidth)
+            {
+                sameComboWidth = maxSameComboWidth;
+                sameAudioBehaviorComboBox.Width = sameComboWidth;
+            }
+
+            differentAudioBehaviorComboBox.SetBounds(
+                diffComboX,
+                differentAudioBehaviorComboBoxBaseBounds.Y,
+                diffComboWidth,
+                differentAudioBehaviorComboBoxBaseBounds.Height);
         }
     }
 }
@@ -2786,6 +3490,7 @@ namespace MusicalMoments
                 Key = item.Key
             }));
 
+            RebuildHotkeyAudioIndex();
             ApplyAudioFilterAndPaging(resetToFirstPage: false);
         }
 

@@ -15,17 +15,43 @@ namespace MusicalMoments.KeyHelp
         [DllImport("user32.dll")]
         private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
-        [DllImport("user32.dll")]
-        private static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
         private const uint KeyEventFExtendedKey = 0x0001;
         private const uint KeyEventFKeyUp = 0x0002;
+        private const uint InputMouse = 0;
         private const uint MouseEventFMiddleDown = 0x0020;
         private const uint MouseEventFMiddleUp = 0x0040;
         private const uint MouseEventFXDown = 0x0080;
         private const uint MouseEventFXUp = 0x0100;
         private const uint XButton1 = 0x0001;
         private const uint XButton2 = 0x0002;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct INPUT
+        {
+            public uint type;
+            public InputUnion U;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private struct InputUnion
+        {
+            [FieldOffset(0)]
+            public MOUSEINPUT mi;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MOUSEINPUT
+        {
+            public int dx;
+            public int dy;
+            public uint mouseData;
+            public uint dwFlags;
+            public uint time;
+            public UIntPtr dwExtraInfo;
+        }
 
         private readonly PluginWsClient wsClient;
         private readonly GlobalInputHook globalInputHook;
@@ -212,14 +238,11 @@ namespace MusicalMoments.KeyHelp
             switch (key)
             {
                 case Keys.MButton:
-                    mouse_event(MouseEventFMiddleDown, 0, 0, 0, UIntPtr.Zero);
-                    return true;
+                    return SendMouseInput(MouseEventFMiddleDown);
                 case Keys.XButton1:
-                    mouse_event(MouseEventFXDown, 0, 0, XButton1, UIntPtr.Zero);
-                    return true;
+                    return SendMouseInput(MouseEventFXDown, XButton1);
                 case Keys.XButton2:
-                    mouse_event(MouseEventFXDown, 0, 0, XButton2, UIntPtr.Zero);
-                    return true;
+                    return SendMouseInput(MouseEventFXDown, XButton2);
                 default:
                     keybd_event((byte)key, 0, KeyEventFExtendedKey, UIntPtr.Zero);
                     return true;
@@ -236,13 +259,13 @@ namespace MusicalMoments.KeyHelp
             switch (key)
             {
                 case Keys.MButton:
-                    mouse_event(MouseEventFMiddleUp, 0, 0, 0, UIntPtr.Zero);
+                    SendMouseInput(MouseEventFMiddleUp);
                     break;
                 case Keys.XButton1:
-                    mouse_event(MouseEventFXUp, 0, 0, XButton1, UIntPtr.Zero);
+                    SendMouseInput(MouseEventFXUp, XButton1);
                     break;
                 case Keys.XButton2:
-                    mouse_event(MouseEventFXUp, 0, 0, XButton2, UIntPtr.Zero);
+                    SendMouseInput(MouseEventFXUp, XButton2);
                     break;
                 default:
                     keybd_event((byte)key, 0, KeyEventFExtendedKey | KeyEventFKeyUp, UIntPtr.Zero);
@@ -260,22 +283,37 @@ namespace MusicalMoments.KeyHelp
             switch (key)
             {
                 case Keys.MButton:
-                    mouse_event(MouseEventFMiddleDown, 0, 0, 0, UIntPtr.Zero);
-                    mouse_event(MouseEventFMiddleUp, 0, 0, 0, UIntPtr.Zero);
-                    return true;
+                    return SendMouseInput(MouseEventFMiddleDown) && SendMouseInput(MouseEventFMiddleUp);
                 case Keys.XButton1:
-                    mouse_event(MouseEventFXDown, 0, 0, XButton1, UIntPtr.Zero);
-                    mouse_event(MouseEventFXUp, 0, 0, XButton1, UIntPtr.Zero);
-                    return true;
+                    return SendMouseInput(MouseEventFXDown, XButton1) && SendMouseInput(MouseEventFXUp, XButton1);
                 case Keys.XButton2:
-                    mouse_event(MouseEventFXDown, 0, 0, XButton2, UIntPtr.Zero);
-                    mouse_event(MouseEventFXUp, 0, 0, XButton2, UIntPtr.Zero);
-                    return true;
+                    return SendMouseInput(MouseEventFXDown, XButton2) && SendMouseInput(MouseEventFXUp, XButton2);
                 default:
                     keybd_event((byte)key, 0, KeyEventFExtendedKey, UIntPtr.Zero);
                     keybd_event((byte)key, 0, KeyEventFExtendedKey | KeyEventFKeyUp, UIntPtr.Zero);
                     return true;
             }
+        }
+
+        private static bool SendMouseInput(uint flags, uint mouseData = 0)
+        {
+            INPUT[] inputs =
+            {
+                new INPUT
+                {
+                    type = InputMouse,
+                    U = new InputUnion
+                    {
+                        mi = new MOUSEINPUT
+                        {
+                            dwFlags = flags,
+                            mouseData = mouseData
+                        }
+                    }
+                }
+            };
+
+            return SendInput(1, inputs, Marshal.SizeOf<INPUT>()) == 1;
         }
 
         private void bindKeyTextBox_KeyDown(object sender, KeyEventArgs e)

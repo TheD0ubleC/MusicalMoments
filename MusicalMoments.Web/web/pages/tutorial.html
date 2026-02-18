@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MusicalMoments 使用教程</title>
+  <meta name="description" content="MusicalMoments 使用教程，包含安装流程、基础配置、常见问题与排错建议，适合新用户快速上手。">
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/mm-theme.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body class="mm-theme">
+  <div class="mm-noise"></div>
+  <div class="mm-orb mm-orb-a"></div>
+  <div class="mm-orb mm-orb-b"></div>
+
+  <header class="mm-public-header">
+    <div class="mm-shell">
+      <div class="mm-board mm-nav-wrap mm-animated">
+        <a href="/" class="mm-brand" aria-label="MusicalMoments 首页">
+          <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="mm-brand-title-logo">
+        </a>
+
+        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav id="siteNav" class="mm-nav-menu">
+          <a href="/" class="mm-nav-item">首页</a>
+          <a href="/download" class="mm-nav-item">下载</a>
+          <a href="/tutorial" class="mm-nav-item active">教程</a>
+          <a href="/statu" class="mm-nav-item">状态</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="mm-shell mm-page">
+    <div class="mm-page-stack">
+      <section class="mm-board mm-doc-head mm-animated">
+        <span class="mm-chip"><span class="mm-tag-dot"></span>使用文档</span>
+        <h1>MusicalMoments 使用教程</h1>
+        <p>本页按真实使用流程组织内容，包括安装步骤、配置建议与常见问题处理方式。教程内容来自仓库中的 Markdown 文档。</p>
+
+        <ul class="mm-doc-meta">
+          <li>文档文件：`/assets/docs/tutorial.md`</li>
+          <li>渲染方式：前端 Markdown 渲染</li>
+          <li id="tutorialUpdatedAt">更新时间：加载中...</li>
+        </ul>
+      </section>
+
+      <section class="mm-board mm-doc-body mm-animated mm-stagger-1">
+        <div id="tutorialContent" class="mm-doc-content">教程内容加载中...</div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="mm-site-footer">
+    <div class="mm-shell">
+      <div class="mm-board mm-footer-wrap">
+        <p>MusicalMoments 使用教程</p>
+        <p id="footerMeta">MM Web Backend</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/public-common.js" defer></script>
+  <script src="/assets/js/vendor/marked.min.js" defer></script>
+  <script src="/assets/js/tutorial.js" defer></script>
+</body>
+</html>

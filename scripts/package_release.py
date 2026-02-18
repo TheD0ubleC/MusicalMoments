@@ -88,6 +88,28 @@ def copy_publish_output(source: Path, destination: Path) -> None:
             shutil.copy2(item, target)
 
 
+def copy_main_publish_output(source: Path, destination: Path) -> None:
+    destination.mkdir(parents=True, exist_ok=True)
+    excluded_dirs = {"Plugin"}
+    excluded_file_prefixes = (
+        "MusicalMoments.Updater",
+    )
+    for item in source.iterdir():
+        if item.is_dir() and item.name in excluded_dirs:
+            continue
+
+        if item.is_file() and any(item.name.startswith(prefix) for prefix in excluded_file_prefixes):
+            continue
+
+        target = destination / item.name
+        if item.is_dir():
+            if target.exists():
+                shutil.rmtree(target)
+            shutil.copytree(item, target)
+        else:
+            shutil.copy2(item, target)
+
+
 def zip_directory(source_dir: Path, output_file: Path) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(output_file, "w", compression=ZIP_DEFLATED) as archive:
@@ -95,6 +117,36 @@ def zip_directory(source_dir: Path, output_file: Path) -> None:
             if file_path.is_file():
                 arc_name = file_path.relative_to(source_dir)
                 archive.write(file_path, arc_name)
+
+
+def ensure_single_file_publish_shape(output_dir: Path, expected_exe_name: str) -> None:
+    expected_exe = output_dir / expected_exe_name
+    if not expected_exe.exists():
+        raise FileNotFoundError(f"Missing published executable: {expected_exe}")
+
+    disallowed_dll = output_dir / f"{Path(expected_exe_name).stem}.dll"
+    if disallowed_dll.exists():
+        raise RuntimeError(
+            f"Publish output is not single-file: found {disallowed_dll.name} next to {expected_exe_name}"
+        )
+
+
+def validate_zip_layout(zip_path: Path) -> None:
+    with ZipFile(zip_path, "r") as archive:
+        entries = [name for name in archive.namelist() if name]
+        bad_entries = [
+            name for name in entries
+            if name.startswith("_")
+            or "/_work/" in name
+            or "/_main_publish/" in name
+            or "/_plugin_publish_" in name
+            or "/_updater_publish/" in name
+        ]
+        if bad_entries:
+            raise RuntimeError(
+                "zip contains intermediate build directories:\n"
+                + "\n".join(bad_entries[:20])
+            )
 
 
 def build_local_tailwind() -> None:
@@ -167,6 +219,7 @@ def build_variant(
         self_contained=self_contained,
         publish_single_file=True,
     )
+    ensure_single_file_publish_shape(updater_publish_dir, "MusicalMoments.Updater.exe")
 
     publish_project(
         project_path=MAIN_PROJECT,
@@ -176,8 +229,9 @@ def build_variant(
         self_contained=self_contained,
         publish_single_file=True,
     )
+    ensure_single_file_publish_shape(main_publish_dir, "MusicalMoments.exe")
 
-    copy_publish_output(main_publish_dir, variant_package_dir)
+    copy_main_publish_output(main_publish_dir, variant_package_dir)
     copy_publish_output(updater_publish_dir, variant_package_dir)
 
     plugin_root = variant_package_dir / "Plugin"
@@ -195,12 +249,14 @@ def build_variant(
             self_contained=self_contained,
             publish_single_file=True,
         )
+        ensure_single_file_publish_shape(plugin_publish_dir, f"{plugin_name}.exe")
 
         plugin_target_dir = plugin_root / plugin_name
         clean_dir(plugin_target_dir)
         copy_publish_output(plugin_publish_dir, plugin_target_dir)
 
     zip_directory(variant_package_dir, output_zip)
+    validate_zip_layout(output_zip)
     log(f"Created package: {output_zip}")
 
 

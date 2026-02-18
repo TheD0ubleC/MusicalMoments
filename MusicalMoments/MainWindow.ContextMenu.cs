@@ -154,6 +154,7 @@ namespace MusicalMoments
                 });
             }
 
+            RebuildHotkeyAudioIndex();
             if (CheckDuplicateKeys()) { MessageBox.Show($"已检测到相同按键 请勿作死将两个或多个音频绑定在同个按键上 该操作可能会导致MM崩溃 此提示会在Bind Key时与软件启动时检测并发出", "温馨提示"); }
         }
 

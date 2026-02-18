@@ -10,7 +10,17 @@
     public bool SwitchStreamTips { get; set; }
     public string SameAudioPressBehavior { get; set; }
     public string DifferentAudioInterruptBehavior { get; set; }
+    public string CloseActionOnExit { get; set; }
     public bool? RestoreDefaultsAfterInstall { get; set; }
+    public string AudioPerformanceMode { get; set; }
+    public int AudioPerformanceSimpleLevel { get; set; }
+    public int AudioManualPlaybackLatencyMs { get; set; }
+    public int AudioManualBufferSeconds { get; set; }
+    public int AudioManualBuffersCount { get; set; }
+    public bool AudioManualAdvanced { get; set; }
+    public string AudioPreloadMode { get; set; }
+    public int AudioPreloadCount { get; set; }
+    public bool OptimizationRealtimeUpdate { get; set; } = true;
     public float VBVolume { get; set; }
     public float Volume { get; set; }
     public float TipsVolume { get; set; }

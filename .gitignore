@@ -57,7 +57,10 @@ logs/
 # Docker 相关
 docker-compose.override.yml
 .env
+mm_admin.key
+MusicalMoments.Web/mm_admin.key
 
 _artifacts/
 _build_tmp/
+MusicalMoments.Web/data/
 launchSettings.json

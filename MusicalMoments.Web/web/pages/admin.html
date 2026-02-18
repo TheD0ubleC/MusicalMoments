@@ -1,0 +1,271 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MusicalMoments Admin</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/mm-theme.css">
+  <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body class="mm-theme">
+  <div class="mm-noise"></div>
+  <div class="mm-orb mm-orb-a"></div>
+  <div class="mm-orb mm-orb-b"></div>
+
+  <section id="loginPanel" class="admin-login-screen">
+    <div class="admin-login-wrap">
+      <article class="mm-board mm-animated overflow-hidden">
+        <div class="mm-bar-blue p-5">
+          <div class="admin-login-head">
+            <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="admin-login-title-logo">
+            <strong>后台安全登录</strong>
+          </div>
+        </div>
+
+        <div class="p-5 md:p-6">
+          <p class="admin-login-tip">
+            后台仅支持管理员 key 文件认证。
+            登录后可维护稳定版、插件描述、上传资源和实时统计。
+            登录尝试会记录时间、IP 与位置信息。
+          </p>
+
+          <form id="adminLoginForm" class="admin-login-form">
+            <label class="admin-field">管理员 Key 文件
+              <input id="adminKeyFile" name="keyFile" type="file" required class="mm-file px-3 py-3 text-sm">
+            </label>
+            <button type="submit" class="mm-button-primary">登录后台</button>
+          </form>
+
+          <p id="loginHint"></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div id="adminApp" class="hidden admin-app">
+    <div class="mm-shell">
+      <header class="mm-board mm-bar-blue admin-topbar mm-animated">
+        <div class="admin-top-grid">
+          <div class="admin-brand-pill">
+            <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="admin-brand-title-logo">
+          </div>
+
+          <h1 class="admin-top-title">Website 管理控制台</h1>
+
+          <div class="admin-top-actions">
+            <span id="tokenExpireAt" class="admin-token">未登录</span>
+            <a href="/" target="_blank" rel="noopener" class="admin-top-link">打开官网</a>
+            <button id="logoutBtn" type="button" class="admin-top-link danger" disabled>退出登录</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="mm-board admin-nav-wrap">
+        <div class="admin-nav-row">
+          <button class="admin-nav-btn active" data-target="dashboardPane" type="button">总览</button>
+          <button class="admin-nav-btn" data-target="versionPane" type="button">版本管理</button>
+          <button class="admin-nav-btn" data-target="pluginPane" type="button">插件管理</button>
+          <button class="admin-nav-btn" data-target="uploadPane" type="button">上传中心</button>
+        </div>
+      </section>
+
+      <main class="admin-main">
+        <section id="dashboardPane" class="admin-pane active mm-board">
+          <div class="admin-title-row">
+            <h3>流量与资源概览</h3>
+            <span id="dashLatestPointers" class="admin-pointer">stable:-</span>
+          </div>
+
+          <div class="admin-stat-grid">
+            <article class="admin-stat-card"><p>总请求</p><h4 id="dashTotalRequests">0</h4></article>
+            <article class="admin-stat-card"><p>页面访问</p><h4 id="dashPageViews">0</h4></article>
+            <article class="admin-stat-card"><p>API访问</p><h4 id="dashApiRequests">0</h4></article>
+            <article class="admin-stat-card"><p>下载次数</p><h4 id="dashDownloads">0</h4></article>
+            <article class="admin-stat-card"><p>API下载</p><h4 id="dashApiDownloads">0</h4></article>
+            <article class="admin-stat-card"><p>流量(MB)</p><h4 id="dashBytesServed">0</h4></article>
+          </div>
+
+          <div class="admin-mini-grid">
+            <article class="admin-mini-card"><p>版本总数</p><h4 id="dashVersionCount">0</h4></article>
+            <article class="admin-mini-card"><p>插件总数</p><h4 id="dashPluginCount">0</h4></article>
+          </div>
+
+          <div class="admin-title-row mt-4">
+            <h3>在线与使用统计</h3>
+            <div class="admin-usage-tools">
+              <label for="usageDaySelect">查看日期</label>
+              <select id="usageDaySelect" class="mm-select px-2 py-1.5">
+                <option value="">今天</option>
+              </select>
+              <button id="usageDayRefresh" type="button" class="mm-button-soft px-3 py-1.5 text-xs">刷新</button>
+            </div>
+          </div>
+
+          <div class="admin-usage-grid">
+            <article class="admin-mini-card"><p>在线人数</p><h4 id="dashOnlineNow">0</h4></article>
+            <article class="admin-mini-card"><p>今日峰值在线</p><h4 id="dashTodayOnlinePeak">0</h4></article>
+            <article class="admin-mini-card"><p>所选日峰值在线</p><h4 id="dashSelectedOnlinePeak">0</h4></article>
+            <article class="admin-mini-card"><p>总播放次数</p><h4 id="dashPlayedTotal">0</h4></article>
+            <article class="admin-mini-card"><p>总关闭次数</p><h4 id="dashCloseTotal">0</h4></article>
+            <article class="admin-mini-card"><p>总切流次数</p><h4 id="dashChangedTotal">0</h4></article>
+            <article class="admin-mini-card"><p>当日播放次数</p><h4 id="dashPlayedDay">0</h4></article>
+            <article class="admin-mini-card"><p>当日关闭次数</p><h4 id="dashCloseDay">0</h4></article>
+            <article class="admin-mini-card"><p>当日切流次数</p><h4 id="dashChangedDay">0</h4></article>
+          </div>
+
+          <div class="mt-3 overflow-x-auto">
+            <table class="mm-table">
+              <thead><tr><th>路径</th><th>命中次数</th></tr></thead>
+              <tbody id="adminTopRoutes"></tbody>
+            </table>
+          </div>
+
+          <div class="admin-title-row mt-4">
+            <h3>后台登录审计日志</h3>
+            <span class="admin-pointer">最近 50 条</span>
+          </div>
+
+          <div class="mt-3 overflow-x-auto">
+            <table class="mm-table">
+              <thead><tr><th>时间</th><th>IP</th><th>位置</th><th>状态</th><th>详情</th></tr></thead>
+              <tbody id="adminLoginLogs"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="versionPane" class="admin-pane mm-board">
+          <div class="admin-title-row">
+            <h3>版本管理（仅稳定版）</h3>
+            <span class="admin-pointer">latest stable: <span id="latestStableId">-</span></span>
+          </div>
+
+          <div class="admin-search-row">
+            <input id="versionSearchInput" class="mm-input px-3 py-2.5" placeholder="搜索版本号、标题、描述...">
+            <button id="versionCreateBtn" type="button" class="mm-button-soft px-4 py-2.5">新建版本</button>
+          </div>
+
+          <form id="versionForm" class="admin-form-grid one">
+            <input type="hidden" id="versionId">
+            <input type="hidden" id="versionTrack" value="stable">
+
+            <label class="admin-field">版本号
+              <input id="versionNumber" required class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">标题
+              <input id="versionTitle" required class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">下载链接
+              <input id="versionDownloadURL" required class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">SHA256
+              <input id="versionSha256" class="mm-input px-3 py-2.5" placeholder="可选">
+            </label>
+            <label class="admin-field">文件大小(Byte)
+              <input id="versionFileSize" type="number" min="0" value="0" class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">描述
+              <textarea id="versionDescription" rows="2" class="mm-textarea px-3 py-2.5"></textarea>
+            </label>
+            <label class="admin-field">更新日志
+              <textarea id="versionChangelog" rows="4" class="mm-textarea px-3 py-2.5"></textarea>
+            </label>
+
+            <label class="admin-check">
+              <input id="versionSetLatest" type="checkbox">
+              保存后设为最新稳定版
+            </label>
+
+            <div class="admin-actions">
+              <button type="submit" class="mm-button-primary px-4 py-2.5">保存版本</button>
+              <button id="versionFormReset" type="button" class="mm-button-soft px-4 py-2.5">清空</button>
+            </div>
+          </form>
+
+          <div class="mt-3 overflow-x-auto">
+            <table class="mm-table">
+              <thead>
+                <tr><th>ID</th><th>版本</th><th>通道</th><th>标题</th><th>更新时间</th><th>操作</th></tr>
+              </thead>
+              <tbody id="versionTableBody"></tbody>
+            </table>
+          </div>
+
+        </section>
+
+        <section id="pluginPane" class="admin-pane mm-board">
+          <div class="admin-title-row">
+            <h3>插件管理</h3>
+          </div>
+
+          <div class="admin-search-row">
+            <input id="pluginSearchInput" class="mm-input px-3 py-2.5" placeholder="搜索插件名、版本、描述...">
+            <button id="pluginCreateBtn" type="button" class="mm-button-soft px-4 py-2.5">新建插件</button>
+          </div>
+
+          <form id="pluginForm" class="admin-form-grid one">
+            <input type="hidden" id="pluginId">
+
+            <label class="admin-field">插件名称
+              <input id="pluginName" required class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">版本
+              <input id="pluginVersion" required class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">下载链接
+              <input id="pluginDownloadURL" required class="mm-input px-3 py-2.5">
+            </label>
+            <label class="admin-field">SHA256
+              <input id="pluginSha256" class="mm-input px-3 py-2.5" placeholder="可选">
+            </label>
+            <label class="admin-field">插件描述
+              <textarea id="pluginDescription" rows="3" class="mm-textarea px-3 py-2.5" placeholder="用于下载页展示的插件描述"></textarea>
+            </label>
+
+            <div class="admin-actions">
+              <button type="submit" class="mm-button-primary px-4 py-2.5">保存插件</button>
+              <button id="pluginFormReset" type="button" class="mm-button-soft px-4 py-2.5">清空</button>
+            </div>
+          </form>
+
+          <div class="mt-3 overflow-x-auto">
+            <table class="mm-table">
+              <thead><tr><th>ID</th><th>名称</th><th>版本</th><th>描述</th><th>更新时间</th><th>操作</th></tr></thead>
+              <tbody id="pluginTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="uploadPane" class="admin-pane mm-board">
+          <div class="admin-title-row">
+            <h3>上传中心</h3>
+          </div>
+
+          <form id="uploadForm" class="admin-form-grid one max-w-2xl">
+            <label class="admin-field">上传类型
+              <select id="uploadKind" class="mm-select px-3 py-2.5">
+                <option value="release">release</option>
+                <option value="plugin">plugin</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+            <label class="admin-field">选择文件
+              <input id="uploadFile" type="file" required class="mm-file px-3 py-2.5 text-sm">
+            </label>
+            <button type="submit" class="mm-button-primary px-4 py-3">上传文件</button>
+          </form>
+
+          <pre id="uploadResult" class="admin-upload-result mt-3">上传成功后将在这里显示下载链接与 SHA256。</pre>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="globalToast" class="mm-toast"></div>
+
+  <script src="/assets/js/public-common.js" defer></script>
+  <script src="/assets/js/admin.js" defer></script>
+</body>
+</html>
+

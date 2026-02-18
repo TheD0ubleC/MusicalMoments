@@ -19,7 +19,13 @@
     <Compile Update="MainWindow.Feedback.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MainWindow.HotkeyDispatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainWindow.Navigation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.Optimization.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="MainWindow.PlaybackLogic.cs">
@@ -29,6 +35,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="MainWindow.Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainWindow.Tray.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="MainWindow.VbGuide.cs">

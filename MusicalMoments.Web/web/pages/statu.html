@@ -1,0 +1,131 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MusicalMoments 站点状态</title>
+  <meta name="description" content="MusicalMoments 站点状态页，集中展示资源数量、访问统计、服务状态与最近更新时间。">
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/mm-theme.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body class="mm-theme">
+  <div class="mm-noise"></div>
+  <div class="mm-orb mm-orb-a"></div>
+  <div class="mm-orb mm-orb-b"></div>
+
+  <header class="mm-public-header">
+    <div class="mm-shell">
+      <div class="mm-board mm-nav-wrap mm-animated">
+        <a href="/" class="mm-brand" aria-label="MusicalMoments 首页">
+          <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="mm-brand-title-logo">
+        </a>
+
+        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav id="siteNav" class="mm-nav-menu">
+          <a href="/" class="mm-nav-item">首页</a>
+          <a href="/download" class="mm-nav-item">下载</a>
+          <a href="/tutorial" class="mm-nav-item">教程</a>
+          <a href="/statu" class="mm-nav-item active">状态</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="mm-shell mm-page">
+    <div class="mm-page-stack">
+      <section class="mm-board mm-status-hero mm-animated">
+        <span class="mm-chip"><span class="mm-tag-dot"></span>站点状态</span>
+        <h1>站点运行概览</h1>
+        <p>状态页用于查看资源规模、访问请求与服务可用性。统计数据来自站点实时汇总。</p>
+      </section>
+
+      <section class="mm-board mm-ops-panel mm-animated mm-stagger-1">
+        <div class="mm-section-head">
+          <div>
+            <p>Overview</p>
+            <h2>核心指标</h2>
+          </div>
+          <span id="statuLastUpdated">最近刷新：--</span>
+        </div>
+
+        <ul class="mm-kpi-list">
+          <li>
+            <p>资源总数</p>
+            <h3 id="resourceCount">0</h3>
+          </li>
+          <li>
+            <p>稳定版数量</p>
+            <h3 id="versionCount">0</h3>
+          </li>
+          <li>
+            <p>插件数量</p>
+            <h3 id="pluginCount">0</h3>
+          </li>
+        </ul>
+
+        <ul class="mm-kpi-list long">
+          <li>
+            <p>总请求</p>
+            <h3 id="statTotalRequests">0</h3>
+          </li>
+          <li>
+            <p>页面访问</p>
+            <h3 id="statPageViews">0</h3>
+          </li>
+          <li>
+            <p>API 请求</p>
+            <h3 id="statApiRequests">0</h3>
+          </li>
+          <li>
+            <p>下载次数</p>
+            <h3 id="statDownloads">0</h3>
+          </li>
+          <li>
+            <p>API 下载</p>
+            <h3 id="statApiDownloads">0</h3>
+          </li>
+          <li>
+            <p>流量 (MB)</p>
+            <h3 id="statBytesServed">0</h3>
+          </li>
+        </ul>
+
+        <ul class="mm-status-strip">
+          <li><span>资源服务</span><strong id="syncStatus">检测中...</strong></li>
+          <li><span>统计接口</span><strong id="statsStatus">检测中...</strong></li>
+          <li><span>教程入口</span><a href="/tutorial">打开教程文档</a></li>
+        </ul>
+      </section>
+
+      <section class="mm-board mm-card-section mm-animated">
+        <div class="mm-section-head">
+          <div>
+            <p>Top Routes</p>
+            <h2>访问路径 Top 10</h2>
+          </div>
+        </div>
+
+        <ul id="topRoutesList" class="mm-route-list"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="mm-site-footer">
+    <div class="mm-shell">
+      <div class="mm-board mm-footer-wrap">
+        <p>MusicalMoments 站点状态</p>
+        <p id="footerMeta">MM Web Backend</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/public-common.js" defer></script>
+  <script src="/assets/js/status.js" defer></script>
+</body>
+</html>

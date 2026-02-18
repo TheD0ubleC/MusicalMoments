@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -8,6 +9,65 @@ namespace MusicalMoments
     public partial class MainWindow
     {
         private bool refreshingAudioDeviceCombos;
+        private bool allowExitWithoutPrompt;
+        private bool closingWithFade;
+        private ClientUsageReporter usageReporter;
+
+        private void InitializeCloseBehaviorUx()
+        {
+            if (closeBehaviorComboBox == null)
+            {
+                return;
+            }
+
+            if (closeBehaviorComboBox.Items.Count == 0)
+            {
+                closeBehaviorComboBox.Items.Add("隐藏到托盘");
+                closeBehaviorComboBox.Items.Add("直接关闭");
+                closeBehaviorComboBox.Items.Add("每次都询问");
+            }
+
+            if (closeBehaviorComboBox.SelectedIndex < 0)
+            {
+                closeBehaviorComboBox.SelectedIndex = 1;
+            }
+        }
+
+        private WindowCloseBehavior GetSelectedCloseBehavior()
+        {
+            return closeBehaviorComboBox?.SelectedIndex switch
+            {
+                0 => WindowCloseBehavior.MinimizeToTray,
+                2 => WindowCloseBehavior.AskEveryTime,
+                _ => WindowCloseBehavior.ExitDirectly
+            };
+        }
+
+        private void SetSelectedCloseBehavior(WindowCloseBehavior behavior)
+        {
+            if (closeBehaviorComboBox == null)
+            {
+                return;
+            }
+
+            closeBehaviorComboBox.SelectedIndex = behavior switch
+            {
+                WindowCloseBehavior.MinimizeToTray => 0,
+                WindowCloseBehavior.AskEveryTime => 2,
+                _ => 1
+            };
+        }
+
+        private static WindowCloseBehavior ParseCloseBehavior(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value)
+                && Enum.TryParse(value, true, out WindowCloseBehavior behavior))
+            {
+                return behavior;
+            }
+
+            return WindowCloseBehavior.ExitDirectly;
+        }
 
         private static int ClampComboIndex(int index, int itemCount)
         {
@@ -97,6 +157,18 @@ namespace MusicalMoments
             InputComboSelect = GetSafeSelectedIndex(comboBox_VBAudioEquipmentOutput);
             OutputComboSelect = GetSafeSelectedIndex(comboBox_AudioEquipmentOutput);
             AudioEquipmentPlayCheck = audioEquipmentPlay.Checked;
+
+            string vbOutputName = comboBox_VBAudioEquipmentOutput.SelectedItem?.ToString() ?? string.Empty;
+            string physicalOutputName = comboBox_AudioEquipmentOutput.SelectedItem?.ToString() ?? string.Empty;
+            string microphoneInputName = comboBox_AudioEquipmentInput.SelectedItem?.ToString() ?? string.Empty;
+
+            int vbOutputDeviceId = string.IsNullOrWhiteSpace(vbOutputName) ? -1 : Misc.GetOutputDeviceID(vbOutputName);
+            int physicalOutputDeviceId = string.IsNullOrWhiteSpace(physicalOutputName) ? -1 : Misc.GetOutputDeviceID(physicalOutputName);
+            int microphoneInputDeviceId = string.IsNullOrWhiteSpace(microphoneInputName) ? -1 : Misc.GetInputDeviceID(microphoneInputName);
+            int tipOutputDeviceId = physicalOutputDeviceId >= 0 ? physicalOutputDeviceId : vbOutputDeviceId;
+
+            UpdatePlaybackDeviceCache(vbOutputDeviceId, physicalOutputDeviceId, microphoneInputDeviceId, tipOutputDeviceId);
+            UpdateSwitchStreamTipsCache();
         }
 
         internal void RefreshAudioDeviceCombosPreserveSelection()
@@ -145,6 +217,8 @@ namespace MusicalMoments
 
         private void LoadUserData(bool changeToAudioPage = true)
         {
+            InitializeCloseBehaviorUx();
+
             string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "userSettings.json");
             if (File.Exists(configPath))
             {
@@ -214,6 +288,9 @@ namespace MusicalMoments
                         restoreDefaultsAfterInstallCheckBox.Checked = settings.RestoreDefaultsAfterInstall ?? true;
                     }
 
+                    SetSelectedCloseBehavior(ParseCloseBehavior(settings.CloseActionOnExit));
+                    ApplyPerformanceSettingsFromUser(settings);
+
                     closeCount = settings.CloseCount;
                     playedCount = settings.PlayedCount;
                     changedCount = settings.ChangedCount;
@@ -244,24 +321,142 @@ namespace MusicalMoments
                     restoreDefaultsAfterInstallCheckBox.Checked = true;
                 }
 
+                SetSelectedCloseBehavior(WindowCloseBehavior.ExitDirectly);
                 sameAudioPressBehavior = SameAudioPressBehavior.StopPlayback;
                 differentAudioInterruptBehavior = DifferentAudioInterruptBehavior.StopAndPlayNew;
                 UpdatePlaybackBehaviorToolTip();
+                ApplyPerformanceSettingsFromUser(null);
                 firstStart = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
             }
         }
 
+
+        private ClientUsageSnapshot BuildClientUsageSnapshot()
+        {
+            int played = Interlocked.Add(ref playedCount, 0);
+            int closed = Interlocked.Add(ref closeCount, 0);
+            int changed = Interlocked.Add(ref changedCount, 0);
+
+            return new ClientUsageSnapshot(
+                playedCount: (ulong)Math.Max(played, 0),
+                closeCount: (ulong)Math.Max(closed, 0),
+                streamChangedCount: (ulong)Math.Max(changed, 0));
+        }
+
+        private void StartClientUsageReporter()
+        {
+            if (usageReporter != null)
+            {
+                return;
+            }
+
+            usageReporter = ClientUsageReporter.TryCreate(
+                runningDirectory,
+                VersionService.CurrentVersionTag,
+                BuildClientUsageSnapshot);
+            usageReporter?.Start();
+        }
+
+        private void ReportClientUsageHeartbeat()
+        {
+            ClientUsageReporter reporter = usageReporter;
+            if (reporter == null)
+            {
+                return;
+            }
+
+            _ = reporter.ReportHeartbeatAsync();
+        }
+
+        private void StopClientUsageReporter()
+        {
+            ClientUsageReporter reporter = usageReporter;
+            usageReporter = null;
+            reporter?.StopAndDispose(sendShutdown: true);
+        }
         private async void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveUserData(true);
-            Unsubscribe();
+            if (e.CloseReason == CloseReason.WindowsShutDown
+                || e.CloseReason == CloseReason.TaskManagerClosing
+                || allowExitWithoutPrompt)
+            {
+                SaveUserData(true);
+                CleanupBeforeExit();
+                return;
+            }
+
+            if (closingWithFade)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            WindowCloseBehavior behavior = GetSelectedCloseBehavior();
+            if (behavior == WindowCloseBehavior.AskEveryTime)
+            {
+                CloseDecision decision = ShowCloseDecisionDialog();
+                if (decision.Action == CloseDecisionAction.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                behavior = decision.Action == CloseDecisionAction.MinimizeToTray
+                    ? WindowCloseBehavior.MinimizeToTray
+                    : WindowCloseBehavior.ExitDirectly;
+
+                if (decision.RememberChoice)
+                {
+                    SetSelectedCloseBehavior(behavior);
+                }
+            }
+
+            if (behavior == WindowCloseBehavior.MinimizeToTray)
+            {
+                SaveUserData(true);
+                e.Cancel = true;
+                BeginInvoke(new Action(HideToTray));
+                return;
+            }
 
             e.Cancel = true;
-            await Misc.FadeOut(200, this);
+            closingWithFade = true;
+            try
+            {
+                Enabled = false;
+                await UiEffectsService.FadeHideWithoutDispose(160, this);
+                allowExitWithoutPrompt = true;
+                Close();
+            }
+            finally
+            {
+                if (!IsDisposed && !allowExitWithoutPrompt)
+                {
+                    Enabled = true;
+                    Show();
+                    Opacity = 1;
+                }
+
+                closingWithFade = false;
+            }
+        }
+
+        private void CleanupBeforeExit()
+        {
+            StopClientUsageReporter();
+            StopOptimizationRealtimeUpdates();
+            DisposeTrayFeatures();
+            Unsubscribe();
         }
 
         private void SaveUserData(bool addCloseCount = false)
         {
+            int closeValue = addCloseCount
+                ? Interlocked.Increment(ref closeCount)
+                : Interlocked.Add(ref closeCount, 0);
+            int playedValue = Interlocked.Add(ref playedCount, 0);
+            int changedValue = Interlocked.Add(ref changedCount, 0);
+
             UserSettings settings = new UserSettings
             {
                 VBAudioEquipmentInputIndex = GetSafeSelectedIndex(comboBox_VBAudioEquipmentInput),
@@ -274,18 +469,26 @@ namespace MusicalMoments
                 SwitchStreamTips = switchStreamTips.Checked,
                 SameAudioPressBehavior = sameAudioPressBehavior.ToString(),
                 DifferentAudioInterruptBehavior = differentAudioInterruptBehavior.ToString(),
+                CloseActionOnExit = GetSelectedCloseBehavior().ToString(),
                 RestoreDefaultsAfterInstall = restoreDefaultsAfterInstallCheckBox?.Checked ?? true,
                 VBVolume = VBVolumeTrackBar.Value / 100f,
                 Volume = VolumeTrackBar.Value / 100f,
                 TipsVolume = TipsVolumeTrackBar.Value / 100f,
-                CloseCount = closeCount + (addCloseCount ? 1 : 0),
-                PlayedCount = playedCount,
-                ChangedCount = changedCount,
+                CloseCount = closeValue,
+                PlayedCount = playedValue,
+                ChangedCount = changedValue,
                 FirstStart = firstStart
             };
 
+            FillPerformanceSettingsToUser(settings);
+
             string json = JsonConvert.SerializeObject(settings);
             File.WriteAllText(Path.Combine(runningDirectory, "userSettings.json"), json);
+
+            if (addCloseCount)
+            {
+                ReportClientUsageHeartbeat();
+            }
         }
 
         private void audioEquipmentPlay_CheckedChanged(object sender, EventArgs e)
@@ -339,3 +542,5 @@ namespace MusicalMoments
         }
     }
 }
+
+

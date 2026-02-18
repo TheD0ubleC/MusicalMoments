@@ -1,0 +1,96 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MusicalMoments 下载中心</title>
+  <meta name="description" content="MusicalMoments 下载中心，集中提供最新稳定版、更新日志和插件资源，方便快速获取可用版本。">
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/mm-theme.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body class="mm-theme">
+  <div class="mm-noise"></div>
+  <div class="mm-orb mm-orb-a"></div>
+  <div class="mm-orb mm-orb-b"></div>
+
+  <header class="mm-public-header">
+    <div class="mm-shell">
+      <div class="mm-board mm-nav-wrap mm-animated">
+        <a href="/" class="mm-brand" aria-label="MusicalMoments 首页">
+          <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="mm-brand-title-logo">
+        </a>
+
+        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav id="siteNav" class="mm-nav-menu">
+          <a href="/" class="mm-nav-item">首页</a>
+          <a href="/download" class="mm-nav-item active">下载</a>
+          <a href="/tutorial" class="mm-nav-item">教程</a>
+          <a href="/statu" class="mm-nav-item">状态</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="mm-shell mm-page">
+    <div class="mm-page-stack">
+      <section class="mm-board mm-download-hero mm-animated">
+        <div class="mm-download-layout">
+          <div class="mm-download-main">
+            <span class="mm-chip"><span class="mm-tag-dot"></span>下载中心</span>
+            <h1>获取最新稳定版与插件</h1>
+            <p>下载页只保留关键信息：稳定版入口、版本日志与插件列表，帮助你快速定位需要的资源。</p>
+          </div>
+
+          <div class="mm-stable-highlight">
+            <p>当前稳定版本</p>
+            <h2 id="latestStableVersion">加载中...</h2>
+            <span id="latestStableMeta">正在获取版本信息...</span>
+            <small id="latestPublishedAt">发布时间：--</small>
+            <a id="latestStableDownload" href="#" class="mm-latest-action">下载稳定版</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="mm-board mm-card-section mm-animated">
+        <div class="mm-section-head">
+          <div>
+            <p>Changelog</p>
+            <h2>版本更新日志</h2>
+          </div>
+        </div>
+        <pre id="latestChangelog" class="mm-changelog">正在加载更新日志...</pre>
+      </section>
+
+      <section class="mm-board mm-list-panel mm-animated mm-stagger-1">
+        <div class="mm-section-head">
+          <div>
+            <p>Plugins</p>
+            <h2>插件下载列表</h2>
+          </div>
+          <span id="pluginTotalInfo">共 0 项</span>
+        </div>
+
+        <div id="pluginList" class="mm-list-grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="mm-site-footer">
+    <div class="mm-shell">
+      <div class="mm-board mm-footer-wrap">
+        <p>MusicalMoments 下载中心</p>
+        <p id="footerMeta">MM Web Backend</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/public-common.js" defer></script>
+  <script src="/assets/js/download.js" defer></script>
+</body>
+</html>
