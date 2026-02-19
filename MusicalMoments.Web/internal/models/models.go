@@ -27,14 +27,29 @@ type Version struct {
 	UpdatedAt   time.Time    `json:"updatedAt"`
 }
 
-type Plugin struct {
+type PluginVersion struct {
 	ID          string    `json:"id"`
-	Name        string    `json:"name"`
 	Version     string    `json:"version"`
-	Description string    `json:"description"`
+	Changelog   string    `json:"changelog"`
 	DownloadURL string    `json:"downloadURL"`
 	SHA256      string    `json:"sha256"`
+	FileSize    int64     `json:"fileSize"`
+	PublishedAt time.Time `json:"publishedAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
+}
+
+type Plugin struct {
+	ID          string          `json:"id"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	CreatedAt   time.Time       `json:"createdAt"`
+	UpdatedAt   time.Time       `json:"updatedAt"`
+	Versions    []PluginVersion `json:"versions"`
+
+	// Legacy fields kept for seamless migration from old flat plugin records.
+	Version     string `json:"version,omitempty"`
+	DownloadURL string `json:"downloadURL,omitempty"`
+	SHA256      string `json:"sha256,omitempty"`
 }
 
 type DailyAnalytics struct {

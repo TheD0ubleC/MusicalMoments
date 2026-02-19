@@ -55,6 +55,8 @@ namespace MusicalMoments
         public MainWindow()
         {
             InitializeComponent();
+            WinFormsWhiteTheme.ApplyToForm(this);
+            WinFormsWhiteTheme.ApplyToToolStrip(mainContextMenuStrip);
             CurrentInstance = this;
             InitializeCloseBehaviorUx();
             InitializeTrayFeatures();
@@ -493,11 +495,10 @@ namespace MusicalMoments
         }
         private void ToggleStream_KeyDown(object sender, KeyEventArgs e)
         {
-            string displayText = Misc.GetKeyDisplay(keyEventArgs: e);
-            if (!string.IsNullOrEmpty(displayText))
+            if (KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys key, out string displayText))
             {
                 ToggleStream.Text = displayText;
-                toggleStreamKey = displayText == "None" ? Keys.None : e.KeyCode;
+                toggleStreamKey = key;
                 ToggleStream.Enabled = false;
                 ToggleStream.Enabled = true;
                 e.SuppressKeyPress = true;
@@ -505,21 +506,19 @@ namespace MusicalMoments
         }
         private void ToggleStream_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string displayText = e.KeyChar.ToString().ToUpper();
-            ToggleStream.Text = displayText;
-            if (e.KeyChar >= 'A' && e.KeyChar <= 'Z')
-            {
-                toggleStreamKey = (Keys)e.KeyChar;
-            }
-            else if (e.KeyChar >= 'a' && e.KeyChar <= 'z')
-            {
-                toggleStreamKey = (Keys)(e.KeyChar - 32);
-            }
+            // KeyDown handles binding capture, keep KeyPress from injecting text.
             e.Handled = true;
         }
         private void ToggleStream_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!KeyBindingService.TryGetSupportedMouseBinding(e.Button, out Keys key, out string displayText))
+            if ((e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+                && sender is Control control
+                && !control.Focused)
+            {
+                return;
+            }
+
+            if (!KeyBindingService.TryGetSupportedMouseBinding(e.Button, Control.ModifierKeys, out Keys key, out string displayText))
             {
                 return;
             }
@@ -529,11 +528,10 @@ namespace MusicalMoments
         }
         private void PlayAudio_KeyDown(object sender, KeyEventArgs e)
         {
-            string displayText = Misc.GetKeyDisplay(keyEventArgs: e);
-            if (!string.IsNullOrEmpty(displayText))
+            if (KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys key, out string displayText))
             {
                 PlayAudio.Text = displayText;
-                playAudioKey = displayText == "None" ? Keys.None : e.KeyCode;
+                playAudioKey = key;
                 PlayAudio.Enabled = false;
                 PlayAudio.Enabled = true;
                 e.SuppressKeyPress = true;
@@ -541,22 +539,20 @@ namespace MusicalMoments
         }
         private void PlayAudio_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string displayText = e.KeyChar.ToString().ToUpper();
-            PlayAudio.Text = displayText;
-            if (e.KeyChar >= 'A' && e.KeyChar <= 'Z')
-            {
-                playAudioKey = (Keys)e.KeyChar;
-            }
-            else if (e.KeyChar >= 'a' && e.KeyChar <= 'z')
-            {
-                playAudioKey = (Keys)(e.KeyChar - 32);
-            }
+            // KeyDown handles binding capture, keep KeyPress from injecting text.
             e.Handled = true;
 
         }
         private void PlayAudio_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!KeyBindingService.TryGetSupportedMouseBinding(e.Button, out Keys key, out string displayText))
+            if ((e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+                && sender is Control control
+                && !control.Focused)
+            {
+                return;
+            }
+
+            if (!KeyBindingService.TryGetSupportedMouseBinding(e.Button, Control.ModifierKeys, out Keys key, out string displayText))
             {
                 return;
             }

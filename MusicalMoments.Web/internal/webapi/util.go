@@ -60,6 +60,72 @@ func bearerTokenFromRequest(r *http.Request) string {
 	return strings.TrimSpace(authorization[7:])
 }
 
+func allowMethods(w http.ResponseWriter, r *http.Request, methods ...string) bool {
+	if len(methods) == 0 {
+		return true
+	}
+
+	for _, method := range methods {
+		if r.Method == method {
+			return true
+		}
+	}
+
+	w.Header().Set("Allow", strings.Join(methods, ", "))
+	writeJSON(w, http.StatusMethodNotAllowed, "method not allowed", nil)
+	return false
+}
+
+func pathValueOrFirstSegment(r *http.Request, key string, prefix string, suffix string) string {
+	if r != nil {
+		if value := strings.TrimSpace(r.PathValue(key)); value != "" {
+			return value
+		}
+	}
+
+	if r == nil {
+		return ""
+	}
+
+	pathValue := strings.TrimPrefix(r.URL.Path, prefix)
+	pathValue = strings.Trim(pathValue, "/")
+	if pathValue == "" {
+		return ""
+	}
+
+	if suffix != "" {
+		if !strings.HasSuffix(pathValue, suffix) {
+			return ""
+		}
+		pathValue = strings.TrimSuffix(pathValue, suffix)
+		pathValue = strings.Trim(pathValue, "/")
+	}
+
+	if pathValue == "" {
+		return ""
+	}
+
+	if idx := strings.Index(pathValue, "/"); idx >= 0 {
+		pathValue = pathValue[:idx]
+	}
+	return strings.TrimSpace(pathValue)
+}
+
+func pathValueOrRemainder(r *http.Request, key string, prefix string) string {
+	if r != nil {
+		if value := strings.TrimSpace(r.PathValue(key)); value != "" {
+			return value
+		}
+	}
+	if r == nil {
+		return ""
+	}
+
+	value := strings.TrimPrefix(r.URL.Path, prefix)
+	value = strings.Trim(value, "/")
+	return strings.TrimSpace(value)
+}
+
 var idLikePattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_\-]{7,}$`)
 
 func normalizeRouteForMetrics(urlPath string) string {

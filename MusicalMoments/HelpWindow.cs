@@ -18,6 +18,7 @@ namespace MusicalMoments
         public HelpWindow()
         {
             InitializeComponent();
+            WinFormsWhiteTheme.ApplyToForm(this);
             FormBorderStyle = FormBorderStyle.Sizable;
             MinimumSize = Size;
 
@@ -70,6 +71,7 @@ namespace MusicalMoments
                         if (control != null)
                         {
                             this.Controls.Add(control);
+                            WinFormsWhiteTheme.ApplyToControl(control);
                             dynamicControls.Add(control);
                         }
                     }

@@ -83,6 +83,12 @@ namespace MusicalMoments
 
         private void EnqueueGlobalHotkey(Keys keyCode)
         {
+            keyCode = KeyBindingService.NormalizeBinding(keyCode);
+            if (keyCode == Keys.None)
+            {
+                return;
+            }
+
             if (hotkeyWorkerThread == null)
             {
                 HandleGlobalHotkeyOnWorker(keyCode);
@@ -107,18 +113,19 @@ namespace MusicalMoments
 
         private void HandleGlobalHotkeyOnWorker(Keys keyCode)
         {
-            if (keyCode == Keys.Escape)
+            keyCode = KeyBindingService.NormalizeBinding(keyCode);
+            if (KeyBindingService.IsEscapeWithoutModifier(keyCode))
             {
                 return;
             }
 
-            if (keyCode == playAudioKey)
+            if (keyCode == KeyBindingService.NormalizeBinding(playAudioKey))
             {
                 RequestPlayAudio(selectedAudioPath, countAsPlayed: true);
                 return;
             }
 
-            if (keyCode == toggleStreamKey)
+            if (keyCode == KeyBindingService.NormalizeBinding(toggleStreamKey))
             {
                 TogglePlaybackModeCore(switchStreamTipsCache);
                 return;
@@ -141,17 +148,18 @@ namespace MusicalMoments
             Dictionary<Keys, string> next = new Dictionary<Keys, string>();
             foreach (AudioInfo item in audioInfo)
             {
+                Keys keyBinding = KeyBindingService.NormalizeBinding(item?.Key ?? Keys.None);
                 if (item == null
-                    || item.Key == Keys.None
+                    || keyBinding == Keys.None
                     || string.IsNullOrWhiteSpace(item.FilePath)
                     || !File.Exists(item.FilePath))
                 {
                     continue;
                 }
 
-                if (!next.ContainsKey(item.Key))
+                if (!next.ContainsKey(keyBinding))
                 {
-                    next[item.Key] = Path.GetFullPath(item.FilePath);
+                    next[keyBinding] = Path.GetFullPath(item.FilePath);
                 }
             }
 

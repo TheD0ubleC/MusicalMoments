@@ -239,16 +239,16 @@ namespace MusicalMoments
 
                     ApplyAudioDeviceSelection(settings);
 
-                    if (!string.IsNullOrEmpty(settings.ToggleStreamKey) && Enum.TryParse(settings.ToggleStreamKey, out Keys toggleKey))
+                    if (!string.IsNullOrEmpty(settings.ToggleStreamKey) && KeyBindingService.TryParseBinding(settings.ToggleStreamKey, out Keys toggleKey))
                     {
-                        toggleStreamKey = toggleKey;
-                        ToggleStream.Text = toggleKey.ToString();
+                        toggleStreamKey = KeyBindingService.NormalizeBinding(toggleKey);
+                        ToggleStream.Text = KeyBindingService.GetDisplayTextForKey(toggleStreamKey);
                     }
 
-                    if (!string.IsNullOrEmpty(settings.PlayAudioKey) && Enum.TryParse(settings.PlayAudioKey, out Keys playKey))
+                    if (!string.IsNullOrEmpty(settings.PlayAudioKey) && KeyBindingService.TryParseBinding(settings.PlayAudioKey, out Keys playKey))
                     {
-                        playAudioKey = playKey;
-                        PlayAudio.Text = playKey.ToString();
+                        playAudioKey = KeyBindingService.NormalizeBinding(playKey);
+                        PlayAudio.Text = KeyBindingService.GetDisplayTextForKey(playAudioKey);
                     }
 
                     VBVolumeTrackBar.Value = (int)(settings.VBVolume * 100);
@@ -463,8 +463,8 @@ namespace MusicalMoments
                 AudioEquipmentInputIndex = GetSafeSelectedIndex(comboBox_AudioEquipmentInput),
                 VBAudioEquipmentOutputIndex = GetSafeSelectedIndex(comboBox_VBAudioEquipmentOutput),
                 AudioEquipmentOutputIndex = GetSafeSelectedIndex(comboBox_AudioEquipmentOutput),
-                ToggleStreamKey = toggleStreamKey.ToString(),
-                PlayAudioKey = playAudioKey.ToString(),
+                ToggleStreamKey = KeyBindingService.NormalizeBinding(toggleStreamKey).ToString(),
+                PlayAudioKey = KeyBindingService.NormalizeBinding(playAudioKey).ToString(),
                 AudioEquipmentPlay = audioEquipmentPlay.Checked,
                 SwitchStreamTips = switchStreamTips.Checked,
                 SameAudioPressBehavior = sameAudioPressBehavior.ToString(),

@@ -57,16 +57,16 @@ func (s *Server) resolveClientLocation(r *http.Request, rawIP string) string {
 
 	normalized := normalizeIP(rawIP)
 	if normalized == "" {
-		return "未知"
+		return "unknown"
 	}
 
 	addr, err := netip.ParseAddr(normalized)
 	if err != nil {
-		return "未知"
+		return "unknown"
 	}
 
 	if addr.IsLoopback() || addr.IsPrivate() || addr.IsLinkLocalUnicast() || addr.IsLinkLocalMulticast() {
-		return "本机或内网"
+		return "local/private network"
 	}
 
 	if cached, ok := s.getCachedLocation(normalized); ok {
@@ -80,31 +80,31 @@ func (s *Server) resolveClientLocation(r *http.Request, rawIP string) string {
 
 func (s *Server) lookupPublicIPLocation(ip string) string {
 	if s.geoClient == nil {
-		return "公网 IP"
+		return "public ip"
 	}
 
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://ipapi.co/%s/json/", ip), nil)
 	if err != nil {
-		return "公网 IP"
+		return "public ip"
 	}
 	request.Header.Set("User-Agent", "MM-Web/1.0")
 
 	response, err := s.geoClient.Do(request)
 	if err != nil {
-		return "公网 IP"
+		return "public ip"
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return "公网 IP"
+		return "public ip"
 	}
 
 	var payload ipapiResponse
 	if err := json.NewDecoder(io.LimitReader(response.Body, 32*1024)).Decode(&payload); err != nil {
-		return "公网 IP"
+		return "public ip"
 	}
 	if payload.Error {
-		return "公网 IP"
+		return "public ip"
 	}
 
 	parts := make([]string, 0, 3)
@@ -115,7 +115,7 @@ func (s *Server) lookupPublicIPLocation(ip string) string {
 	}
 
 	if len(parts) == 0 {
-		return "公网 IP"
+		return "public ip"
 	}
 	return strings.Join(parts, " / ")
 }

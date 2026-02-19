@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace MusicalMoments
             listView.Items.Clear();
             foreach (AudioInfo audio in LoadAudioInfos(directoryPath))
             {
-                string keyText = audio.Key == Keys.None ? "未绑定" : audio.Key.ToString();
+                string keyText = audio.Key == Keys.None ? "未绑定" : KeyBindingService.GetDisplayTextForKey(audio.Key);
                 ListViewItem item = new ListViewItem(new[] { audio.Name, audio.Track, audio.FileType, keyText })
                 {
                     Tag = audio.FilePath
@@ -176,12 +176,16 @@ namespace MusicalMoments
             try
             {
                 string keyText = ReadKeyJsonInfo(jsonFilePath);
-                if (string.IsNullOrWhiteSpace(keyText) || keyText == "未绑定" || keyText == "None")
+                if (string.IsNullOrWhiteSpace(keyText)
+                    || keyText == "未绑定"
+                    || keyText == "None")
                 {
                     return Keys.None;
                 }
 
-                return Enum.TryParse(keyText, out Keys keyValue) ? keyValue : Keys.None;
+                return KeyBindingService.TryParseBinding(keyText, out Keys keyValue)
+                    ? KeyBindingService.NormalizeBinding(keyValue)
+                    : Keys.None;
             }
             catch
             {

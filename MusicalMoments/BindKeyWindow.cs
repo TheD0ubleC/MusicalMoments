@@ -15,6 +15,7 @@ namespace MusicalMoments
         public BindKeyWindow(Keys key)
         {
             InitializeComponent();
+            WinFormsWhiteTheme.ApplyToForm(this);
             FormBorderStyle = FormBorderStyle.Sizable;
             MinimumSize = Size;
 
@@ -37,27 +38,18 @@ namespace MusicalMoments
 
         private void BindKey_KeyDown(object sender, KeyEventArgs e)
         {
-            string displayText = KeyBindingService.GetKeyDisplay(keyEventArgs: e);
-            if (string.IsNullOrWhiteSpace(displayText))
+            if (!KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys keyValue, out string displayText))
             {
                 return;
             }
 
-            Keys keyValue = displayText == "None" ? Keys.None : e.KeyCode;
             CommitBinding(keyValue, displayText);
             e.SuppressKeyPress = true;
         }
 
         private void BindKey_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string displayText = KeyBindingService.GetKeyDisplay(keyPressEventArgs: e);
-            if (string.IsNullOrWhiteSpace(displayText))
-            {
-                return;
-            }
-
-            Keys keyValue = (Keys)char.ToUpperInvariant(e.KeyChar);
-            CommitBinding(keyValue, displayText);
+            // KeyDown handles binding capture, keep KeyPress from injecting text.
             e.Handled = true;
         }
 
@@ -92,7 +84,7 @@ namespace MusicalMoments
                 return;
             }
 
-            if (e.Key == Keys.Escape)
+            if (KeyBindingService.IsEscapeWithoutModifier(e.Key))
             {
                 CommitBinding(Keys.None, "None");
                 return;
@@ -115,7 +107,7 @@ namespace MusicalMoments
             }
 
             bindingCommitted = true;
-            nowKey = key;
+            nowKey = KeyBindingService.NormalizeBinding(key);
             BindKey.Text = displayText;
             MainWindow.nowKey = nowKey;
             DialogResult = DialogResult.OK;

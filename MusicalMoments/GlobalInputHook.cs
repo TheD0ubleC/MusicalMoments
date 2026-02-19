@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -80,10 +80,14 @@ namespace MusicalMoments
                 if (message == WmKeyDown || message == WmSysKeyDown)
                 {
                     int vkCode = Marshal.ReadInt32(lParam);
-                    Keys key = (Keys)vkCode;
-                    if (MarkPressed(key))
+                    Keys rawKey = (Keys)vkCode;
+                    if (MarkPressed(rawKey))
                     {
-                        RaiseHotkeyPressed(key, isMouse: false);
+                        Keys binding = ComposeBinding(rawKey);
+                        if (binding != Keys.None)
+                        {
+                            RaiseHotkeyPressed(binding, isMouse: false);
+                        }
                     }
                 }
                 else if (message == WmKeyUp || message == WmSysKeyUp)
@@ -103,10 +107,7 @@ namespace MusicalMoments
                 int message = wParam.ToInt32();
                 if (message == WmMButtonDown)
                 {
-                    if (MarkPressed(Keys.MButton))
-                    {
-                        RaiseHotkeyPressed(Keys.MButton, isMouse: true);
-                    }
+                    RaiseMouseIfPressed(Keys.MButton);
                 }
                 else if (message == WmMButtonUp)
                 {
@@ -118,17 +119,11 @@ namespace MusicalMoments
                     int xButton = (int)((mouseInfo.MouseData >> 16) & 0xFFFF);
                     if (xButton == XButton1)
                     {
-                        if (MarkPressed(Keys.XButton1))
-                        {
-                            RaiseHotkeyPressed(Keys.XButton1, isMouse: true);
-                        }
+                        RaiseMouseIfPressed(Keys.XButton1);
                     }
                     else if (xButton == XButton2)
                     {
-                        if (MarkPressed(Keys.XButton2))
-                        {
-                            RaiseHotkeyPressed(Keys.XButton2, isMouse: true);
-                        }
+                        RaiseMouseIfPressed(Keys.XButton2);
                     }
                 }
                 else if (message == WmXButtonUp)
@@ -147,6 +142,39 @@ namespace MusicalMoments
             }
 
             return CallNextHookEx(mouseHookId, nCode, wParam, lParam);
+        }
+
+        private void RaiseMouseIfPressed(Keys mouseKey)
+        {
+            if (!MarkPressed(mouseKey))
+            {
+                return;
+            }
+
+            Keys binding = ComposeBinding(mouseKey);
+            if (binding != Keys.None)
+            {
+                RaiseHotkeyPressed(binding, isMouse: true);
+            }
+        }
+
+        private Keys ComposeBinding(Keys triggerRawKey)
+        {
+            lock (pressedHotkeysLock)
+            {
+                bool ctrl = IsAnyPressed(Keys.ControlKey, Keys.LControlKey, Keys.RControlKey);
+                bool alt = IsAnyPressed(Keys.Menu, Keys.LMenu, Keys.RMenu);
+                bool shift = IsAnyPressed(Keys.ShiftKey, Keys.LShiftKey, Keys.RShiftKey);
+                Keys primary = KeyBindingService.NormalizePrimaryKey(triggerRawKey & Keys.KeyCode);
+                return KeyBindingService.BuildBinding(primary, ctrl, alt, shift);
+            }
+        }
+
+        private bool IsAnyPressed(Keys keyA, Keys keyB, Keys keyC)
+        {
+            return pressedHotkeys.Contains(keyA)
+                || pressedHotkeys.Contains(keyB)
+                || pressedHotkeys.Contains(keyC);
         }
 
         private void RaiseHotkeyPressed(Keys key, bool isMouse)

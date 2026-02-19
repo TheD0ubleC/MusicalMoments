@@ -248,7 +248,7 @@
             // 
             // sideLists
             // 
-            sideLists.BackColor = SystemColors.Control;
+            sideLists.BackColor = Color.White;
             sideLists.BorderStyle = BorderStyle.None;
             sideLists.Cursor = Cursors.Hand;
             sideLists.Font = new Font("Microsoft JhengHei UI", 13F);
@@ -289,7 +289,7 @@
             // 
             // tabPage2
             // 
-            tabPage2.BackColor = SystemColors.Control;
+            tabPage2.BackColor = Color.White;
             tabPage2.Controls.Add(audioNextPageButton);
             tabPage2.Controls.Add(audioPrevPageButton);
             tabPage2.Controls.Add(audioPageStatusLabel);
@@ -314,7 +314,7 @@
             audioNextPageButton.Size = new Size(78, 32);
             audioNextPageButton.TabIndex = 8;
             audioNextPageButton.Text = "下一页";
-            audioNextPageButton.UseVisualStyleBackColor = true;
+            audioNextPageButton.UseVisualStyleBackColor = false;
             audioNextPageButton.Click += audioNextPageButton_Click;
             // 
             // audioPrevPageButton
@@ -325,7 +325,7 @@
             audioPrevPageButton.Size = new Size(78, 32);
             audioPrevPageButton.TabIndex = 7;
             audioPrevPageButton.Text = "上一页";
-            audioPrevPageButton.UseVisualStyleBackColor = true;
+            audioPrevPageButton.UseVisualStyleBackColor = false;
             audioPrevPageButton.Click += audioPrevPageButton_Click;
             // 
             // audioPageStatusLabel
@@ -371,7 +371,7 @@
             mToAudioData1.Size = new Size(160, 32);
             mToAudioData1.TabIndex = 3;
             mToAudioData1.Text = "打开存放路径";
-            mToAudioData1.UseVisualStyleBackColor = true;
+            mToAudioData1.UseVisualStyleBackColor = false;
             mToAudioData1.Click += mToAudioData1_Click;
             // 
             // SelectedAudioLabel
@@ -393,7 +393,7 @@
             reLoadAudioListsView.Size = new Size(75, 32);
             reLoadAudioListsView.TabIndex = 1;
             reLoadAudioListsView.Text = "刷新";
-            reLoadAudioListsView.UseVisualStyleBackColor = true;
+            reLoadAudioListsView.UseVisualStyleBackColor = false;
             reLoadAudioListsView.Click += reLoadAudioListsView_Click;
             // 
             // audioListView
@@ -436,7 +436,7 @@
             // 
             // tabPage1
             // 
-            tabPage1.BackColor = SystemColors.Control;
+            tabPage1.BackColor = Color.White;
             tabPage1.Controls.Add(tips_Group1);
             tabPage1.Location = new Point(0, 22);
             tabPage1.Name = "tabPage1";
@@ -480,7 +480,7 @@
             open_help_window.Size = new Size(97, 27);
             open_help_window.TabIndex = 20;
             open_help_window.Text = "图文教程";
-            open_help_window.UseVisualStyleBackColor = true;
+            open_help_window.UseVisualStyleBackColor = false;
             open_help_window.Click += open_help_window_Click;
             // 
             // help_tip
@@ -502,7 +502,7 @@
             to_audio_page.Size = new Size(97, 27);
             to_audio_page.TabIndex = 18;
             to_audio_page.Text = "一键修复";
-            to_audio_page.UseVisualStyleBackColor = true;
+            to_audio_page.UseVisualStyleBackColor = false;
             to_audio_page.Click += to_audio_page_Click;
             // 
             // audio_page_tips
@@ -523,7 +523,7 @@
             toC.Size = new Size(97, 27);
             toC.TabIndex = 17;
             toC.Text = "声音设置";
-            toC.UseVisualStyleBackColor = true;
+            toC.UseVisualStyleBackColor = false;
             toC.Click += toC_Click;
             // 
             // tips_Label5
@@ -544,7 +544,7 @@
             mToAudioData.Size = new Size(97, 27);
             mToAudioData.TabIndex = 15;
             mToAudioData.Text = "卸载VB";
-            mToAudioData.UseVisualStyleBackColor = true;
+            mToAudioData.UseVisualStyleBackColor = false;
             mToAudioData.Click += mToAudioData_Click;
             // 
             // retestVB
@@ -555,7 +555,7 @@
             retestVB.Size = new Size(97, 27);
             retestVB.TabIndex = 0;
             retestVB.Text = "检查状态";
-            retestVB.UseVisualStyleBackColor = true;
+            retestVB.UseVisualStyleBackColor = false;
             retestVB.Click += retestVB_Click;
             // 
             // label_VBStatus
@@ -576,7 +576,7 @@
             toSettings.Size = new Size(97, 27);
             toSettings.TabIndex = 0;
             toSettings.Text = "前往设置";
-            toSettings.UseVisualStyleBackColor = true;
+            toSettings.UseVisualStyleBackColor = false;
             toSettings.Click += toSettings_Click;
             // 
             // tips_Label4
@@ -607,7 +607,7 @@
             toVB.Size = new Size(97, 27);
             toVB.TabIndex = 11;
             toVB.Text = "安装VB";
-            toVB.UseVisualStyleBackColor = true;
+            toVB.UseVisualStyleBackColor = false;
             toVB.Click += toVB_Click;
             // 
             // tips_Label2
@@ -641,7 +641,7 @@
             restoreDefaultsAfterInstallCheckBox.Size = new Size(313, 21);
             restoreDefaultsAfterInstallCheckBox.TabIndex = 22;
             restoreDefaultsAfterInstallCheckBox.Text = "安装后自动恢复系统默认扬声器与麦克风（推荐）";
-            restoreDefaultsAfterInstallCheckBox.UseVisualStyleBackColor = true;
+            restoreDefaultsAfterInstallCheckBox.UseVisualStyleBackColor = false;
             // 
             // mainTabControl
             // 
@@ -669,7 +669,7 @@
             // tabPage3
             // 
             tabPage3.AutoScroll = true;
-            tabPage3.BackColor = SystemColors.Control;
+            tabPage3.BackColor = Color.White;
             tabPage3.Controls.Add(playbackBehaviorGroup);
             tabPage3.Controls.Add(volume_Group);
             tabPage3.Controls.Add(group_Misc);
@@ -852,7 +852,7 @@
             check_update.Size = new Size(112, 22);
             check_update.TabIndex = 23;
             check_update.Text = "检查更新";
-            check_update.UseVisualStyleBackColor = true;
+            check_update.UseVisualStyleBackColor = false;
             check_update.Click += check_update_Click;
             // 
             // open_help_button2
@@ -863,7 +863,7 @@
             open_help_button2.Size = new Size(112, 22);
             open_help_button2.TabIndex = 22;
             open_help_button2.Text = "播放逻辑设置";
-            open_help_button2.UseVisualStyleBackColor = true;
+            open_help_button2.UseVisualStyleBackColor = false;
             open_help_button2.Visible = false;
             open_help_button2.Click += open_help_button2_Click;
             // 
@@ -900,7 +900,7 @@
             switchStreamTips.Size = new Size(139, 22);
             switchStreamTips.TabIndex = 1;
             switchStreamTips.Text = "切换源时播放提示";
-            switchStreamTips.UseVisualStyleBackColor = true;
+            switchStreamTips.UseVisualStyleBackColor = false;
             // 
             // audioEquipmentPlay
             // 
@@ -913,7 +913,7 @@
             audioEquipmentPlay.Size = new Size(153, 22);
             audioEquipmentPlay.TabIndex = 0;
             audioEquipmentPlay.Text = "物理扬声器同步播放";
-            audioEquipmentPlay.UseVisualStyleBackColor = true;
+            audioEquipmentPlay.UseVisualStyleBackColor = false;
             audioEquipmentPlay.CheckedChanged += audioEquipmentPlay_CheckedChanged;
             // 
             // group_Key
@@ -1015,7 +1015,7 @@
             autoSelectDevicesButton.Size = new Size(115, 22);
             autoSelectDevicesButton.TabIndex = 8;
             autoSelectDevicesButton.Text = "自动识别设备";
-            autoSelectDevicesButton.UseVisualStyleBackColor = true;
+            autoSelectDevicesButton.UseVisualStyleBackColor = false;
             autoSelectDevicesButton.Click += autoSelectDevicesButton_Click;
             // 
             // comboBox_AudioEquipmentOutput
@@ -1108,7 +1108,7 @@
             // 
             // tabPage8
             // 
-            tabPage8.BackColor = SystemColors.Control;
+            tabPage8.BackColor = Color.White;
             tabPage8.Controls.Add(optimizationPreloadGroup);
             tabPage8.Controls.Add(optimizationPerformanceGroup);
             tabPage8.Location = new Point(0, 22);
@@ -1156,7 +1156,7 @@
             optimizationPreloadApplyButton.Size = new Size(50, 27);
             optimizationPreloadApplyButton.TabIndex = 5;
             optimizationPreloadApplyButton.Text = "刷新";
-            optimizationPreloadApplyButton.UseVisualStyleBackColor = true;
+            optimizationPreloadApplyButton.UseVisualStyleBackColor = false;
             optimizationPreloadApplyButton.Click += optimizationPreloadApplyButton_Click;
             // 
             // optimizationPreloadCountTextBox
@@ -1222,7 +1222,7 @@
             optimizationRealtimeCheckBox.Size = new Size(110, 21);
             optimizationRealtimeCheckBox.TabIndex = 7;
             optimizationRealtimeCheckBox.Text = "实时更新(1秒)";
-            optimizationRealtimeCheckBox.UseVisualStyleBackColor = true;
+            optimizationRealtimeCheckBox.UseVisualStyleBackColor = false;
             optimizationRealtimeCheckBox.CheckedChanged += optimizationRealtimeCheckBox_CheckedChanged;
             // 
             // optimizationPerformanceGroup
@@ -1268,7 +1268,7 @@
             optimizationApplyButton.Size = new Size(58, 27);
             optimizationApplyButton.TabIndex = 11;
             optimizationApplyButton.Text = "应用";
-            optimizationApplyButton.UseVisualStyleBackColor = true;
+            optimizationApplyButton.UseVisualStyleBackColor = false;
             optimizationApplyButton.Click += optimizationApplyButton_Click;
             // 
             // optimizationBuffersCountNumeric
@@ -1388,7 +1388,7 @@
             // 
             // tabPage4
             // 
-            tabPage4.BackColor = SystemColors.Control;
+            tabPage4.BackColor = Color.White;
             tabPage4.Controls.Add(aifadian);
             tabPage4.Controls.Add(imageAliPay);
             tabPage4.Controls.Add(imageWeChat);
@@ -1408,7 +1408,7 @@
             aifadian.Size = new Size(99, 32);
             aifadian.TabIndex = 6;
             aifadian.Text = "爱发电";
-            aifadian.UseVisualStyleBackColor = true;
+            aifadian.UseVisualStyleBackColor = false;
             aifadian.Click += aifadian_Click;
             // 
             // imageAliPay
@@ -1445,7 +1445,7 @@
             // 
             // tabPage5
             // 
-            tabPage5.BackColor = SystemColors.Control;
+            tabPage5.BackColor = Color.White;
             tabPage5.Controls.Add(info_Group);
             tabPage5.Controls.Add(info_Label2);
             tabPage5.Controls.Add(info_Label1);
@@ -1475,7 +1475,7 @@
             // info_ListBox
             // 
             info_ListBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            info_ListBox.BackColor = SystemColors.Control;
+            info_ListBox.BackColor = Color.White;
             info_ListBox.Font = new Font("Microsoft JhengHei UI", 8.25F);
             info_ListBox.ForeColor = Color.FromArgb(90, 90, 90);
             info_ListBox.FormattingEnabled = true;
@@ -1548,7 +1548,7 @@
             // tabPage6
             // 
             tabPage6.AllowDrop = true;
-            tabPage6.BackColor = SystemColors.Control;
+            tabPage6.BackColor = Color.White;
             tabPage6.Controls.Add(open_help_button1);
             tabPage6.Controls.Add(conversion_Group4);
             tabPage6.Controls.Add(conversion_Group3);
@@ -1571,7 +1571,7 @@
             open_help_button1.Size = new Size(159, 32);
             open_help_button1.TabIndex = 21;
             open_help_button1.Text = "打开帮助";
-            open_help_button1.UseVisualStyleBackColor = true;
+            open_help_button1.UseVisualStyleBackColor = false;
             open_help_button1.Click += open_help_button1_Click;
             // 
             // conversion_Group4
@@ -1649,7 +1649,7 @@
             convert_Button.Size = new Size(75, 28);
             convert_Button.TabIndex = 6;
             convert_Button.Text = "转换";
-            convert_Button.UseVisualStyleBackColor = true;
+            convert_Button.UseVisualStyleBackColor = false;
             convert_Button.Click += convert_Button_Click;
             // 
             // conversion_Label2
@@ -1722,12 +1722,12 @@
             upData_button.Size = new Size(75, 28);
             upData_button.TabIndex = 0;
             upData_button.Text = "上传";
-            upData_button.UseVisualStyleBackColor = true;
+            upData_button.UseVisualStyleBackColor = false;
             upData_button.Click += upData_button_Click;
             // 
             // tabPage7
             // 
-            tabPage7.BackColor = SystemColors.Control;
+            tabPage7.BackColor = Color.White;
             tabPage7.Controls.Add(to_mmdownloader);
             tabPage7.Controls.Add(AudioListView_fd);
             tabPage7.Controls.Add(numberLabel);
@@ -1750,7 +1750,7 @@
             to_mmdownloader.Size = new Size(123, 110);
             to_mmdownloader.TabIndex = 7;
             to_mmdownloader.Text = "前往网页版\r\n\r\n更丝滑更流畅\r\n上传并分享您的音频\r\n";
-            to_mmdownloader.UseVisualStyleBackColor = true;
+            to_mmdownloader.UseVisualStyleBackColor = false;
             // 
             // AudioListView_fd
             // 
@@ -1801,7 +1801,7 @@
             DownloadSelected.Size = new Size(123, 28);
             DownloadSelected.TabIndex = 3;
             DownloadSelected.Text = "下载选中";
-            DownloadSelected.UseVisualStyleBackColor = true;
+            DownloadSelected.UseVisualStyleBackColor = false;
             DownloadSelected.Click += DownloadSelected_Click;
             // 
             // SearchBarTextBox
@@ -1841,12 +1841,12 @@
             LoadList.Size = new Size(123, 28);
             LoadList.TabIndex = 1;
             LoadList.Text = "加载/刷新";
-            LoadList.UseVisualStyleBackColor = true;
+            LoadList.UseVisualStyleBackColor = false;
             LoadList.Click += LoadList_Click;
             // 
             // tabPage9
             // 
-            tabPage9.BackColor = SystemColors.Control;
+            tabPage9.BackColor = Color.White;
             tabPage9.Controls.Add(LoadPlugin);
             tabPage9.Controls.Add(reLoadPluginListsView);
             tabPage9.Controls.Add(PluginServerAddress);
@@ -1869,7 +1869,7 @@
             LoadPlugin.Size = new Size(75, 31);
             LoadPlugin.TabIndex = 8;
             LoadPlugin.Text = "加载";
-            LoadPlugin.UseVisualStyleBackColor = true;
+            LoadPlugin.UseVisualStyleBackColor = false;
             LoadPlugin.Click += LoadPlugin_Click;
             // 
             // reLoadPluginListsView
@@ -1879,7 +1879,7 @@
             reLoadPluginListsView.Size = new Size(75, 31);
             reLoadPluginListsView.TabIndex = 6;
             reLoadPluginListsView.Text = "刷新";
-            reLoadPluginListsView.UseVisualStyleBackColor = true;
+            reLoadPluginListsView.UseVisualStyleBackColor = false;
             reLoadPluginListsView.Click += reLoadPluginListsView_Click;
             // 
             // PluginServerAddress
@@ -1899,7 +1899,7 @@
             mToPluginData.Size = new Size(193, 31);
             mToPluginData.TabIndex = 4;
             mToPluginData.Text = "打开插件文件夹";
-            mToPluginData.UseVisualStyleBackColor = true;
+            mToPluginData.UseVisualStyleBackColor = false;
             mToPluginData.Click += mToPluginData_Click;
             // 
             // PluginStatus
@@ -1918,7 +1918,7 @@
             TogglePluginServer.Size = new Size(193, 31);
             TogglePluginServer.TabIndex = 2;
             TogglePluginServer.Text = "开启插件服务";
-            TogglePluginServer.UseVisualStyleBackColor = true;
+            TogglePluginServer.UseVisualStyleBackColor = false;
             TogglePluginServer.Click += TogglePluginServer_Click;
             // 
             // pluginListView
@@ -1955,7 +1955,7 @@
             // 
             // tabPage10
             // 
-            tabPage10.BackColor = SystemColors.Control;
+            tabPage10.BackColor = Color.White;
             tabPage10.Controls.Add(FeedbackTipsButton);
             tabPage10.Controls.Add(FeedbackContent);
             tabPage10.Controls.Add(FeedbackTips4);
@@ -1982,7 +1982,7 @@
             FeedbackTipsButton.Size = new Size(110, 32);
             FeedbackTipsButton.TabIndex = 14;
             FeedbackTipsButton.Text = "必看";
-            FeedbackTipsButton.UseVisualStyleBackColor = true;
+            FeedbackTipsButton.UseVisualStyleBackColor = false;
             FeedbackTipsButton.Click += FeedbackTipsButton_Click;
             // 
             // FeedbackContent
@@ -2013,7 +2013,7 @@
             FeedbackButton.Size = new Size(110, 32);
             FeedbackButton.TabIndex = 12;
             FeedbackButton.Text = "反馈";
-            FeedbackButton.UseVisualStyleBackColor = true;
+            FeedbackButton.UseVisualStyleBackColor = false;
             FeedbackButton.Click += FeedbackButton_Click;
             // 
             // FeedbackDisaster
@@ -2025,7 +2025,7 @@
             FeedbackDisaster.Size = new Size(54, 22);
             FeedbackDisaster.TabIndex = 11;
             FeedbackDisaster.Text = "灾难";
-            FeedbackDisaster.UseVisualStyleBackColor = true;
+            FeedbackDisaster.UseVisualStyleBackColor = false;
             // 
             // FeedbackAverage
             // 
@@ -2038,7 +2038,7 @@
             FeedbackAverage.TabIndex = 10;
             FeedbackAverage.TabStop = true;
             FeedbackAverage.Text = "普通";
-            FeedbackAverage.UseVisualStyleBackColor = true;
+            FeedbackAverage.UseVisualStyleBackColor = false;
             // 
             // FeedbackUrgent
             // 
@@ -2049,7 +2049,7 @@
             FeedbackUrgent.Size = new Size(54, 22);
             FeedbackUrgent.TabIndex = 9;
             FeedbackUrgent.Text = "紧急";
-            FeedbackUrgent.UseVisualStyleBackColor = true;
+            FeedbackUrgent.UseVisualStyleBackColor = false;
             // 
             // Contact
             // 
@@ -2182,6 +2182,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(800, 500);
             Controls.Add(groupBox1);
             Controls.Add(mainGroupBox);
@@ -3514,7 +3515,7 @@ namespace MusicalMoments
                     ContainsIgnoreCase(item.Name, keyword)
                     || ContainsIgnoreCase(item.Track, keyword)
                     || ContainsIgnoreCase(item.FileType, keyword)
-                    || ContainsIgnoreCase(item.Key.ToString(), keyword)
+                    || ContainsIgnoreCase(KeyBindingService.GetDisplayTextForKey(item.Key), keyword)
                     || ContainsIgnoreCase(Path.GetFileName(item.FilePath), keyword)));
             }
 
@@ -3546,7 +3547,7 @@ namespace MusicalMoments
             audioListView.Items.Clear();
             foreach (AudioInfo item in pageItems)
             {
-                string keyText = item.Key == Keys.None ? "未绑定" : item.Key.ToString();
+                string keyText = item.Key == Keys.None ? "未绑定" : KeyBindingService.GetDisplayTextForKey(item.Key);
                 ListViewItem row = new ListViewItem(new[] { item.Name, item.Track, item.FileType, keyText })
                 {
                     Tag = item.FilePath
@@ -3587,5 +3588,6 @@ namespace MusicalMoments
         }
     }
 }
+
 
 

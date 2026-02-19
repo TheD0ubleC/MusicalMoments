@@ -8,6 +8,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"sync"
@@ -101,7 +102,9 @@ func (s *Store) ListPlugins() []models.Plugin {
 	defer s.mu.RUnlock()
 
 	out := make([]models.Plugin, len(s.data.Plugins))
-	copy(out, s.data.Plugins)
+	for i := range s.data.Plugins {
+		out[i] = clonePlugin(s.data.Plugins[i])
+	}
 	sort.Slice(out, func(i, j int) bool {
 		return out[i].UpdatedAt.After(out[j].UpdatedAt)
 	})
@@ -137,11 +140,26 @@ func (s *Store) FindPlugin(id string) (models.Plugin, bool) {
 	defer s.mu.RUnlock()
 	for _, plugin := range s.data.Plugins {
 		if plugin.ID == id {
-			return plugin, true
+			return clonePlugin(plugin), true
 		}
 	}
 
 	return models.Plugin{}, false
+}
+
+func (s *Store) FindPluginVersion(id string) (models.Plugin, models.PluginVersion, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	for _, plugin := range s.data.Plugins {
+		for _, version := range plugin.Versions {
+			if version.ID == id {
+				return clonePlugin(plugin), version, true
+			}
+		}
+	}
+
+	return models.Plugin{}, models.PluginVersion{}, false
 }
 
 func (s *Store) UpsertVersion(version models.Version) (models.Version, error) {
@@ -247,17 +265,29 @@ func (s *Store) SetLatestVersion(track models.VersionTrack, id string) error {
 
 func (s *Store) UpsertPlugin(plugin models.Plugin) (models.Plugin, error) {
 	now := time.Now().UTC()
-	plugin.UpdatedAt = now
 	if strings.TrimSpace(plugin.ID) == "" {
 		plugin.ID = newID("plg")
+		plugin.CreatedAt = now
 	}
+	plugin.Name = strings.TrimSpace(plugin.Name)
+	plugin.Description = strings.TrimSpace(plugin.Description)
+	plugin.Version = ""
+	plugin.DownloadURL = ""
+	plugin.SHA256 = ""
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	s.ensureMapsLocked()
+
 	updated := false
 	for i := range s.data.Plugins {
 		if s.data.Plugins[i].ID == plugin.ID {
+			existing := s.data.Plugins[i]
+			plugin.CreatedAt = existing.CreatedAt
+			plugin.UpdatedAt = now
+			plugin.Versions = clonePluginVersions(existing.Versions)
+			sortPluginVersionsDesc(plugin.Versions)
 			s.data.Plugins[i] = plugin
 			updated = true
 			break
@@ -265,11 +295,151 @@ func (s *Store) UpsertPlugin(plugin models.Plugin) (models.Plugin, error) {
 	}
 
 	if !updated {
+		if plugin.CreatedAt.IsZero() {
+			plugin.CreatedAt = now
+		}
+		plugin.UpdatedAt = now
+		plugin.Versions = normalizePluginVersions(plugin.Versions, now)
 		s.data.Plugins = append(s.data.Plugins, plugin)
 	}
 
 	s.touchDirtyLocked()
-	return plugin, nil
+	return clonePlugin(plugin), nil
+}
+
+func (s *Store) UpsertPluginVersion(pluginID string, version models.PluginVersion) (models.Plugin, models.PluginVersion, error) {
+	pluginID = strings.TrimSpace(pluginID)
+	if pluginID == "" {
+		return models.Plugin{}, models.PluginVersion{}, errors.New("plugin id is required")
+	}
+
+	now := time.Now().UTC()
+	version.ID = strings.TrimSpace(version.ID)
+	version.Version = strings.TrimSpace(version.Version)
+	version.Changelog = strings.TrimSpace(version.Changelog)
+	version.DownloadURL = strings.TrimSpace(version.DownloadURL)
+	version.SHA256 = strings.ToLower(strings.TrimSpace(version.SHA256))
+	if version.PublishedAt.IsZero() {
+		version.PublishedAt = now
+	}
+	version.UpdatedAt = now
+	if version.ID == "" {
+		version.ID = newID("plgv")
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.ensureMapsLocked()
+
+	for i := range s.data.Plugins {
+		if s.data.Plugins[i].ID != pluginID {
+			continue
+		}
+
+		plugin := s.data.Plugins[i]
+		if plugin.CreatedAt.IsZero() {
+			plugin.CreatedAt = now
+		}
+
+		updated := false
+		for j := range plugin.Versions {
+			if plugin.Versions[j].ID == version.ID {
+				plugin.Versions[j] = version
+				updated = true
+				break
+			}
+		}
+		if !updated {
+			plugin.Versions = append(plugin.Versions, version)
+		}
+
+		sortPluginVersionsDesc(plugin.Versions)
+		plugin.UpdatedAt = now
+		plugin.Version = ""
+		plugin.DownloadURL = ""
+		plugin.SHA256 = ""
+		s.data.Plugins[i] = plugin
+
+		s.touchDirtyLocked()
+		return clonePlugin(plugin), version, nil
+	}
+
+	return models.Plugin{}, models.PluginVersion{}, errors.New("plugin not found")
+}
+
+func (s *Store) DeletePluginVersion(pluginID string, versionID string) bool {
+	pluginID = strings.TrimSpace(pluginID)
+	versionID = strings.TrimSpace(versionID)
+	if pluginID == "" || versionID == "" {
+		return false
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for i := range s.data.Plugins {
+		if s.data.Plugins[i].ID != pluginID {
+			continue
+		}
+
+		oldLen := len(s.data.Plugins[i].Versions)
+		filtered := s.data.Plugins[i].Versions[:0]
+		for _, item := range s.data.Plugins[i].Versions {
+			if item.ID != versionID {
+				filtered = append(filtered, item)
+			}
+		}
+		s.data.Plugins[i].Versions = filtered
+		sortPluginVersionsDesc(s.data.Plugins[i].Versions)
+		if len(filtered) > 0 {
+			s.data.Plugins[i].UpdatedAt = filtered[0].UpdatedAt
+		} else {
+			s.data.Plugins[i].UpdatedAt = time.Now().UTC()
+		}
+
+		if len(filtered) == oldLen {
+			return false
+		}
+
+		s.touchDirtyLocked()
+		return true
+	}
+
+	return false
+}
+
+func (s *Store) ResolvePluginDownloadTarget(id string) (models.Plugin, models.PluginVersion, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	id = strings.TrimSpace(id)
+	if id == "" {
+		return models.Plugin{}, models.PluginVersion{}, false
+	}
+
+	for _, plugin := range s.data.Plugins {
+		if plugin.ID == id {
+			if len(plugin.Versions) == 0 {
+				return models.Plugin{}, models.PluginVersion{}, false
+			}
+			latest := pickLatestPluginVersion(plugin.Versions)
+			if latest.ID == "" {
+				return models.Plugin{}, models.PluginVersion{}, false
+			}
+			return clonePlugin(plugin), latest, true
+		}
+	}
+
+	for _, plugin := range s.data.Plugins {
+		for _, version := range plugin.Versions {
+			if version.ID == id {
+				return clonePlugin(plugin), version, true
+			}
+		}
+	}
+
+	return models.Plugin{}, models.PluginVersion{}, false
 }
 
 func (s *Store) DeletePlugin(id string) bool {
@@ -614,6 +784,7 @@ func (s *Store) loadOrCreate() error {
 
 	s.data = fileData
 	s.ensureMapsLocked()
+	s.normalizePluginsLocked(time.Now().UTC())
 	s.dirty = false
 	return nil
 }
@@ -650,6 +821,12 @@ func (s *Store) ensureMapsLocked() {
 	}
 	if s.data.Plugins == nil {
 		s.data.Plugins = make([]models.Plugin, 0)
+	} else {
+		for i := range s.data.Plugins {
+			if s.data.Plugins[i].Versions == nil {
+				s.data.Plugins[i].Versions = make([]models.PluginVersion, 0)
+			}
+		}
 	}
 	if s.data.Analytics.RouteHits == nil {
 		s.data.Analytics.RouteHits = make(map[string]uint64)
@@ -699,10 +876,156 @@ func defaultData() models.DataFile {
 	}
 }
 
+func (s *Store) normalizePluginsLocked(now time.Time) {
+	migrated := false
+
+	for i := range s.data.Plugins {
+		original := s.data.Plugins[i]
+		plugin := original
+
+		if plugin.CreatedAt.IsZero() {
+			plugin.CreatedAt = plugin.UpdatedAt
+		}
+		if plugin.CreatedAt.IsZero() {
+			plugin.CreatedAt = now
+		}
+
+		// Migrate legacy flat plugin rows to the new base+version model.
+		if len(plugin.Versions) == 0 {
+			legacyVersion := strings.TrimSpace(plugin.Version)
+			legacyURL := strings.TrimSpace(plugin.DownloadURL)
+			if legacyVersion != "" && legacyURL != "" {
+				legacyUpdated := plugin.UpdatedAt
+				if legacyUpdated.IsZero() {
+					legacyUpdated = now
+				}
+				plugin.Versions = []models.PluginVersion{
+					{
+						ID:          newID("plgv"),
+						Version:     legacyVersion,
+						DownloadURL: legacyURL,
+						SHA256:      strings.ToLower(strings.TrimSpace(plugin.SHA256)),
+						PublishedAt: legacyUpdated,
+						UpdatedAt:   legacyUpdated,
+					},
+				}
+			}
+		}
+
+		plugin.Versions = normalizePluginVersions(plugin.Versions, now)
+		sortPluginVersionsDesc(plugin.Versions)
+
+		if plugin.UpdatedAt.IsZero() {
+			if len(plugin.Versions) > 0 {
+				plugin.UpdatedAt = plugin.Versions[0].UpdatedAt
+			} else {
+				plugin.UpdatedAt = now
+			}
+		}
+
+		plugin.Version = ""
+		plugin.DownloadURL = ""
+		plugin.SHA256 = ""
+		s.data.Plugins[i] = plugin
+
+		if !reflect.DeepEqual(original, plugin) {
+			migrated = true
+		}
+	}
+
+	if migrated {
+		s.dirty = true
+	}
+}
+
 func sortVersionsDesc(versions []models.Version) {
 	sort.Slice(versions, func(i, j int) bool {
 		return versions[i].PublishedAt.After(versions[j].PublishedAt)
 	})
+}
+
+func sortPluginVersionsDesc(versions []models.PluginVersion) {
+	sort.Slice(versions, func(i, j int) bool {
+		left := versions[i].PublishedAt
+		if left.IsZero() {
+			left = versions[i].UpdatedAt
+		}
+		right := versions[j].PublishedAt
+		if right.IsZero() {
+			right = versions[j].UpdatedAt
+		}
+		return left.After(right)
+	})
+}
+
+func normalizePluginVersions(versions []models.PluginVersion, now time.Time) []models.PluginVersion {
+	if len(versions) == 0 {
+		return make([]models.PluginVersion, 0)
+	}
+
+	out := make([]models.PluginVersion, len(versions))
+	for i := range versions {
+		item := versions[i]
+		if strings.TrimSpace(item.ID) == "" {
+			item.ID = newID("plgv")
+		}
+		item.Version = strings.TrimSpace(item.Version)
+		item.Changelog = strings.TrimSpace(item.Changelog)
+		item.DownloadURL = strings.TrimSpace(item.DownloadURL)
+		item.SHA256 = strings.ToLower(strings.TrimSpace(item.SHA256))
+		if item.PublishedAt.IsZero() {
+			item.PublishedAt = item.UpdatedAt
+		}
+		if item.PublishedAt.IsZero() {
+			item.PublishedAt = now
+		}
+		if item.UpdatedAt.IsZero() {
+			item.UpdatedAt = item.PublishedAt
+		}
+		out[i] = item
+	}
+
+	return out
+}
+
+func pickLatestPluginVersion(versions []models.PluginVersion) models.PluginVersion {
+	if len(versions) == 0 {
+		return models.PluginVersion{}
+	}
+	best := versions[0]
+	bestDate := best.PublishedAt
+	if bestDate.IsZero() {
+		bestDate = best.UpdatedAt
+	}
+
+	for i := 1; i < len(versions); i++ {
+		item := versions[i]
+		itemDate := item.PublishedAt
+		if itemDate.IsZero() {
+			itemDate = item.UpdatedAt
+		}
+		if itemDate.After(bestDate) {
+			best = item
+			bestDate = itemDate
+		}
+	}
+
+	return best
+}
+
+func clonePluginVersions(input []models.PluginVersion) []models.PluginVersion {
+	if len(input) == 0 {
+		return make([]models.PluginVersion, 0)
+	}
+	out := make([]models.PluginVersion, len(input))
+	copy(out, input)
+	return out
+}
+
+func clonePlugin(input models.Plugin) models.Plugin {
+	plugin := input
+	plugin.Versions = clonePluginVersions(input.Versions)
+	return plugin
 }
 
 func newID(prefix string) string {

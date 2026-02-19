@@ -71,13 +71,14 @@
             removeKey.Size = new Size(192, 31);
             removeKey.TabIndex = 11;
             removeKey.Text = "点我消除已绑定的键";
-            removeKey.UseVisualStyleBackColor = true;
+            removeKey.UseVisualStyleBackColor = false;
             removeKey.Click += removeKey_Click;
             // 
             // BindKeyWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(217, 114);
             Controls.Add(removeKey);
             Controls.Add(Tip);

@@ -1,5 +1,6 @@
 ﻿<!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +10,8 @@
   <link rel="stylesheet" href="/assets/css/mm-theme.css">
   <link rel="stylesheet" href="/assets/css/site.css">
 </head>
-<body class="mm-theme">
+
+<body class="mm-theme mm-home-page">
   <div class="mm-noise"></div>
   <div class="mm-orb mm-orb-a"></div>
   <div class="mm-orb mm-orb-b"></div>
@@ -21,7 +23,8 @@
           <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="mm-brand-title-logo">
         </a>
 
-        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav">
+        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav"
+          aria-label="切换导航菜单">
           <span></span>
           <span></span>
           <span></span>
@@ -37,106 +40,128 @@
     </div>
   </header>
 
-  <main class="mm-shell mm-page">
-    <div class="mm-page-stack">
-      <section class="mm-board mm-home-hero mm-animated">
-        <div class="mm-home-hero-main">
-          <span class="mm-chip"><span class="mm-tag-dot"></span>官方入口</span>
-          <h1>下载稳定版，按教程完成配置</h1>
-          <p>
-            主页聚合了最常用入口：稳定版下载、插件更新和教程文档。
-            信息按使用顺序排列，便于你快速完成首次部署。
-          </p>
+  <main class="mm-page mm-home-main">
+    <section id="homeLead" class="mm-home-lead" aria-label="首页宣言">
+      <div class="mm-home-lead-core">
+        <h1 class="mm-home-lead-title">一个开源、免费且多生态的实时音频控制与播放平台。</h1>
+        <a id="homeLeadScroll" href="#homeContentStart" class="mm-home-lead-scroll" aria-label="下滑查看首页内容">
+          <i aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
 
-          <div class="mm-home-actions">
-            <a id="ctaStableDownload" href="#" class="mm-button-primary px-6 py-3">立即下载稳定版</a>
-            <a href="/download" class="mm-button-soft px-6 py-3">打开下载中心</a>
-            <a href="/tutorial" class="mm-button-link">查看配置教程</a>
-          </div>
+    <div class="mm-shell">
+      <div class="mm-page-stack mm-home-sections">
+        <section id="homeContentStart" class="mm-board mm-home-hero mm-animated">
+          <div class="mm-home-hero-main">
+            <span class="mm-chip"><span class="mm-tag-dot"></span>描述</span>
+            <ul class="mm-home-desc-list">
+              <li>完全开源！服务器与域名皆为自费！请为我们的仓库点一个星星！<a class="mm-inline-link"
+                  href="https://github.com/TheD0ubleC/MusicalMoments" target="_blank">GitHub 仓库</a></li>
+              <li>想在游戏里播放音频整活？MM 为你提供一站式解决方案。</li>
+              <li>这里不存在播放音频与开麦冲突的问题，可通过按键无缝在音频流与麦克风流之间切换。</li>
+              <li>播放音频时需要一直按住开麦键？MM 拥有官方支持的“按键帮助”插件，在播放音频时帮您按住开麦键。</li>
+              <li>忘记了绑定的快捷键？可以使用官方插件“触手可及”在任何支持浏览器的设备上远程控制 MM 播放。</li>
+              <li>整活音频太少？MM 有官方公益自建音频分享站点！</li>
+            </ul>
 
-          <ul class="mm-home-quick">
-            <li>
-              <strong>步骤 1</strong>
-              <span>安装最新稳定版客户端</span>
-            </li>
-            <li>
-              <strong>步骤 2</strong>
-              <span>按教程完成基础设置</span>
-            </li>
-            <li>
-              <strong>步骤 3</strong>
-              <span>按需下载并启用插件</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="mm-home-hero-side">
-          <div class="mm-stable-highlight">
-            <p>当前推荐版本</p>
-            <h2 id="latestStableVersion">加载中...</h2>
-            <span id="latestStableMeta">正在获取稳定版信息...</span>
-            <a id="latestStableDownload" href="#" class="mm-latest-action">下载这个版本</a>
-          </div>
-
-          <div class="mm-home-note">
-            <h3>站点状态</h3>
-            <p>运行概览和访问统计已独立到状态页，便于集中查看。</p>
-            <a href="/statu" class="mm-inline-link">前往状态页</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="mm-home-lanes">
-        <article class="mm-board mm-card-section mm-animated">
-          <div class="mm-section-head">
-            <div>
-              <p>Plugins</p>
-              <h2>最新插件</h2>
+            <div class="mm-home-actions">
+              <a id="ctaStableDownload" aria-disabled="true" class="mm-button-primary px-6 py-3">下载稳定版</a>
+              <a href="/download" class="mm-button-soft px-6 py-3">版本与下载</a>
+              <a href="/tutorial" class="mm-button-link">查看配置教程</a>
             </div>
-            <a href="/download" class="mm-inline-link">查看全部插件</a>
-          </div>
-          <div id="homePluginLane" class="mm-resource-list"></div>
-        </article>
 
-        <article class="mm-board mm-card-section mm-animated">
-          <div class="mm-section-head">
-            <div>
-              <p>Stable Feed</p>
-              <h2>稳定版更新记录</h2>
+            <ul class="mm-home-quick">
+              <li>
+                <strong>步骤 01</strong>
+                <span>下载推荐稳定版并完成安装。</span>
+              </li>
+              <li>
+                <strong>步骤 02</strong>
+                <span>根据教程完成音频与热键配置。</span>
+              </li>
+              <li>
+                <strong>步骤 03</strong>
+                <span>按需安装插件扩展能力。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mm-home-hero-side">
+            <div class="mm-stable-highlight">
+              <p>当前推荐版本</p>
+              <h2 id="latestStableVersion">加载中...</h2>
+              <span id="latestStableMeta">正在获取稳定版信息...</span>
+              <a id="latestStableDownload" aria-disabled="true" class="mm-latest-action">下载这个版本</a>
             </div>
-            <a href="/download" class="mm-inline-link">打开下载中心</a>
           </div>
-          <div id="homeVersionLane" class="mm-resource-list"></div>
-        </article>
-      </section>
+        </section>
 
-      <section class="mm-board mm-card-section mm-animated">
-        <div class="mm-section-head no-margin">
-          <div>
-            <p>Screenshots</p>
-            <h2>应用界面</h2>
+        <section class="mm-home-lanes">
+          <article class="mm-board mm-card-section mm-animated">
+            <div class="mm-section-head">
+              <div>
+                <p>版本动态</p>
+                <h2>稳定版更新记录</h2>
+              </div>
+              <a href="/download" class="mm-inline-link">进入下载中心</a>
+            </div>
+            <div id="homeVersionLane" class="mm-resource-list"></div>
+          </article>
+
+          <article class="mm-board mm-card-section mm-animated mm-stagger-1">
+            <div class="mm-section-head">
+              <div>
+                <p>插件资源</p>
+                <h2>最新插件</h2>
+              </div>
+              <a href="/download" class="mm-inline-link">查看全部插件</a>
+            </div>
+            <div id="homePluginLane" class="mm-resource-list"></div>
+          </article>
+        </section>
+
+        <section class="mm-board mm-card-section mm-animated mm-stagger-2">
+          <div class="mm-section-head no-margin">
+            <div>
+              <p>界面预览</p>
+              <h2>客户端主要界面</h2>
+            </div>
           </div>
-        </div>
 
-        <div class="mm-shot-list mt-3">
-          <figure class="mm-shot-card">
-            <img src="/assets/img/screenshots/main-page.png" alt="主界面截图">
-            <figcaption>主界面：管理音频资源、热键触发与运行状态。</figcaption>
-          </figure>
-          <figure class="mm-shot-card">
-            <img src="/assets/img/screenshots/plugin.png" alt="插件管理截图">
-            <figcaption>插件页：安装插件、查看版本并维护说明信息。</figcaption>
-          </figure>
-        </div>
-      </section>
+          <div class="mm-shot-list">
+            <figure class="mm-shot-card">
+              <img src="/assets/img/screenshots/main-page.png" alt="主界面截图">
+              <figcaption>主界面：集中管理音频资源、热键触发与运行状态。</figcaption>
+            </figure>
+            <figure class="mm-shot-card">
+              <img src="/assets/img/screenshots/settings.png" alt="设置页截图">
+              <figcaption>设置页：细粒度调整行为策略，快速适配不同使用场景。</figcaption>
+            </figure>
+            <figure class="mm-shot-card">
+              <img src="/assets/img/screenshots/plugin.png" alt="插件页截图">
+              <figcaption>插件页：插件安装、版本维护和说明文档集中管理。</figcaption>
+            </figure>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
+
+  <div id="homeShotModal" class="mm-shot-modal" role="dialog" aria-modal="true" aria-hidden="true"
+    aria-labelledby="homeShotModalCaption">
+    <button id="homeShotModalClose" type="button" class="mm-shot-modal-close" aria-label="关闭预览">×</button>
+    <figure class="mm-shot-modal-stage">
+      <img id="homeShotModalImage" src="" alt="">
+      <figcaption id="homeShotModalCaption"></figcaption>
+    </figure>
+  </div>
 
   <footer class="mm-site-footer">
     <div class="mm-shell">
       <div class="mm-board mm-footer-wrap">
         <p>MusicalMoments 官方网站</p>
-        <p id="footerMeta">MM Web Backend</p>
+        <p id="footerMeta"><a class="mm-inline-link" href="https://github.com/TheD0ubleC/MusicalMoments" target="_blank"
+            rel="noopener noreferrer">TheD0ubleC</a> · v--</p>
       </div>
     </div>
   </footer>
@@ -144,4 +169,5 @@
   <script src="/assets/js/public-common.js" defer></script>
   <script src="/assets/js/home.js" defer></script>
 </body>
+
 </html>

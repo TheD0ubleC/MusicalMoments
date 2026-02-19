@@ -1,5 +1,6 @@
 ﻿<!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="/assets/css/mm-theme.css">
   <link rel="stylesheet" href="/assets/css/site.css">
 </head>
+
 <body class="mm-theme">
   <div class="mm-noise"></div>
   <div class="mm-orb mm-orb-a"></div>
@@ -21,7 +23,8 @@
           <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="mm-brand-title-logo">
         </a>
 
-        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav">
+        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav"
+          aria-label="切换导航菜单">
           <span></span>
           <span></span>
           <span></span>
@@ -40,15 +43,14 @@
   <main class="mm-shell mm-page">
     <div class="mm-page-stack">
       <section class="mm-board mm-status-hero mm-animated">
-        <span class="mm-chip"><span class="mm-tag-dot"></span>站点状态</span>
+        <span class="mm-chip"><span class="mm-tag-dot"></span>Status Board</span>
         <h1>站点运行概览</h1>
-        <p>状态页用于查看资源规模、访问请求与服务可用性。统计数据来自站点实时汇总。</p>
       </section>
 
       <section class="mm-board mm-ops-panel mm-animated mm-stagger-1">
         <div class="mm-section-head">
           <div>
-            <p>Overview</p>
+            <p>运行概览</p>
             <h2>核心指标</h2>
           </div>
           <span id="statuLastUpdated">最近刷新：--</span>
@@ -103,10 +105,10 @@
         </ul>
       </section>
 
-      <section class="mm-board mm-card-section mm-animated">
+      <section class="mm-board mm-card-section mm-animated mm-stagger-2">
         <div class="mm-section-head">
           <div>
-            <p>Top Routes</p>
+            <p>访问热度</p>
             <h2>访问路径 Top 10</h2>
           </div>
         </div>
@@ -120,7 +122,8 @@
     <div class="mm-shell">
       <div class="mm-board mm-footer-wrap">
         <p>MusicalMoments 站点状态</p>
-        <p id="footerMeta">MM Web Backend</p>
+        <p id="footerMeta"><a class="mm-inline-link" href="https://github.com/TheD0ubleC/MusicalMoments" target="_blank"
+            rel="noopener noreferrer">TheD0ubleC</a> · v--</p>
       </div>
     </div>
   </footer>
@@ -128,4 +131,5 @@
   <script src="/assets/js/public-common.js" defer></script>
   <script src="/assets/js/status.js" defer></script>
 </body>
+
 </html>

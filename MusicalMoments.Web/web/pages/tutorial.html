@@ -21,7 +21,7 @@
           <img src="/assets/img/mm-title-logo.png" alt="MusicalMoments" class="mm-brand-title-logo">
         </a>
 
-        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav">
+        <button id="navToggle" type="button" class="mm-nav-toggle" aria-expanded="false" aria-controls="siteNav" aria-label="切换导航菜单">
           <span></span>
           <span></span>
           <span></span>
@@ -40,19 +40,26 @@
   <main class="mm-shell mm-page">
     <div class="mm-page-stack">
       <section class="mm-board mm-doc-head mm-animated">
-        <span class="mm-chip"><span class="mm-tag-dot"></span>使用文档</span>
+        <span class="mm-chip"><span class="mm-tag-dot"></span>User Guide</span>
         <h1>MusicalMoments 使用教程</h1>
-        <p>本页按真实使用流程组织内容，包括安装步骤、配置建议与常见问题处理方式。教程内容来自仓库中的 Markdown 文档。</p>
-
-        <ul class="mm-doc-meta">
-          <li>文档文件：`/assets/docs/tutorial.md`</li>
-          <li>渲染方式：前端 Markdown 渲染</li>
-          <li id="tutorialUpdatedAt">更新时间：加载中...</li>
-        </ul>
       </section>
 
-      <section class="mm-board mm-doc-body mm-animated mm-stagger-1">
-        <div id="tutorialContent" class="mm-doc-content">教程内容加载中...</div>
+      <section class="mm-board mm-doc-topbar mm-animated mm-stagger-1">
+        <div class="mm-doc-top-row">
+          <span class="mm-doc-top-title">文档导航</span>
+          <nav id="tutorialDocNav" class="mm-doc-nav" aria-label="教程文档导航"></nav>
+          <a href="https://docsify.js.org/" target="_blank" rel="noopener noreferrer" class="mm-doc-top-ext">Docsify</a>
+        </div>
+        <div class="mm-doc-top-row secondary">
+          <span class="mm-doc-top-label">章节跳转</span>
+          <nav id="tutorialSectionNav" class="mm-doc-anchor-nav" aria-label="当前文档章节"></nav>
+        </div>
+      </section>
+
+      <section class="mm-board mm-doc-body mm-animated mm-stagger-2">
+        <div id="tutorialContent" class="mm-doc-content">
+          <div id="app">教程内容加载中...</div>
+        </div>
       </section>
     </div>
   </main>
@@ -61,13 +68,12 @@
     <div class="mm-shell">
       <div class="mm-board mm-footer-wrap">
         <p>MusicalMoments 使用教程</p>
-        <p id="footerMeta">MM Web Backend</p>
+        <p id="footerMeta"><a class="mm-inline-link" href="https://github.com/TheD0ubleC/MusicalMoments" target="_blank" rel="noopener noreferrer">TheD0ubleC</a> · v--</p>
       </div>
     </div>
   </footer>
 
   <script src="/assets/js/public-common.js" defer></script>
-  <script src="/assets/js/vendor/marked.min.js" defer></script>
   <script src="/assets/js/tutorial.js" defer></script>
 </body>
 </html>

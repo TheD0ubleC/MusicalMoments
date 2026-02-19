@@ -128,18 +128,24 @@ namespace MusicalMoments
         {
             ListViewItem selectedItem = audioListView.SelectedItems[0];
             Keys key = Keys.None;
-            if (selectedItem.SubItems[3].Text != "未绑定")
-            {
-                key = (Keys)Enum.Parse(typeof(Keys), selectedItem.SubItems[3].Text);
-            }
-            BindKeyWindow bindKeyWindow = new BindKeyWindow(key);
-            bindKeyWindow.ShowDialog();
-            nowKey = bindKeyWindow.Key;
-
-            Misc.WriteKeyJsonInfo(Path.ChangeExtension(selectedItem.Tag.ToString(), ".json"), nowKey.ToString());
-            selectedItem.SubItems[3].Text = nowKey == Keys.None ? "未绑定" : nowKey.ToString();
             string filePath = selectedItem.Tag as string;
             AudioInfo existingAudioInfo = audioInfo.FirstOrDefault(item => string.Equals(item.FilePath, filePath, StringComparison.OrdinalIgnoreCase));
+            if (existingAudioInfo != null)
+            {
+                key = KeyBindingService.NormalizeBinding(existingAudioInfo.Key);
+            }
+            else if (selectedItem.SubItems[3].Text != "未绑定"
+                     && KeyBindingService.TryParseBinding(selectedItem.SubItems[3].Text, out Keys parsedKey))
+            {
+                key = parsedKey;
+            }
+
+            BindKeyWindow bindKeyWindow = new BindKeyWindow(key);
+            bindKeyWindow.ShowDialog();
+            nowKey = KeyBindingService.NormalizeBinding(bindKeyWindow.Key);
+
+            Misc.WriteKeyJsonInfo(Path.ChangeExtension(selectedItem.Tag.ToString(), ".json"), nowKey.ToString());
+            selectedItem.SubItems[3].Text = nowKey == Keys.None ? "未绑定" : KeyBindingService.GetDisplayTextForKey(nowKey);
             if (existingAudioInfo != null)
             {
                 existingAudioInfo.Key = nowKey;
@@ -163,16 +169,18 @@ namespace MusicalMoments
             for (int i = 0; i < audioInfo.Count; i++)
             {
                 var parentItem = audioInfo[i];
-                if (parentItem.Key == Keys.None)
+                Keys parentKey = KeyBindingService.NormalizeBinding(parentItem.Key);
+                if (parentKey == Keys.None)
                     continue;
 
                 for (int j = i + 1; j < audioInfo.Count; j++)
                 {
                     var childItem = audioInfo[j];
-                    if (childItem.Key == Keys.None)
+                    Keys childKey = KeyBindingService.NormalizeBinding(childItem.Key);
+                    if (childKey == Keys.None)
                         continue;
 
-                    if (parentItem.Key == childItem.Key)
+                    if (parentKey == childKey)
                     {
                         return true;
                     }

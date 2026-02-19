@@ -51,7 +51,7 @@
             button1.Size = new Size(75, 28);
             button1.TabIndex = 1;
             button1.Text = "前往设置";
-            button1.UseVisualStyleBackColor = true;
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // r_help
@@ -61,13 +61,14 @@
             r_help.Size = new Size(42, 41);
             r_help.TabIndex = 2;
             r_help.Text = "刷新";
-            r_help.UseVisualStyleBackColor = true;
+            r_help.UseVisualStyleBackColor = false;
             r_help.Click += r_help_Click;
             // 
             // HelpWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(651, 389);
             Controls.Add(r_help);
             Controls.Add(button1);
