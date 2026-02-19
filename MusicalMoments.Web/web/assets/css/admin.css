@@ -679,7 +679,6 @@
 .admin-usage-tools {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 0.5rem;
   color: var(--mm-text-muted);
   font-size: 0.86rem;
