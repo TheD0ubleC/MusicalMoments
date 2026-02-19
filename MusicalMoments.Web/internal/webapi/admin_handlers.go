@@ -1,4 +1,4 @@
-﻿package webapi
+package webapi
 
 import (
 	"crypto/rand"
@@ -453,5 +453,3 @@ func newFileToken() string {
 	}
 	return "id_" + hex.EncodeToString(raw)
 }
-
-
