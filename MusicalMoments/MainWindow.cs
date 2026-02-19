@@ -943,8 +943,8 @@ namespace MusicalMoments
         private async void LoadList_Click(object sender, EventArgs e)
         {
             string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download.json");
-            string jsonUrl = "https://www.scmd.cc/api/all-audio";
-            string hashUrl = "https://www.scmd.cc/api/all-audio-hash";
+            string jsonUrl = "https://audio.scmd.cc/api/all-audio";
+            string hashUrl = "https://audio.scmd.cc/api/all-audio-hash";
 
             try
             {
