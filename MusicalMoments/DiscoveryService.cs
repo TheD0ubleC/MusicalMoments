@@ -24,7 +24,7 @@ namespace MusicalMoments
                 if (json["files"] == null || json["files"]!.Type != JTokenType.Array)
                 {
                     MessageBox.Show("本地 JSON 异常！将尝试重新获取");
-                    await DownloadJsonFile("https://www.scmd.cc/api/all-audio", filePath);
+                    await DownloadJsonFile("https://audio.scmd.cc/api/all-audio", filePath);
                     return;
                 }
 

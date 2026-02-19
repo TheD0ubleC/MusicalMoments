@@ -24,7 +24,7 @@ namespace MusicalMoments
 
     internal sealed class ClientUsageReporter : IDisposable
     {
-        private const string DefaultWebBaseUrl = "https://mm.scmd.cc";
+        private const string DefaultWebBaseUrl = "https://www.scmd.cc";
         private const string BaseUrlEnvKey = "MM_WEB_BASE_URL";
         private const string BaseUrlFileName = "mm-web-base-url.txt";
         private const string ClientIDFileName = "usage-client.id";
