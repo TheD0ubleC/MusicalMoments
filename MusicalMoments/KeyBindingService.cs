@@ -74,7 +74,7 @@ namespace MusicalMoments
             bool alt = (keyEventArgs.Modifiers & Keys.Alt) == Keys.Alt;
             bool shift = (keyEventArgs.Modifiers & Keys.Shift) == Keys.Shift;
 
-            if (keyCode == Keys.Escape)
+            if (keyCode == Keys.Escape && !ctrl && !alt && !shift)
             {
                 key = Keys.None;
                 displayText = "None";
@@ -173,6 +173,7 @@ namespace MusicalMoments
             bool alt = false;
             bool shift = false;
             Keys primary = Keys.None;
+            Keys fallbackModifierPrimary = Keys.None;
 
             foreach (string rawPart in parts)
             {
@@ -181,18 +182,21 @@ namespace MusicalMoments
                     || part.Equals("Control", StringComparison.OrdinalIgnoreCase))
                 {
                     ctrl = true;
+                    fallbackModifierPrimary = Keys.ControlKey;
                     continue;
                 }
 
                 if (part.Equals("Alt", StringComparison.OrdinalIgnoreCase))
                 {
                     alt = true;
+                    fallbackModifierPrimary = Keys.Menu;
                     continue;
                 }
 
                 if (part.Equals("Shift", StringComparison.OrdinalIgnoreCase))
                 {
                     shift = true;
+                    fallbackModifierPrimary = Keys.ShiftKey;
                     continue;
                 }
 
@@ -207,18 +211,7 @@ namespace MusicalMoments
 
             if (primary == Keys.None)
             {
-                if (ctrl)
-                {
-                    primary = Keys.ControlKey;
-                }
-                else if (alt)
-                {
-                    primary = Keys.Menu;
-                }
-                else if (shift)
-                {
-                    primary = Keys.ShiftKey;
-                }
+                primary = fallbackModifierPrimary;
             }
 
             key = BuildBinding(primary, ctrl, alt, shift);
@@ -277,10 +270,38 @@ namespace MusicalMoments
             return keyCode == Keys.ControlKey || keyCode == Keys.Menu || keyCode == Keys.ShiftKey;
         }
 
+        public static bool IsModifierOnlyBinding(Keys key)
+        {
+            Keys normalized = NormalizeBinding(key);
+            if (normalized == Keys.None)
+            {
+                return false;
+            }
+
+            return IsModifierPrimaryKey(normalized & Keys.KeyCode);
+        }
+
         public static bool IsEscapeWithoutModifier(Keys key)
         {
             Keys normalized = NormalizeBinding(key);
-            return (normalized & Keys.KeyCode) == Keys.Escape;
+            return (normalized & Keys.KeyCode) == Keys.Escape && (normalized & Keys.Modifiers) == Keys.None;
+        }
+
+        public static bool ShouldCommitPendingBindingOnKeyUp(KeyEventArgs keyEventArgs, Keys pendingBinding)
+        {
+            if (keyEventArgs == null || pendingBinding == Keys.None)
+            {
+                return false;
+            }
+
+            if (!IsModifierPrimaryKey(keyEventArgs.KeyCode))
+            {
+                return false;
+            }
+
+            Keys pendingPrimary = NormalizePrimaryKey(NormalizeBinding(pendingBinding) & Keys.KeyCode);
+            Keys releasedPrimary = NormalizePrimaryKey(keyEventArgs.KeyCode & Keys.KeyCode);
+            return pendingPrimary == releasedPrimary;
         }
 
         private static bool TryParseSimpleKeyName(string text, out Keys key)

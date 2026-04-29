@@ -956,6 +956,7 @@
             PlayAudio.Text = "Key";
             PlayAudio.TextAlign = HorizontalAlignment.Center;
             PlayAudio.KeyDown += PlayAudio_KeyDown;
+            PlayAudio.KeyUp += PlayAudio_KeyUp;
             PlayAudio.KeyPress += PlayAudio_KeyPress;
             PlayAudio.MouseDown += PlayAudio_MouseDown;
             // 
@@ -983,6 +984,7 @@
             ToggleStream.Text = "Key";
             ToggleStream.TextAlign = HorizontalAlignment.Center;
             ToggleStream.KeyDown += ToggleStream_KeyDown;
+            ToggleStream.KeyUp += ToggleStream_KeyUp;
             ToggleStream.KeyPress += ToggleStream_KeyPress;
             ToggleStream.MouseDown += ToggleStream_MouseDown;
             // 

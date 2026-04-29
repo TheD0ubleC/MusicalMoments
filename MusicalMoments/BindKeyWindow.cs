@@ -7,6 +7,7 @@ namespace MusicalMoments
     {
         private readonly Keys originalKey;
         private Keys nowKey;
+        private Keys pendingKeyboardBinding;
         private GlobalInputHook globalHook;
         private bool bindingCommitted;
 
@@ -43,7 +44,28 @@ namespace MusicalMoments
                 return;
             }
 
+            BindKey.Text = displayText;
+            e.SuppressKeyPress = true;
+            if (KeyBindingService.IsModifierOnlyBinding(keyValue))
+            {
+                pendingKeyboardBinding = keyValue;
+                return;
+            }
+
+            pendingKeyboardBinding = Keys.None;
             CommitBinding(keyValue, displayText);
+        }
+
+        private void BindKey_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (bindingCommitted || !KeyBindingService.ShouldCommitPendingBindingOnKeyUp(e, pendingKeyboardBinding))
+            {
+                return;
+            }
+
+            Keys keyValue = pendingKeyboardBinding;
+            pendingKeyboardBinding = Keys.None;
+            CommitBinding(keyValue, KeyBindingService.GetDisplayTextForKey(keyValue));
             e.SuppressKeyPress = true;
         }
 
@@ -60,6 +82,7 @@ namespace MusicalMoments
 
         private void removeKey_Click(object sender, EventArgs e)
         {
+            pendingKeyboardBinding = Keys.None;
             CommitBinding(Keys.None, "None");
         }
 
@@ -96,6 +119,14 @@ namespace MusicalMoments
                 return;
             }
 
+            BindKey.Text = displayText;
+            if (KeyBindingService.IsModifierOnlyBinding(e.Key))
+            {
+                pendingKeyboardBinding = e.Key;
+                return;
+            }
+
+            pendingKeyboardBinding = Keys.None;
             CommitBinding(e.Key, displayText);
         }
 
@@ -107,6 +138,7 @@ namespace MusicalMoments
             }
 
             bindingCommitted = true;
+            pendingKeyboardBinding = Keys.None;
             nowKey = KeyBindingService.NormalizeBinding(key);
             BindKey.Text = displayText;
             MainWindow.nowKey = nowKey;

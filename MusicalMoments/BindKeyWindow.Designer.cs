@@ -48,6 +48,7 @@
             BindKey.Text = "Key";
             BindKey.TextAlign = HorizontalAlignment.Center;
             BindKey.KeyDown += BindKey_KeyDown;
+            BindKey.KeyUp += BindKey_KeyUp;
             BindKey.KeyPress += BindKey_KeyPress;
             BindKey.Leave += BindKey_Leave;
             // 

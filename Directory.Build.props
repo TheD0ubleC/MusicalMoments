@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <MMVersion>1.6.0</MMVersion>
+    <MMVersion>1.7.0</MMVersion>
     <MMReleaseChannel>release</MMReleaseChannel>
     <MMArchitecture>x64</MMArchitecture>
-    <MMVersionTag>v1.6.0-release-x64</MMVersionTag>
-    <Version>1.6.0</Version>
-    <AssemblyVersion>1.6.0</AssemblyVersion>
-    <FileVersion>1.6.0</FileVersion>
-    <InformationalVersion>v1.6.0-release-x64</InformationalVersion>
+    <MMVersionTag>v1.7.0-release-x64</MMVersionTag>
+    <Version>1.7.0</Version>
+    <AssemblyVersion>1.7.0</AssemblyVersion>
+    <FileVersion>1.7.0</FileVersion>
+    <InformationalVersion>v1.7.0-release-x64</InformationalVersion>
   </PropertyGroup>
 </Project>

@@ -17,6 +17,7 @@ using File = System.IO.File;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Microsoft.VisualBasic.Devices;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 
@@ -37,6 +38,8 @@ namespace MusicalMoments
         public static string firstStart = System.DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
         public static bool playAudio = true;
         private GlobalInputHook globalInputHook;
+        private Keys pendingToggleStreamBinding = Keys.None;
+        private Keys pendingPlayAudioBinding = Keys.None;
         public static bool isPlaying = false;
         public static float VBvolume = 1f;
         public static float volume = 1f;
@@ -49,6 +52,9 @@ namespace MusicalMoments
         public static bool AudioEquipmentPlayCheck = true;
 
         public static List<AudioInfo> audioInfo = new List<AudioInfo>();
+        private static readonly HttpClient UpdateDownloadClient = CreateUpdateDownloadClient();
+        private static readonly string[] UpdateDownloadHosts = { "https://github.scmd.cc", "https://github.com" };
+        private int updateCheckInProgress;
         private bool synchronizingNavigationSelection;
         private int lastNavigationIndex = -1;
         private int visualNavigationIndex;
@@ -205,7 +211,7 @@ namespace MusicalMoments
                 help_tip.ForeColor = Color.FromArgb(178, 34, 34);
             }
             //   最后再版本验证 以防UI错误
-            CheckNewVer();
+            _ = CheckNewVer();
 
         }
 
@@ -265,43 +271,301 @@ namespace MusicalMoments
             return "未知";
         }
 
-        private async void CheckNewVer(bool noUpdateShowMessage = false)
+        private async Task CheckNewVer(bool noUpdateShowMessage = false)
         {
-            var newVerTips = await Misc.GetLatestVersionTipsAsync();
-            var latestVer = await Misc.GetLatestVersionAsync();
-            if (latestVer != nowVer)
+            if (Interlocked.Exchange(ref updateCheckInProgress, 1) == 1)
             {
-                DialogResult dialogResult = MessageBox.Show($"Musical Moments存在新版本，请尽快更新。当前版本为{nowVer} 最新版本为{latestVer}。\r\n按下是则自动下载最新版本压缩包 按下否则跳转至最新版本页面 按下取消则关闭\r\n\r\n以下是新版本简介:\r\n{newVerTips}", "新版本推送", MessageBoxButtons.YesNoCancel);
+                return;
+            }
+
+            try
+            {
+                ReleaseInfo latestRelease = await UpdateService.GetLatestReleaseAsync();
+                string latestVer = latestRelease.TagName?.Trim() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(latestVer))
+                {
+                    if (noUpdateShowMessage)
+                    {
+                        MessageBox.Show("检查更新失败，请稍后重试。", "提示");
+                    }
+
+                    return;
+                }
+
+                if (string.Equals(latestVer, nowVer, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (noUpdateShowMessage)
+                    {
+                        MessageBox.Show("当前已是最新版本！", "提示");
+                    }
+
+                    return;
+                }
+
+                string newVerTips = string.IsNullOrWhiteSpace(latestRelease.Body) ? "暂无更新说明。" : latestRelease.Body;
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Musical Moments存在新版本，请尽快更新。当前版本为{nowVer} 最新版本为{latestVer}。\r\n按下是则自动下载最新版本压缩包 按下否则跳转至最新版本页面 按下取消则关闭\r\n\r\n以下是新版本简介:\r\n{newVerTips}",
+                    "新版本推送",
+                    MessageBoxButtons.YesNoCancel);
 
                 if (dialogResult == DialogResult.Yes)
                 {
-                    string version = VersionService.ExtractVersionNumber(latestVer);
-                    string downloadUrl = $"https://github.scmd.cc/TheD0ubleC/MusicalMoments/releases/download/{latestVer}/MM.Release-{version}.zip";
                     try
                     {
-                        string zipPath = Path.Combine(runningDirectory, $"MM.Release-{version}.zip");
-                        using (HttpClient httpClient = new HttpClient())
-                        {
-                            byte[] payload = await httpClient.GetByteArrayAsync(downloadUrl);
-                            await File.WriteAllBytesAsync(zipPath, payload);
-                        }
-                        MessageBox.Show($"下载成功 已存放至运行目录 即将开始更新 详情路径:{zipPath}", "提示");
-                        Process currentProcess = Process.GetCurrentProcess();
-                        int pid = currentProcess.Id;
-                        StartApplication(Path.Combine(runningDirectory, "MusicalMoments.Updater.exe"), pid.ToString(), zipPath, runningDirectory);
+                        await StartAutoUpdateAsync(latestRelease);
                     }
                     catch (Exception ex)
-                    { MessageBox.Show($"下载失败，请至github页面自行下载或在群文件下载 错误详情:{ex.ToString()}", "错误"); }
+                    {
+                        MessageBox.Show($"自动更新失败，请稍后重试或手动下载。\r\n错误详情:{ex}", "错误");
+                    }
                 }
                 else if (dialogResult == DialogResult.No)
                 {
-                    Process.Start(new ProcessStartInfo("https://github.com/TheD0ubleC/MusicalMoments/releases/tag/" + latestVer) { UseShellExecute = true });
+                    string releasePageUrl = ResolveReleasePageUrl(latestRelease, latestVer);
+                    Process.Start(new ProcessStartInfo(releasePageUrl) { UseShellExecute = true });
                 }
             }
-            if (noUpdateShowMessage)
-            { MessageBox.Show($"当前已是最新版本！", "提示"); }
+            catch (Exception ex)
+            {
+                if (noUpdateShowMessage)
+                {
+                    MessageBox.Show($"检查更新失败：{ex.Message}", "错误");
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref updateCheckInProgress, 0);
+            }
         }
-        static void StartApplication(string applicationPath, params string[] arguments)
+
+        private async Task StartAutoUpdateAsync(ReleaseInfo release)
+        {
+            string latestVer = release.TagName?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(latestVer))
+            {
+                throw new InvalidOperationException("未获取到有效版本号。");
+            }
+
+            string updaterPath = Path.Combine(runningDirectory, "MusicalMoments.Updater.exe");
+            if (!File.Exists(updaterPath))
+            {
+                throw new FileNotFoundException("未找到更新器，请重新下载完整版本。", updaterPath);
+            }
+
+            string version = VersionService.ExtractVersionNumber(latestVer);
+            string packageFileName = $"MM.Release-{version}.zip";
+            string tempUpdateDirectory = Path.Combine(Path.GetTempPath(), "MusicalMoments", "Update");
+            Directory.CreateDirectory(tempUpdateDirectory);
+            string zipPath = Path.Combine(tempUpdateDirectory, packageFileName);
+
+            List<string> candidateUrls = BuildUpdatePackageUrls(release, version);
+            if (candidateUrls.Count == 0)
+            {
+                throw new InvalidOperationException("未找到可用的更新包下载地址。");
+            }
+
+            Exception? lastError = null;
+            bool isDownloaded = false;
+            foreach (string downloadUrl in candidateUrls)
+            {
+                try
+                {
+                    await DownloadUpdatePackageAsync(downloadUrl, zipPath);
+                    ValidateDownloadedPackage(zipPath);
+                    isDownloaded = true;
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    lastError = ex;
+                }
+            }
+
+            if (!isDownloaded)
+            {
+                throw new InvalidOperationException("自动下载更新包失败。", lastError);
+            }
+
+            Process currentProcess = Process.GetCurrentProcess();
+            bool updaterStarted = StartApplication(updaterPath, currentProcess.Id.ToString(), zipPath, runningDirectory);
+            if (!updaterStarted)
+            {
+                throw new InvalidOperationException("启动更新器失败。");
+            }
+
+            MessageBox.Show($"更新包下载并校验成功，程序将重启并自动完成更新。\r\n更新包路径:{zipPath}", "提示");
+            Close();
+        }
+
+        private static List<string> BuildUpdatePackageUrls(ReleaseInfo release, string version)
+        {
+            string latestVer = release.TagName?.Trim() ?? string.Empty;
+            string expectedPackageName = $"MM.Release-{version}.zip";
+            List<(string Url, int Score)> rankedCandidates = new List<(string Url, int Score)>();
+
+            foreach (ReleaseAssetInfo asset in release.Assets)
+            {
+                string assetUrl = asset.DownloadUrl?.Trim() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(assetUrl))
+                {
+                    continue;
+                }
+
+                string assetName = asset.Name?.Trim() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(assetName))
+                {
+                    assetName = Path.GetFileName(assetUrl);
+                }
+
+                if (!assetName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                int score = 0;
+                if (assetName.Equals(expectedPackageName, StringComparison.OrdinalIgnoreCase))
+                {
+                    score += 1000;
+                }
+                if (assetName.IndexOf(version, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    score += 100;
+                }
+                if (assetName.IndexOf("release", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    score += 30;
+                }
+                if (assetName.IndexOf("x64", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    score += 10;
+                }
+
+                rankedCandidates.Add((assetUrl, score));
+            }
+
+            rankedCandidates.Sort((left, right) => right.Score.CompareTo(left.Score));
+
+            List<string> candidateUrls = new List<string>();
+            foreach ((string url, _) in rankedCandidates)
+            {
+                AddMirroredUrlCandidates(candidateUrls, url);
+            }
+
+            if (!string.IsNullOrWhiteSpace(latestVer))
+            {
+                foreach (string host in UpdateDownloadHosts)
+                {
+                    AddMirroredUrlCandidates(candidateUrls, $"{host}/TheD0ubleC/MusicalMoments/releases/download/{latestVer}/{expectedPackageName}");
+                }
+            }
+
+            HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            List<string> deduplicatedUrls = new List<string>();
+            foreach (string candidateUrl in candidateUrls)
+            {
+                if (string.IsNullOrWhiteSpace(candidateUrl) || !seen.Add(candidateUrl))
+                {
+                    continue;
+                }
+
+                deduplicatedUrls.Add(candidateUrl);
+            }
+
+            return deduplicatedUrls;
+        }
+
+        private static void AddMirroredUrlCandidates(List<string> targetUrls, string rawUrl)
+        {
+            if (string.IsNullOrWhiteSpace(rawUrl))
+            {
+                return;
+            }
+
+            targetUrls.Add(rawUrl);
+
+            const string githubHost = "://github.com/";
+            const string mirrorHost = "://github.scmd.cc/";
+            if (rawUrl.Contains(githubHost, StringComparison.OrdinalIgnoreCase))
+            {
+                targetUrls.Add(rawUrl.Replace(githubHost, mirrorHost, StringComparison.OrdinalIgnoreCase));
+            }
+            else if (rawUrl.Contains(mirrorHost, StringComparison.OrdinalIgnoreCase))
+            {
+                targetUrls.Add(rawUrl.Replace(mirrorHost, githubHost, StringComparison.OrdinalIgnoreCase));
+            }
+        }
+
+        private static string ResolveReleasePageUrl(ReleaseInfo release, string latestVer)
+        {
+            List<string> candidateUrls = new List<string>();
+            AddMirroredUrlCandidates(candidateUrls, release.HtmlUrl ?? string.Empty);
+
+            if (!string.IsNullOrWhiteSpace(latestVer))
+            {
+                foreach (string host in UpdateDownloadHosts)
+                {
+                    candidateUrls.Add($"{host}/TheD0ubleC/MusicalMoments/releases/tag/{latestVer}");
+                }
+            }
+
+            foreach (string url in candidateUrls)
+            {
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    return url;
+                }
+            }
+
+            return "https://github.com/TheD0ubleC/MusicalMoments/releases";
+        }
+
+        private static async Task DownloadUpdatePackageAsync(string downloadUrl, string zipPath)
+        {
+            using HttpResponseMessage response = await UpdateDownloadClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            await using Stream packageStream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = new FileStream(zipPath, FileMode.Create, FileAccess.Write, FileShare.None);
+            await packageStream.CopyToAsync(fileStream);
+        }
+
+        private static void ValidateDownloadedPackage(string zipPath)
+        {
+            using ZipArchive zip = ZipFile.OpenRead(zipPath);
+            if (zip.Entries.Count == 0)
+            {
+                throw new InvalidDataException("更新包为空。");
+            }
+
+            bool hasMainExecutable = false;
+            foreach (ZipArchiveEntry entry in zip.Entries)
+            {
+                if (string.Equals(Path.GetFileName(entry.FullName), "MusicalMoments.exe", StringComparison.OrdinalIgnoreCase))
+                {
+                    hasMainExecutable = true;
+                    break;
+                }
+            }
+
+            if (!hasMainExecutable)
+            {
+                throw new InvalidDataException("更新包缺少主程序文件。");
+            }
+        }
+
+        private static HttpClient CreateUpdateDownloadClient()
+        {
+            HttpClient client = new HttpClient
+            {
+                Timeout = TimeSpan.FromMinutes(2)
+            };
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("MusicalMoments-Updater/2.0");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/octet-stream");
+            return client;
+        }
+
+        private static bool StartApplication(string applicationPath, params string[] arguments)
         {
             try
             {
@@ -310,6 +574,8 @@ namespace MusicalMoments
                     ProcessStartInfo startInfo = new ProcessStartInfo
                     {
                         FileName = applicationPath,
+                        WorkingDirectory = Path.GetDirectoryName(applicationPath) ?? runningDirectory,
+                        UseShellExecute = false
                     };
                     foreach (string argument in arguments)
                     {
@@ -317,6 +583,7 @@ namespace MusicalMoments
                     }
                     Process.Start(startInfo);
                     Console.WriteLine($"Started application: {applicationPath} with arguments: {string.Join(" ", arguments)}");
+                    return true;
                 }
                 else
                 {
@@ -327,6 +594,8 @@ namespace MusicalMoments
             {
                 Console.WriteLine($"Error starting application: {ex.Message}");
             }
+
+            return false;
         }
         private void mainTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -493,16 +762,53 @@ namespace MusicalMoments
                 }
             }
         }
+
+        private void ApplyBindingCaptureToTextBox(System.Windows.Forms.TextBox textBox, Keys key, string displayText, ref Keys targetKey, ref Keys pendingBinding)
+        {
+            pendingBinding = Keys.None;
+            targetKey = KeyBindingService.NormalizeBinding(key);
+            textBox.Text = displayText;
+            textBox.Enabled = false;
+            textBox.Enabled = true;
+        }
+
+        private void HandleBindingTextBoxKeyDown(System.Windows.Forms.TextBox textBox, KeyEventArgs e, ref Keys targetKey, ref Keys pendingBinding)
+        {
+            if (!KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys key, out string displayText))
+            {
+                return;
+            }
+
+            textBox.Text = displayText;
+            e.SuppressKeyPress = true;
+            if (KeyBindingService.IsModifierOnlyBinding(key))
+            {
+                pendingBinding = key;
+                return;
+            }
+
+            ApplyBindingCaptureToTextBox(textBox, key, displayText, ref targetKey, ref pendingBinding);
+        }
+
+        private void HandleBindingTextBoxKeyUp(System.Windows.Forms.TextBox textBox, KeyEventArgs e, ref Keys targetKey, ref Keys pendingBinding)
+        {
+            if (!KeyBindingService.ShouldCommitPendingBindingOnKeyUp(e, pendingBinding))
+            {
+                return;
+            }
+
+            Keys key = pendingBinding;
+            ApplyBindingCaptureToTextBox(textBox, key, KeyBindingService.GetDisplayTextForKey(key), ref targetKey, ref pendingBinding);
+            e.SuppressKeyPress = true;
+        }
+
         private void ToggleStream_KeyDown(object sender, KeyEventArgs e)
         {
-            if (KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys key, out string displayText))
-            {
-                ToggleStream.Text = displayText;
-                toggleStreamKey = key;
-                ToggleStream.Enabled = false;
-                ToggleStream.Enabled = true;
-                e.SuppressKeyPress = true;
-            }
+            HandleBindingTextBoxKeyDown(ToggleStream, e, ref toggleStreamKey, ref pendingToggleStreamBinding);
+        }
+        private void ToggleStream_KeyUp(object sender, KeyEventArgs e)
+        {
+            HandleBindingTextBoxKeyUp(ToggleStream, e, ref toggleStreamKey, ref pendingToggleStreamBinding);
         }
         private void ToggleStream_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -523,19 +829,15 @@ namespace MusicalMoments
                 return;
             }
 
-            toggleStreamKey = key;
-            ToggleStream.Text = displayText;
+            ApplyBindingCaptureToTextBox(ToggleStream, key, displayText, ref toggleStreamKey, ref pendingToggleStreamBinding);
         }
         private void PlayAudio_KeyDown(object sender, KeyEventArgs e)
         {
-            if (KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys key, out string displayText))
-            {
-                PlayAudio.Text = displayText;
-                playAudioKey = key;
-                PlayAudio.Enabled = false;
-                PlayAudio.Enabled = true;
-                e.SuppressKeyPress = true;
-            }
+            HandleBindingTextBoxKeyDown(PlayAudio, e, ref playAudioKey, ref pendingPlayAudioBinding);
+        }
+        private void PlayAudio_KeyUp(object sender, KeyEventArgs e)
+        {
+            HandleBindingTextBoxKeyUp(PlayAudio, e, ref playAudioKey, ref pendingPlayAudioBinding);
         }
         private void PlayAudio_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -557,8 +859,7 @@ namespace MusicalMoments
                 return;
             }
 
-            playAudioKey = key;
-            PlayAudio.Text = displayText;
+            ApplyBindingCaptureToTextBox(PlayAudio, key, displayText, ref playAudioKey, ref pendingPlayAudioBinding);
         }
         private void info_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {

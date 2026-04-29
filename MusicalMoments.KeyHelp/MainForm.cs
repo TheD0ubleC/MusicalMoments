@@ -58,6 +58,7 @@ namespace MusicalMoments.KeyHelp
 
         private Keys gameKey = Keys.None;
         private Keys mmPlayAudioKey = Keys.None;
+        private Keys pendingGameBinding = Keys.None;
         private PluginStateSnapshot latestState;
 
         private bool pollInProgress;
@@ -118,12 +119,16 @@ namespace MusicalMoments.KeyHelp
                 }
 
                 latestState = state;
-                if (!Enum.TryParse(state.PlayAudioKey, out mmPlayAudioKey))
+                if (!KeyBindingService.TryParseBinding(state.PlayAudioKey, out Keys parsedPlayAudioKey))
                 {
                     mmPlayAudioKey = Keys.None;
                 }
+                else
+                {
+                    mmPlayAudioKey = KeyBindingService.NormalizeBinding(parsedPlayAudioKey);
+                }
 
-                mmKeyLabel.Text = $"MM 播放按键：{state.PlayAudioKey}";
+                mmKeyLabel.Text = $"MM 播放按键：{(mmPlayAudioKey == Keys.None ? "未绑定" : KeyBindingService.GetDisplayTextForKey(mmPlayAudioKey))}";
                 statusLabel.Text = "状态：已连接";
             }
             catch (Exception ex)
@@ -148,7 +153,7 @@ namespace MusicalMoments.KeyHelp
                 return;
             }
 
-            if (e.Key != mmPlayAudioKey || !latestState.PlayAudioEnabled)
+            if (KeyBindingService.NormalizeBinding(e.Key) != mmPlayAudioKey || !latestState.PlayAudioEnabled)
             {
                 return;
             }
@@ -230,69 +235,51 @@ namespace MusicalMoments.KeyHelp
 
         private static bool TryPressBoundInput(Keys key)
         {
-            if (key == Keys.None)
+            Keys normalized = KeyBindingService.NormalizeBinding(key);
+            if (normalized == Keys.None)
             {
                 return false;
             }
 
-            switch (key)
+            Keys modifiers = normalized & Keys.Modifiers;
+            Keys primary = KeyBindingService.NormalizePrimaryKey(normalized & Keys.KeyCode);
+            if (!PressModifierKeys(modifiers))
             {
-                case Keys.MButton:
-                    return SendMouseInput(MouseEventFMiddleDown);
-                case Keys.XButton1:
-                    return SendMouseInput(MouseEventFXDown, XButton1);
-                case Keys.XButton2:
-                    return SendMouseInput(MouseEventFXDown, XButton2);
-                default:
-                    keybd_event((byte)key, 0, KeyEventFExtendedKey, UIntPtr.Zero);
-                    return true;
+                return false;
             }
+
+            if (TrySendPrimaryDown(primary))
+            {
+                return true;
+            }
+
+            ReleaseModifierKeys(modifiers);
+            return false;
         }
 
         private static void ReleaseBoundInput(Keys key)
         {
-            if (key == Keys.None)
+            Keys normalized = KeyBindingService.NormalizeBinding(key);
+            if (normalized == Keys.None)
             {
                 return;
             }
 
-            switch (key)
-            {
-                case Keys.MButton:
-                    SendMouseInput(MouseEventFMiddleUp);
-                    break;
-                case Keys.XButton1:
-                    SendMouseInput(MouseEventFXUp, XButton1);
-                    break;
-                case Keys.XButton2:
-                    SendMouseInput(MouseEventFXUp, XButton2);
-                    break;
-                default:
-                    keybd_event((byte)key, 0, KeyEventFExtendedKey | KeyEventFKeyUp, UIntPtr.Zero);
-                    break;
-            }
+            Keys modifiers = normalized & Keys.Modifiers;
+            Keys primary = KeyBindingService.NormalizePrimaryKey(normalized & Keys.KeyCode);
+            SendPrimaryUp(primary);
+            ReleaseModifierKeys(modifiers);
         }
 
         private static bool TapBoundInput(Keys key)
         {
-            if (key == Keys.None)
+            if (!TryPressBoundInput(key))
             {
                 return false;
             }
 
-            switch (key)
-            {
-                case Keys.MButton:
-                    return SendMouseInput(MouseEventFMiddleDown) && SendMouseInput(MouseEventFMiddleUp);
-                case Keys.XButton1:
-                    return SendMouseInput(MouseEventFXDown, XButton1) && SendMouseInput(MouseEventFXUp, XButton1);
-                case Keys.XButton2:
-                    return SendMouseInput(MouseEventFXDown, XButton2) && SendMouseInput(MouseEventFXUp, XButton2);
-                default:
-                    keybd_event((byte)key, 0, KeyEventFExtendedKey, UIntPtr.Zero);
-                    keybd_event((byte)key, 0, KeyEventFExtendedKey | KeyEventFKeyUp, UIntPtr.Zero);
-                    return true;
-            }
+            ReleaseBoundInput(key);
+            return true;
         }
 
         private static bool SendMouseInput(uint flags, uint mouseData = 0)
@@ -318,41 +305,53 @@ namespace MusicalMoments.KeyHelp
 
         private void bindKeyTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            string displayText = KeyBindingService.GetKeyDisplay(keyEventArgs: e);
-            if (string.IsNullOrWhiteSpace(displayText))
+            if (!KeyBindingService.TryBuildBindingFromKeyEvent(e, out Keys key, out string displayText))
             {
                 return;
             }
 
-            gameKey = displayText == "None" ? Keys.None : e.KeyCode;
             bindKeyTextBox.Text = displayText;
-            SaveSettings();
+            e.SuppressKeyPress = true;
+            if (KeyBindingService.IsModifierOnlyBinding(key))
+            {
+                pendingGameBinding = key;
+                return;
+            }
+
+            CommitGameBinding(key, displayText);
+        }
+
+        private void bindKeyTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!KeyBindingService.ShouldCommitPendingBindingOnKeyUp(e, pendingGameBinding))
+            {
+                return;
+            }
+
+            CommitGameBinding(pendingGameBinding);
             e.SuppressKeyPress = true;
         }
 
         private void bindKeyTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            char keyChar = e.KeyChar;
-            if (keyChar >= 'a' && keyChar <= 'z')
-            {
-                keyChar = (char)(keyChar - 32);
-            }
-
-            gameKey = (Keys)keyChar;
-            bindKeyTextBox.Text = keyChar.ToString();
-            SaveSettings();
             e.Handled = true;
         }
 
         private void bindKeyTextBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!KeyBindingService.TryGetSupportedMouseBinding(e.Button, out Keys key, out string displayText))
+            if (!KeyBindingService.TryGetSupportedMouseBinding(e.Button, Control.ModifierKeys, out Keys key, out string displayText))
             {
                 return;
             }
 
-            gameKey = key;
-            bindKeyTextBox.Text = displayText;
+            CommitGameBinding(key, displayText);
+        }
+
+        private void CommitGameBinding(Keys key, string displayText = null)
+        {
+            pendingGameBinding = Keys.None;
+            gameKey = KeyBindingService.NormalizeBinding(key);
+            bindKeyTextBox.Text = displayText ?? KeyBindingService.GetDisplayTextForKey(gameKey);
             SaveSettings();
         }
 
@@ -393,7 +392,7 @@ namespace MusicalMoments.KeyHelp
 
                 string json = File.ReadAllText(settingsPath);
                 KeyHelpSettings settings = JsonSerializer.Deserialize<KeyHelpSettings>(json);
-                if (settings == null || string.IsNullOrWhiteSpace(settings.GameKey) || !Enum.TryParse(settings.GameKey, out Keys key))
+                if (settings == null || !KeyBindingService.TryParseBinding(settings.GameKey, out Keys key))
                 {
                     bindKeyTextBox.Text = "None";
                     inputMode = HoldMode;
@@ -401,7 +400,7 @@ namespace MusicalMoments.KeyHelp
                     return;
                 }
 
-                gameKey = key;
+                gameKey = KeyBindingService.NormalizeBinding(key);
                 bindKeyTextBox.Text = KeyBindingService.GetDisplayTextForKey(key);
                 inputMode = string.Equals(settings.InputMode, ToggleMode, StringComparison.OrdinalIgnoreCase) ? ToggleMode : HoldMode;
                 holdModeRadio.Checked = string.Equals(inputMode, HoldMode, StringComparison.OrdinalIgnoreCase);
@@ -422,7 +421,7 @@ namespace MusicalMoments.KeyHelp
                 string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, SettingsFileName);
                 var settings = new KeyHelpSettings
                 {
-                    GameKey = gameKey.ToString(),
+                    GameKey = KeyBindingService.NormalizeBinding(gameKey).ToString(),
                     InputMode = inputMode
                 };
                 string json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
@@ -438,6 +437,127 @@ namespace MusicalMoments.KeyHelp
         {
             public string GameKey { get; set; } = Keys.None.ToString();
             public string InputMode { get; set; } = HoldMode;
+        }
+
+        private static bool PressModifierKeys(Keys modifiers)
+        {
+            if ((modifiers & Keys.Control) == Keys.Control && !SendKeyboardInput(Keys.ControlKey, keyUp: false))
+            {
+                return false;
+            }
+
+            if ((modifiers & Keys.Alt) == Keys.Alt && !SendKeyboardInput(Keys.Menu, keyUp: false))
+            {
+                if ((modifiers & Keys.Control) == Keys.Control)
+                {
+                    SendKeyboardInput(Keys.ControlKey, keyUp: true);
+                }
+
+                return false;
+            }
+
+            if ((modifiers & Keys.Shift) == Keys.Shift && !SendKeyboardInput(Keys.ShiftKey, keyUp: false))
+            {
+                if ((modifiers & Keys.Alt) == Keys.Alt)
+                {
+                    SendKeyboardInput(Keys.Menu, keyUp: true);
+                }
+
+                if ((modifiers & Keys.Control) == Keys.Control)
+                {
+                    SendKeyboardInput(Keys.ControlKey, keyUp: true);
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void ReleaseModifierKeys(Keys modifiers)
+        {
+            if ((modifiers & Keys.Shift) == Keys.Shift)
+            {
+                SendKeyboardInput(Keys.ShiftKey, keyUp: true);
+            }
+
+            if ((modifiers & Keys.Alt) == Keys.Alt)
+            {
+                SendKeyboardInput(Keys.Menu, keyUp: true);
+            }
+
+            if ((modifiers & Keys.Control) == Keys.Control)
+            {
+                SendKeyboardInput(Keys.ControlKey, keyUp: true);
+            }
+        }
+
+        private static bool TrySendPrimaryDown(Keys primary)
+        {
+            return primary switch
+            {
+                Keys.MButton => SendMouseInput(MouseEventFMiddleDown),
+                Keys.XButton1 => SendMouseInput(MouseEventFXDown, XButton1),
+                Keys.XButton2 => SendMouseInput(MouseEventFXDown, XButton2),
+                _ => SendKeyboardInput(primary, keyUp: false)
+            };
+        }
+
+        private static void SendPrimaryUp(Keys primary)
+        {
+            switch (primary)
+            {
+                case Keys.MButton:
+                    SendMouseInput(MouseEventFMiddleUp);
+                    break;
+                case Keys.XButton1:
+                    SendMouseInput(MouseEventFXUp, XButton1);
+                    break;
+                case Keys.XButton2:
+                    SendMouseInput(MouseEventFXUp, XButton2);
+                    break;
+                default:
+                    SendKeyboardInput(primary, keyUp: true);
+                    break;
+            }
+        }
+
+        private static bool SendKeyboardInput(Keys key, bool keyUp)
+        {
+            Keys normalized = KeyBindingService.NormalizePrimaryKey(key & Keys.KeyCode);
+            if (normalized == Keys.None)
+            {
+                return false;
+            }
+
+            uint flags = keyUp ? KeyEventFKeyUp : 0;
+            if (RequiresExtendedKeyFlag(normalized))
+            {
+                flags |= KeyEventFExtendedKey;
+            }
+
+            keybd_event((byte)normalized, 0, flags, UIntPtr.Zero);
+            return true;
+        }
+
+        private static bool RequiresExtendedKeyFlag(Keys key)
+        {
+            return key == Keys.Menu
+                || key == Keys.ControlKey
+                || key == Keys.Insert
+                || key == Keys.Delete
+                || key == Keys.Home
+                || key == Keys.End
+                || key == Keys.PageUp
+                || key == Keys.PageDown
+                || key == Keys.Right
+                || key == Keys.Left
+                || key == Keys.Up
+                || key == Keys.Down
+                || key == Keys.NumLock
+                || key == Keys.Cancel
+                || key == Keys.PrintScreen
+                || key == Keys.Divide;
         }
     }
 }

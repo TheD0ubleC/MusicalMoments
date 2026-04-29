@@ -53,6 +53,7 @@
             bindKeyTextBox.Text = "Key";
             bindKeyTextBox.TextAlign = HorizontalAlignment.Center;
             bindKeyTextBox.KeyDown += bindKeyTextBox_KeyDown;
+            bindKeyTextBox.KeyUp += bindKeyTextBox_KeyUp;
             bindKeyTextBox.KeyPress += bindKeyTextBox_KeyPress;
             bindKeyTextBox.MouseDown += bindKeyTextBox_MouseDown;
             // 
@@ -64,7 +65,7 @@
             tipLabel.Name = "tipLabel";
             tipLabel.Size = new Size(760, 22);
             tipLabel.TabIndex = 2;
-            tipLabel.Text = "规则：支持键盘、中键、侧键。左键/右键/滚轮不支持，按 ESC 可清除绑定。";
+            tipLabel.Text = "规则：支持键盘组合键、中键、侧键及其组合。左键/右键/滚轮不支持，按 ESC 可清除绑定。";
             // 
             // mmKeyLabel
             // 
